@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { max, min } from 'd3-array';
+import { pointer, select } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
 
 import { ChartProps } from '../../types';
 import React from 'react';
-import { mergeTailwindClasses } from '../../utils/mergeTailwindClasses';
-import { select } from 'd3-selection';
+import { mergeTailwindClasses } from '../../utils';
+import { transition } from 'd3-transition';
 
 interface ColumnType {
   axis?: 'top' | 'bottom';
@@ -16,6 +17,7 @@ interface ColumnType {
   key: string;
   start?: number;
   end?: number;
+  rx?: number;
 }
 
 export interface BarChartProps extends ChartProps {
@@ -23,10 +25,16 @@ export interface BarChartProps extends ChartProps {
   direction?: 'left' | 'right';
   y: {
     key: string;
-  };
-  dataLabel: {
-    enabled: boolean;
     className?: string;
+    padding?: number;
+  };
+  dataLabel?: {
+    className?: string;
+  };
+  tooltip?: {
+    className?: string;
+    html?: (d: any) => string;
+    keys?: string[];
   };
 }
 
@@ -42,6 +50,7 @@ const BarChart = ({
     right: 0,
     bottom: 0,
     left: 0,
+    bar: 0.1,
   },
   margin = {
     top: x && x.some((column) => column.axis === 'top') ? 40 : 20,
@@ -50,13 +59,10 @@ const BarChart = ({
     left: 60,
   },
   drawing = {
-    enabled: false,
     duration: 0,
   },
-  dataLabel = {
-    enabled: false,
-    className: '',
-  },
+  dataLabel,
+  tooltip,
 }: BarChartProps) => {
   const refreshData = React.useCallback(async () => {
     const svg = select(`#${id}`);
@@ -94,7 +100,7 @@ const BarChart = ({
         margin.top + padding.top,
         height - margin.bottom - padding.bottom,
       ])
-      .padding(0.1); // add paddingBar here
+      .padding(padding.bar); // add paddingBar here
 
     const g = svg.append('g');
 
@@ -103,18 +109,22 @@ const BarChart = ({
         ? axisTop(xFn).ticks(5)
         : axisBottom(xFn).ticks(5);
 
-    const xAxisG = g.append('g').attr('class', 'axis--x axis ');
+    const xAxisG = g
+      .append('g')
+      .attr('class', 'axis--x axis ')
+      .attr('data-testid', 'x-axis');
 
     const yAxis = direction === 'left' ? axisRight(yFn) : axisLeft(yFn);
     const yAxisG = g
       .append('g')
-      .attr('class', 'yAxis axis')
+      .attr('class', `yAxis axis ${y.className || ''}`)
       .attr(
         'transform',
         `translate(${
           direction === 'left' ? width - margin.right : margin.left
         },0)`
-      );
+      )
+      .attr('data-testid', 'y-axis');
 
     xAxisG
       .attr(
@@ -127,6 +137,12 @@ const BarChart = ({
       )
       .call(xAxis);
     yAxisG.call(yAxis);
+    const tooltipDiv = select('body')
+      .append('div')
+      .attr('id', 'tooltip')
+      .style('position', 'absolute')
+      .style('opacity', '0')
+      .attr('class', `${tooltip?.className || ''}`);
 
     x.map((column, i) => {
       const barsG = g.append('g');
@@ -138,7 +154,6 @@ const BarChart = ({
         .append('rect')
         .attr(
           'class',
-
           (d: any) =>
             `fill-current ${
               (column.classNameNegative && d[column.key] < 0
@@ -146,6 +161,7 @@ const BarChart = ({
                 : column.className) || ''
             }`
         )
+        .attr('rx', column.rx || 0)
         .attr('x', (d: any) =>
           direction === 'left'
             ? d[column.key] < 0
@@ -160,7 +176,7 @@ const BarChart = ({
           (d: any) => (yFn(d[y.key]) || 0) + (i * yFn.bandwidth()) / x.length
         )
         .attr('width', (d: any) =>
-          drawing?.enabled && drawing?.duration
+          drawing?.duration
             ? 0
             : direction === 'left'
             ? xFn(minStart || 0) - xFn(Math.abs(d[column.key]))
@@ -168,14 +184,45 @@ const BarChart = ({
             ? xFn(minStart || 0) - xFn(d[column.key])
             : xFn(Math.abs(d[column.key])) - xFn(minStart || 0)
         )
-        .attr('height', yFn.bandwidth() / x.length);
+        .attr('height', yFn.bandwidth() / x.length - (y.padding || 0))
+        .on('mouseenter', function (event: MouseEvent, d: any) {
+          if (tooltip) {
+            tooltipDiv.style('opacity', 1);
+            const [bX, bY] = pointer(event, select('body'));
+            tooltipDiv
+              .style('left', `${bX + 10}px`)
+              .style('top', `${bY + 10}px`);
+            tooltipDiv.html(
+              tooltip && tooltip.html
+                ? tooltip.html(d)
+                : tooltip.keys
+                ? tooltip.keys
+                    .map((key) => `${key}: ${d[key] || ''}`)
+                    .join('<br/>')
+                : `${d[y.key]} <br/> ${column.key} ${d[column.key]}`
+            );
+          }
+        })
+        .on('mousemove', function (event: MouseEvent) {
+          const [bX, bY] = pointer(event, select('body'));
+          tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
+        })
+        .on('mouseleave', function () {
+          tooltip &&
+            tooltipDiv
+              .style('opacity', '0')
+              .style('left', `0px`)
+              .style('top', `0px`);
+        });
+
+      transition();
 
       drawing?.duration &&
         bars
           .transition()
           .duration(drawing.duration)
           .delay(
-            (d: any, idx: number) => i * (drawing.delay || 100) + idx * 100
+            (_: any, idx: number) => i * (drawing.delay || 100) + idx * 100
           )
           .attr('width', (d: any) =>
             direction === 'left'
@@ -185,7 +232,7 @@ const BarChart = ({
               : xFn(Math.abs(d[column.key])) - xFn(minStart || 0)
           );
 
-      dataLabel?.enabled &&
+      dataLabel &&
         barsG
           .selectAll('g')
           .data(data)
@@ -196,6 +243,7 @@ const BarChart = ({
             'class',
             mergeTailwindClasses('fill-current', dataLabel.className || '')
           )
+          .attr('data-testid', 'label')
           .attr('text-anchor', direction === 'left' ? 'start' : 'end')
           .attr(
             'x',
@@ -210,7 +258,7 @@ const BarChart = ({
               yFn.bandwidth() / x.length / 4
           );
     });
-  }, [data, direction, drawing, id, margin, padding, x, y, dataLabel]);
+  }, [data, direction, drawing, id, margin, padding, x, y, dataLabel, tooltip]);
 
   React.useEffect(() => {
     refreshData();
@@ -223,6 +271,7 @@ const BarChart = ({
         className,
         `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart  h-80 fill-current stroke-current`
       )}
+      data-testid='bar-chart'
     />
   );
 };

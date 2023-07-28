@@ -1,0 +1,1 @@
+export { mergeTailwindClasses } from './mergeTailwindClasses';

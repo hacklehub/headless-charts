@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Type A",
+    "min": 50,
+    "firstQuartile": 62,
+    "mid": 80,
+    "lastQuartile": 90,
+    "max": 100
+  },
+  {
+    "name": "Type B",
+    "min": 20,
+    "firstQuartile": 40,
+    "mid": 50,
+    "lastQuartile": 60,
+    "max": 80
+  },
+  {
+    "name": "Type C",
+    "min": 10,
+    "firstQuartile": 20,
+    "mid": 30,
+    "lastQuartile": 40,
+    "max": 50
+  }
+]

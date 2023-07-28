@@ -7,6 +7,7 @@ export interface ChartProps {
     right: number;
     bottom: number;
     left: number;
+    bar: number;
   };
   margin?: {
     top: number;
@@ -14,8 +15,7 @@ export interface ChartProps {
     bottom: number;
     left: number;
   };
-  drawing: {
-    enabled?: boolean;
+  drawing?: {
     duration?: number;
     delay?: number;
   };

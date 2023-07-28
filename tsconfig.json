@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "storyTest/BarChart.test.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

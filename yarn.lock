@@ -3167,7 +3167,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/user-event@npm:^14.0.0":
+"@testing-library/user-event@npm:^14.0.0, @testing-library/user-event@npm:^14.4.3":
   version: 14.4.3
   resolution: "@testing-library/user-event@npm:14.4.3"
   peerDependencies:
@@ -3282,14 +3282,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/d3-array@npm:*, @types/d3-array@npm:^3.0.5":
+"@types/d3-array@npm:*":
   version: 3.0.5
   resolution: "@types/d3-array@npm:3.0.5"
   checksum: c0014042f75dc77ff4749f6a7a78074aa73e63e5b6a985ac79a0abf3e3d943b19ddd3fbfcfcd11124f25b7f4b97cd0948eec84b2e0783cd617b49c593de695f0
   languageName: node
   linkType: hard
 
-"@types/d3-axis@npm:*, @types/d3-axis@npm:^3.0.2":
+"@types/d3-axis@npm:*":
   version: 3.0.2
   resolution: "@types/d3-axis@npm:3.0.2"
   dependencies:
@@ -3451,7 +3451,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/d3-scale@npm:*, @types/d3-scale@npm:^4.0.3":
+"@types/d3-scale@npm:*":
   version: 4.0.3
   resolution: "@types/d3-scale@npm:4.0.3"
   dependencies:
@@ -3460,7 +3460,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/d3-selection@npm:*, @types/d3-selection@npm:^3.0.5":
+"@types/d3-selection@npm:*":
   version: 3.0.5
   resolution: "@types/d3-selection@npm:3.0.5"
   checksum: 77ea35c92273cd2d736355ab5a4cf6477086b064a1f608489a6fef4198ee6bc1d5440e5dfd880099265ac96c4f4b4fda659d89fbaaef37ba03708663196ba8ad
@@ -3497,7 +3497,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/d3-transition@npm:*, @types/d3-transition@npm:^3.0.3":
+"@types/d3-transition@npm:*":
   version: 3.0.3
   resolution: "@types/d3-transition@npm:3.0.3"
   dependencies:
@@ -3810,7 +3810,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^18.0.0, @types/react-dom@npm:^18.2.7":
+"@types/react-dom@npm:^18.0.0, @types/react-dom@npm:^18.2.0":
   version: 18.2.7
   resolution: "@types/react-dom@npm:18.2.7"
   dependencies:
@@ -3819,7 +3819,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:>=16, @types/react@npm:^18.2.15":
+"@types/react@npm:*, @types/react@npm:>=16, @types/react@npm:^18.2.0":
   version: 18.2.17
   resolution: "@types/react@npm:18.2.17"
   dependencies:
@@ -5495,7 +5495,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-array@npm:2 - 3, d3-array@npm:2.10.0 - 3, d3-array@npm:2.5.0 - 3, d3-array@npm:3, d3-array@npm:^3.2.0, d3-array@npm:^3.2.4":
+"d3-array@npm:2 - 3, d3-array@npm:2.10.0 - 3, d3-array@npm:2.5.0 - 3, d3-array@npm:3, d3-array@npm:^3.2.0":
   version: 3.2.4
   resolution: "d3-array@npm:3.2.4"
   dependencies:
@@ -5504,7 +5504,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-axis@npm:3, d3-axis@npm:^3.0.0":
+"d3-axis@npm:3":
   version: 3.0.0
   resolution: "d3-axis@npm:3.0.0"
   checksum: 227ddaa6d4bad083539c1ec245e2228b4620cca941997a8a650cb0af239375dc20271993127eedac66f0543f331027aca09385e1e16eed023f93eac937cddf0b
@@ -5693,7 +5693,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-scale@npm:4, d3-scale@npm:^4.0.2":
+"d3-scale@npm:4":
   version: 4.0.2
   resolution: "d3-scale@npm:4.0.2"
   dependencies:
@@ -5706,7 +5706,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-selection@npm:2 - 3, d3-selection@npm:3, d3-selection@npm:^3.0.0":
+"d3-selection@npm:2 - 3, d3-selection@npm:3":
   version: 3.0.0
   resolution: "d3-selection@npm:3.0.0"
   checksum: f4e60e133309115b99f5b36a79ae0a19d71ee6e2d5e3c7216ef3e75ebd2cb1e778c2ed2fa4c01bef35e0dcbd96c5428f5bd6ca2184fe2957ed582fde6841cbc5
@@ -5747,7 +5747,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-transition@npm:2 - 3, d3-transition@npm:3, d3-transition@npm:^3.0.1":
+"d3-transition@npm:2 - 3, d3-transition@npm:3":
   version: 3.0.1
   resolution: "d3-transition@npm:3.0.1"
   dependencies:
@@ -7419,14 +7419,10 @@ __metadata:
     "@storybook/testing-library": ^0.2.0
     "@testing-library/jest-dom": ^5.17.0
     "@testing-library/react": ^14.0.0
+    "@testing-library/user-event": ^14.4.3
     "@types/d3": ^7.4.0
-    "@types/d3-array": ^3.0.5
-    "@types/d3-axis": ^3.0.2
-    "@types/d3-scale": ^4.0.3
-    "@types/d3-selection": ^3.0.5
-    "@types/d3-transition": ^3.0.3
-    "@types/react": ^18.2.15
-    "@types/react-dom": ^18.2.7
+    "@types/react": ^18.2.0
+    "@types/react-dom": ^18.2.0
     "@typescript-eslint/eslint-plugin": ^6.0.0
     "@typescript-eslint/parser": ^6.0.0
     "@vitejs/plugin-react": ^4.0.3
@@ -7434,11 +7430,6 @@ __metadata:
     "@vitest/ui": ^0.33.0
     autoprefixer: ^10.4.14
     d3: ^7.8.5
-    d3-array: ^3.2.4
-    d3-axis: ^3.0.0
-    d3-scale: ^4.0.2
-    d3-selection: ^3.0.0
-    d3-transition: ^3.0.1
     eslint: ^8.45.0
     eslint-plugin-react-hooks: ^4.6.0
     eslint-plugin-react-refresh: ^0.4.3
