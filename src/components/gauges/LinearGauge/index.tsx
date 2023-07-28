@@ -1,4 +1,3 @@
-// import { axisBottom } from 'd3';
 import { ValueFn, pointer, select, selectAll } from 'd3';
 
 import { mergeTailwindClasses } from '../../../utils';
