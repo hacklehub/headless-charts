@@ -74,17 +74,17 @@ const BoxPlotH = ({
         Number.isFinite(x.min) ? x.min : min(data.map((d: any) => d[x.minKey])),
         x.max || max(data.map((d: any) => d[x.maxKey])),
       ])
-      .range([margin.left, width - padding.right - margin.right]);
+      .range([margin.left, width - (padding.right || 0) - margin.right]);
 
     // domainMin is x.min if it exists (including 0), otherwise the min of the data
 
     const yFn = scaleBand()
       .domain(data.map((d: any) => d[y.key]))
       .range([
-        margin.top + padding.top,
-        height - margin.bottom - padding.bottom,
+        margin.top + (padding.top || 0),
+        height - margin.bottom - (padding.bottom || 0),
       ])
-      .padding(padding.bar);
+      .padding(padding.bar || 0);
 
     // const clipPath =
     svg
@@ -92,9 +92,9 @@ const BoxPlotH = ({
       .attr('id', 'clip')
       .append('rect')
       .attr('x', margin.left)
-      .attr('y', margin.top - padding.top - 10)
+      .attr('y', margin.top - (padding.top || 0) - 10)
       .attr('width', width)
-      .attr('height', height + padding.bottom + 8);
+      .attr('height', height + (padding.bottom || 0) + 8);
 
     const dataG = g
       .append('g')
@@ -177,6 +177,43 @@ const BoxPlotH = ({
       .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth());
 
     // Mid line
+
+    dotRowsG
+      .append('line')
+      .attr('clip-path', 'url(#clip)')
+      .attr('x1', (d: any) => xFn(d[x.maxKey]))
+      .attr('x2', (d: any) => xFn(d[x.maxKey]))
+      .attr('y1', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth())
+      .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth())
+      .attr(
+        'class',
+        mergeTailwindClasses(
+          `box-plot-line stroke-current`,
+          x.classNameLines || ''
+        )
+      )
+      .transition()
+      .duration(1000)
+      .attr('y1', (d: any) => yFn(d[y.key]) || 0)
+      .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth());
+
+    dotRowsG
+      .append('rect')
+      .attr('class', (d: any) =>
+        mergeTailwindClasses(
+          'box-plot-box stroke-current fill-current',
+          d.className,
+          x.classNameBoxes || ''
+        )
+      )
+      .attr('clip-path', 'url(#clip)')
+      .attr('x', (d: any) => xFn(d[x.boxStart]))
+      .attr('y', (d: any) => yFn(d[y.key]) || 0)
+      .attr('height', yFn.bandwidth())
+      .transition()
+      .duration(1000)
+      .attr('width', (d: any) => xFn(d[x.boxEnd]) - xFn(d[x.boxStart]));
+
     dotRowsG
       .append('line')
       .attr('clip-path', 'url(#clip)')
@@ -192,44 +229,6 @@ const BoxPlotH = ({
       .duration(1000)
       .attr('y1', (d: any) => yFn(d[y.key]) || 0)
       .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth());
-
-    dotRowsG
-      .append('line')
-      .attr('clip-path', 'url(#clip)')
-      .attr('x1', (d: any) => xFn(d[x.maxKey]))
-      .attr('x2', (d: any) => xFn(d[x.maxKey]))
-      .attr('y1', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth())
-      .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth())
-      .attr('class', (d: any) =>
-        mergeTailwindClasses(
-          `box-plot-line stroke-current`,
-          x.classNameMap
-            ? x.classNameMap[d[y.key]] || ''
-            : x.classNameLines || ''
-        )
-      )
-      .transition()
-      .duration(1000)
-      .attr('y1', (d: any) => yFn(d[y.key]) || 0)
-      .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth());
-
-    dotRowsG
-      .append('rect')
-      .attr('class', (d: any) =>
-        mergeTailwindClasses(
-          'box-plot-box stroke-current fill-current opacity-90 ',
-          x.classNameMap
-            ? x.classNameMap[d[y.key]] || ''
-            : x.classNameBoxes || ''
-        )
-      )
-      .attr('clip-path', 'url(#clip)')
-      .attr('x', (d: any) => xFn(d[x.boxStart]))
-      .attr('y', (d: any) => yFn(d[y.key]) || 0)
-      .attr('height', yFn.bandwidth())
-      .transition()
-      .duration(1000)
-      .attr('width', (d: any) => xFn(d[x.boxEnd]) - xFn(d[x.boxStart]));
 
     const tooltipDiv = select('body')
       .append('div')

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import BoxPlotH from '.';
 import { Meta } from '@storybook/react';
-import data from './sample.json';
+import data from '../sample.json';
 
 export default {
   title: 'Ranges/BoxPlotH',
@@ -44,12 +44,16 @@ export const CustomColorMap = {
     id: 'box-plot-h-custom-color-map',
     x: {
       ...Default.args.x,
-      classNameMap: {
-        'Type A': 'text-blue-500 ',
-        'Type B': 'text-red-500 ',
-        'Type C': 'text-green-500 ',
-      },
     },
+    data: data.map((d: any, idx: number) => ({
+      ...d,
+      className: [
+        'text-red-900',
+        'text-green-900',
+        'text-yellow-500',
+        'text-orange-500',
+      ][idx],
+    })),
   },
 };
 

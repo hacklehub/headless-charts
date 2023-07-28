@@ -3,11 +3,11 @@ export interface ChartProps {
   data: object[];
   className?: string;
   padding?: {
-    top: number;
-    right: number;
-    bottom: number;
-    left: number;
-    bar: number;
+    top?: number;
+    right?: number;
+    bottom?: number;
+    left?: number;
+    bar?: number;
   };
   margin?: {
     top: number;

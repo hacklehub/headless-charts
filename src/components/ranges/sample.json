@@ -9,6 +9,14 @@
   },
   {
     "name": "Type B",
+    "min": 0,
+    "firstQuartile": 10,
+    "mid": 20,
+    "lastQuartile": 30,
+    "max": 40
+  },
+  {
+    "name": "Type C",
     "min": 20,
     "firstQuartile": 40,
     "mid": 50,
@@ -16,7 +24,7 @@
     "max": 80
   },
   {
-    "name": "Type C",
+    "name": "Type D",
     "min": 10,
     "firstQuartile": 20,
     "mid": 30,
