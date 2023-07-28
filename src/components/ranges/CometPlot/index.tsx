@@ -232,11 +232,13 @@ const DotPlot = ({
           }, ${xFn(d[x.maxKey])} ${
             (yFn(d[y.key]) || 0) -
             Math.sqrt((size || 100) / 4) +
-            yFn.bandwidth() / 2
+            yFn.bandwidth() / 2 -
+            1
           }, ${xFn(d[x.maxKey])} ${
             (yFn(d[y.key]) || 0) +
             Math.sqrt((size || 100) / 4) +
-            yFn.bandwidth() / 2
+            yFn.bandwidth() / 2 +
+            1
           }`
       );
 
