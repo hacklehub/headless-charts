@@ -3,10 +3,10 @@ import { max, min } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
 
-import { ChartProps } from '../../types';
+import { ChartProps } from '../../../types';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { mergeTailwindClasses } from '../../utils';
+import { mergeTailwindClasses } from '../../../utils';
 import { transition } from 'd3-transition';
 
 // import { zoom } from 'd3-zoom';

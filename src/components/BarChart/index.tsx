@@ -64,7 +64,7 @@ const BarChart = ({
   dataLabel,
   tooltip,
 }: BarChartProps) => {
-  const refreshData = React.useCallback(async () => {
+  const refreshData = React.useCallback(() => {
     const svg = select(`#${id}`);
     svg.selectAll('*').remove();
 
@@ -269,7 +269,7 @@ const BarChart = ({
       id={id}
       className={mergeTailwindClasses(
         className,
-        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart  h-80 fill-current stroke-current`
+        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart h-80 fill-current stroke-current`
       )}
       data-testid='bar-chart'
     />
