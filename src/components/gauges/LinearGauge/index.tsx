@@ -1,5 +1,5 @@
 // import { axisBottom } from 'd3';
-import { pointer, select, selectAll } from 'd3';
+import { ValueFn, pointer, select, selectAll } from 'd3';
 
 import { mergeTailwindClasses } from '../../../utils';
 import { scaleLinear } from 'd3';
@@ -8,9 +8,13 @@ import { useEffect } from 'react';
 interface LinearGaugeProps {
   id: string;
   className?: string;
-  /* eslint-disable */
-  label?: any;
-  /* eslint-enable */
+
+  label:
+    | string
+    | number
+    | boolean
+    | ValueFn<SVGTextElement, unknown, string | number | boolean | null>
+    | null;
   data?: number;
   max?: number;
   error?: { data: number; className?: string };
@@ -20,23 +24,11 @@ interface LinearGaugeProps {
   marginTop?: number;
   marginBottom?: number;
   drawing?: { duration: number };
-  //   tooltip?: {
-  //     html?: () =>React.ReactNode
-  //   };
   tooltip?: {
     html?: (
       data: number,
-      // error?: {
-      //   data: number;
-      //   error:
-      //     | {
-      //         data: number;
-      //         className?: string | undefined;
-      //       }
-      //     | undefined;
-      // }
+      error: { data: number; className?: string | undefined } | undefined
       /* eslint-disable */
-      error: any
     ) => any;
     /* eslint-enable */
     className: string;
