@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { ZoomTransform, zoom } from 'd3-zoom';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { max, min } from 'd3-array';
 import { pointer, select } from 'd3-selection';
@@ -19,8 +20,6 @@ import { ChartProps } from '../../../types';
 import React from 'react';
 import { mergeTailwindClasses } from '../../../utils';
 import { transition } from 'd3-transition';
-
-// import { zoom } from 'd3-zoom';
 
 export interface DotPlotProps extends ChartProps {
   y: {
@@ -50,7 +49,6 @@ export interface DotPlotProps extends ChartProps {
     keys?: string[];
     className?: string;
   };
-  zooming?: boolean;
 }
 
 const DotPlot = ({
@@ -74,6 +72,9 @@ const DotPlot = ({
   size,
   shape = 'circle',
   tooltip = {},
+  zooming = {
+    enabled: false,
+  },
 }: DotPlotProps) => {
   const refreshChart = React.useCallback(() => {
     const shapeMapping = {
@@ -85,7 +86,7 @@ const DotPlot = ({
       star: symbolStar,
       wye: symbolWye,
     };
-    const svg = select(`#${id}`);
+    const svg = select<SVGSVGElement, unknown>(`#${id}`);
     // Clear svg
 
     svg.selectAll('*').remove();
@@ -265,7 +266,28 @@ const DotPlot = ({
             (yFn(d[y.key]) || 0) + yFn.bandwidth() / 2
           })`
       );
-  }, [data, id, margin, padding, shape, size, tooltip, x, y]);
+
+    if (zooming?.enabled) {
+      const zoomed = ({ transform }: { transform: ZoomTransform }) => {
+        // transform g across only x axis
+        dotRowsG.attr(
+          'transform',
+          `translate(${transform.x},0)scale(${transform.k},1)`
+        );
+        xAxisG.call(xAxis.scale(transform.rescaleX(xFn)));
+      };
+
+      const zoomFn = zoom<SVGSVGElement, unknown>()
+        .scaleExtent([zooming.min || 1, zooming.max || 2])
+        .translateExtent([
+          [0, 0],
+          [width, height],
+        ])
+        .on('zoom', zoomed);
+
+      svg.call(zoomFn);
+    }
+  }, [data, id, margin, padding, shape, size, tooltip, x, y, zooming]);
 
   React.useEffect(() => {
     refreshChart();
@@ -278,9 +300,10 @@ const DotPlot = ({
   return (
     <svg
       id={id}
-      className={`w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart  h-64 ${
+      className={mergeTailwindClasses(
+        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart h-64`,
         className || ''
-      }`}
+      )}
     />
   );
 };

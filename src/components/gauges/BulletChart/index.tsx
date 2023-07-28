@@ -37,14 +37,14 @@ const BulletChart = ({
   classNameData = 'text-blue-500',
   label = '',
   min = 0,
-  classNameBase = 'text-gray-400',
+  classNameBase = 'text-gray-300 dark:text-gray-600',
   base,
   classNameTarget = 'text-black',
   target,
   threshold,
-  classNameThreshold = `text-gray-300`,
+  classNameThreshold = `text-gray-200 dark:text-gray-700`,
   max,
-  classNameMax = `text-gray-200`,
+  classNameMax = `text-gray-100 dark:text-gray-800`,
   margin = {
     left: 120,
     top: 10,
@@ -84,10 +84,7 @@ const BulletChart = ({
       .append('rect')
       .attr(
         'class',
-        mergeTailwindClasses(
-          'fill-current stroke-current text-red-200 bg-red-200',
-          classNameMax
-        )
+        mergeTailwindClasses('fill-current stroke-current ', classNameMax)
       )
       .attr('x', xFn(min))
       .attr('y', 0)
@@ -167,7 +164,7 @@ const BulletChart = ({
     <svg
       id={id}
       className={mergeTailwindClasses(
-        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart h-6`,
+        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart h-12`,
         className
       )}
     />

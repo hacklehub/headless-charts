@@ -90,3 +90,15 @@ export const CustomHtmlTooltip = {
     },
   },
 };
+
+export const Zooming = {
+  args: {
+    ...Default.args,
+    id: 'box-plot-h-zooming',
+    zooming: {
+      enabled: true,
+      min: 0.75,
+      max: 2,
+    },
+  },
+};

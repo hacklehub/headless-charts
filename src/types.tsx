@@ -19,4 +19,9 @@ export interface ChartProps {
     duration?: number;
     delay?: number;
   };
+  zooming?: {
+    enabled?: boolean;
+    min?: number;
+    max?: number;
+  };
 }

@@ -1,3 +1,4 @@
+import { ZoomTransform, zoom } from 'd3-zoom';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { max, min } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
@@ -9,11 +10,8 @@ import React from 'react';
 import { mergeTailwindClasses } from '../../../utils';
 import { transition } from 'd3-transition';
 
-// import { zoom } from 'd3-zoom';
-
 export interface BoxPlotHProps extends ChartProps {
   classNameData?: string;
-
   x: {
     minKey: string;
     maxKey: string;
@@ -59,9 +57,12 @@ const BoxPlotH = ({
   x,
   tooltip,
   y,
+  zooming = {
+    enabled: false,
+  },
 }: BoxPlotHProps) => {
   const refreshChart = React.useCallback(() => {
-    const svg = select(`#${id}`);
+    const svg = select<SVGSVGElement, unknown>(`#${id}`);
     svg.selectAll('*').remove();
 
     const width = +svg.style('width').split('px')[0],
@@ -273,7 +274,27 @@ const BoxPlotH = ({
         })`
       )
       .call(xAxis);
-  }, [data, id, margin, padding, x, y, tooltip, classNameData]);
+    if (zooming?.enabled) {
+      const zoomed = ({ transform }: { transform: ZoomTransform }) => {
+        // transform g across only x axis
+        dotRowsG.attr(
+          'transform',
+          `translate(${transform.x},0)scale(${transform.k},1)`
+        );
+        xAxisG.call(xAxis.scale(transform.rescaleX(xFn)));
+      };
+
+      const zoomFn = zoom<SVGSVGElement, unknown>()
+        .scaleExtent([zooming.min || 1, zooming.max || 2])
+        .translateExtent([
+          [0, 0],
+          [width, height],
+        ])
+        .on('zoom', zoomed);
+
+      svg.call(zoomFn);
+    }
+  }, [data, id, margin, padding, x, y, tooltip, classNameData, zooming]);
 
   React.useEffect(() => {
     refreshChart();

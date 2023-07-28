@@ -88,3 +88,12 @@ export const CustomColorMap = {
     })),
   },
 };
+
+export const Zooming = {
+  args: {
+    ...Default.args,
+    zooming: {
+      enabled: true,
+    },
+  },
+};
