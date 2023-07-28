@@ -83,8 +83,14 @@ const BarChart = ({
 
     const xFnRange =
       direction === 'left'
-        ? [width - margin.right - padding.right, margin.left + padding.left]
-        : [margin.left + padding.left, width - margin.right - padding.right];
+        ? [
+            width - margin.right - (padding.right || 0),
+            margin.left + (padding.left || 0),
+          ]
+        : [
+            margin.left + (padding.left || 0),
+            width - margin.right - (padding.right || 0),
+          ];
 
     const xFn = scaleLinear()
       .domain([
@@ -97,10 +103,10 @@ const BarChart = ({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .domain(data.map((d: any) => d[y.key]))
       .range([
-        margin.top + padding.top,
-        height - margin.bottom - padding.bottom,
+        margin.top + (padding.top || 0),
+        height - margin.bottom - (padding.bottom || 0),
       ])
-      .padding(padding.bar); // add paddingBar here
+      .padding(padding.bar || 0); // add paddingBar here
 
     const g = svg.append('g');
 
