@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react';
 // import { axisBottom } from 'd3';
 import { pointer, select, selectAll } from 'd3';
 
 import { mergeTailwindClasses } from '../../../utils';
 import { scaleLinear } from 'd3';
+import { useEffect } from 'react';
 
 interface LinearGaugeProps {
   id: string;
   className?: string;
+  /* eslint-disable */
   label?: any;
+  /* eslint-enable */
   data?: number;
   max?: number;
   error?: { data: number; className?: string };
@@ -24,17 +26,19 @@ interface LinearGaugeProps {
   tooltip?: {
     html?: (
       data: number,
-      //   error?: {
-      //     data: number;
-      //     error:
-      //       | {
-      //           data: number;
-      //           className?: string | undefined;
-      //         }
-      //       | undefined;
-      //   }
-      error: any,
+      // error?: {
+      //   data: number;
+      //   error:
+      //     | {
+      //         data: number;
+      //         className?: string | undefined;
+      //       }
+      //     | undefined;
+      // }
+      /* eslint-disable */
+      error: any
     ) => any;
+    /* eslint-enable */
     className: string;
   };
   classNameGauge?: string;
@@ -74,7 +78,7 @@ const LinearGauge = ({
 
     const gaugeG = g.append('g');
 
-    const labelText = gaugeG
+    gaugeG
       .append('text')
       .attr('class', 'fill-current text-lg')
       .text(label)
@@ -82,7 +86,7 @@ const LinearGauge = ({
       .attr('x', marginLeft + (width - marginLeft - marginRight) / 2)
       .attr('y', height - marginTop);
 
-    const bgRail = gaugeG
+    gaugeG
       .append('rect')
       .attr(
         'class',
@@ -97,7 +101,7 @@ const LinearGauge = ({
       .attr('height', gaugeHeight)
       .attr('ry', gaugeHeight / 2);
 
-    const readingRect = gaugeG
+    gaugeG
       .append('rect')
       .attr(
         'class',
@@ -135,8 +139,7 @@ const LinearGauge = ({
       .duration(drawing.duration)
       .attr('width', xFn(data) - xFn(0));
 
-    const errorRect =
-      error &&
+    error &&
       error.data &&
       gaugeG
         .append('rect')
@@ -194,14 +197,14 @@ const LinearGauge = ({
 
   const refreshChart = () => {
     const svg = select(`#${id}`);
-    const width = +svg.style('width').split('px')[0],
-      height = +svg.style('height').split('px')[0];
+    const width = +svg.style('width').split('px')[0];
+    //   height = +svg.style('height').split('px')[0];
 
     const xFn = scaleLinear()
       .domain([0, max])
       .range([marginLeft, width - marginRight]);
 
-    const readingRect = select('.data-rect')
+    select('.data-rect')
       .transition()
       .duration(drawing.duration)
       .attr('width', xFn(data) - xFn(0));
