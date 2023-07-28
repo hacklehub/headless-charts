@@ -1,18 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/react';
-
 import BarChart from '.';
+import { Meta } from '@storybook/react';
 
-const meta: Meta<typeof BarChart> = {
+export default {
   title: 'Linear/BarChart',
   component: BarChart,
   parameters: {
-    // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/react/configure/story-layout
     layout: 'centered',
   },
-  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/react/writing-docs/autodocs
+
   tags: ['autodocs'],
-}; 
-type Story = StoryObj<typeof meta>;
+} as Meta;
 
 const data = [
   {
@@ -27,42 +24,32 @@ const data = [
   },
 ];
 
-export default meta;
-
-export const Basic: Story = {
+export const Default = {
   args: {
     data,
-    id: 'bar-chart',
-    className: 'bg-gray-900',
-    x: [{ key: 'reading', className: 'bg-red-900' }, { key: 'value' }],
+    id: 'bar-chart-reading-name',
+    x: [
+      {
+        key: 'reading',
+        className: 'bg-red-900 text-red-900 fill-current stroke-current',
+      },
+      { key: 'value' },
+    ],
     y: { key: 'name' },
-  },
-};
-
-export const Left: Story = {
-  args: {
-    ...Basic.args,
-    direction: 'left',
-  },
-};
-
-export const Drawing: Story = {
-  args: {
-    ...Basic.args,
-    drawing: {
+    dataLabel: {
       enabled: true,
-      duration: 1000,
-      delay: 100,
+      className: 'text-white',
     },
   },
 };
 
-export const DataLabel: Story = {
+
+export const Drawing = {
   args: {
-    ...Basic.args,
-    dataLabel: {
+    ...Default.args,
+    drawing: {
       enabled: true,
-      className: '',
+      duration: 1000,
     },
   },
 };
