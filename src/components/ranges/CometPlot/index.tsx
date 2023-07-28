@@ -147,12 +147,15 @@ const DotPlot = ({
       )
       .call(xAxis);
 
-    const tooltipDiv = select('body')
-      .append('div')
-      .attr('id', 'tooltip')
-      .style('position', 'absolute')
-      .style('opacity', '0')
-      .attr('class', `tooltip ${(tooltip && tooltip.className) || ''}`);
+    const tooltipDiv =
+      tooltip && select('#tooltip').node()
+        ? select('#tooltip')
+        : select('body')
+            .append('div')
+            .attr('id', 'tooltip')
+            .style('position', 'absolute')
+            .style('opacity', '0')
+            .attr('class', mergeTailwindClasses(tooltip.className));
 
     svg
       .append('clipPath')
@@ -174,23 +177,30 @@ const DotPlot = ({
       .enter()
       .append('g')
       .on('mouseenter', function (event: MouseEvent, d: any) {
-        tooltip && tooltipDiv.style('opacity', 1);
+        if (tooltip) {
+          tooltipDiv.style('opacity', 1);
+          const [bX, bY] = pointer(event, select('body'));
+          tooltipDiv.style('left', `${bX + 10}px`);
+          tooltipDiv.style('top', `${bY + 10}px`);
+          tooltipDiv.html(
+            tooltip && tooltip.html
+              ? tooltip.html(d)
+              : tooltip.keys
+              ? tooltip.keys
+                  .map((key) => `${key}: ${d[key] || ''}`)
+                  .join('<br/>')
+              : `${d[y.key]}: ${d[x.minKey]} to ${d[x.maxKey]}`
+          );
+        }
+      })
+      .on('mousemove', function (event: MouseEvent) {
         const [bX, bY] = pointer(event, select('body'));
-        tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-        tooltipDiv.html(
-          tooltip && tooltip.html
-            ? tooltip.html(d)
-            : tooltip.keys
-            ? tooltip.keys.map((key) => `${key}: ${d[key] || ''}`).join('<br/>')
-            : `${d[y.key]}: ${d[x.minKey]} to ${d[x.maxKey]}`
-        );
+        tooltipDiv.style('left', `${bX + 10}px`);
+        tooltipDiv.style('top', `${bY + 10}px`);
       })
       .on('mouseleave', function () {
-        tooltip &&
-          tooltipDiv
-            .style('opacity', '0')
-            .style('left', `0px`)
-            .style('top', `0px`);
+        tooltipDiv.style('opacity', 0);
+        tooltipDiv.text('');
       });
 
     transition();

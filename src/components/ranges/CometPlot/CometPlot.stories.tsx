@@ -24,6 +24,8 @@ export const Default = {
 export const Styled = {
   args: {
     ...Default.args,
+    className: 'bg-red-50 rounded h-56',
+    data: data,
     x: {
       minKey: 'min',
       maxKey: 'max',
@@ -31,6 +33,9 @@ export const Styled = {
     },
     y: {
       key: 'name',
+    },
+    tooltip: {
+      className: 'p-2 rounded bg-white shadow-md',
     },
   },
 };
@@ -64,7 +69,7 @@ export const CustomTooltipHtml = {
     tooltip: {
       html: (d: any) => {
         return `
-          <div class="text-center rounded border-2 p-2">
+          <div class="text-center rounded border-2 p-2 bg-white">
             <div class="text-lg font-bold">${d.name}</div>
             <div class="text-sm">ranges from ${d.min} to ${d.max}</div>
           </div>
@@ -95,5 +100,23 @@ export const Zooming = {
     zooming: {
       enabled: true,
     },
+  },
+};
+
+/**
+ * There maybe times when the tail is ahead of the head, so we need to reverse
+ */
+export const Reverse = {
+  args: {
+    ...Default.args,
+    data: [
+      ...data,
+      {
+        name: 'Custom',
+        min: 85,
+        max: 65,
+        className: 'text-red-800',
+      },
+    ],
   },
 };
