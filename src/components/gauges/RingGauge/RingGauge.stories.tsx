@@ -54,3 +54,21 @@ export const WithTooltip = {
     },
   },
 };
+
+/** Ring gauge with custom tooltip */
+export const WithCustomTooltip = {
+  args: {
+    data: metrics,
+    id: 'ring-chart-custom-tooltip',
+    labelKey: 'name',
+    dataKey: 'score',
+    targetKey: 'target',
+    tooltip: {
+      className: `bg-gray-800 text-white px-4 py-2 rounded-md shadow-md`,
+      html: (data: any) => `<div class="flex flex-col">
+            <div class="text-lg">${data.name}</div>
+            <div class="text-xs">${data.score} out of ${data.target}</div>
+          </div>`,
+    },
+  },
+};

@@ -148,16 +148,19 @@ const RingGauge = ({
       )
       .attr('d', '')
       .on('mouseenter', function (_event, d) {
-        tooltip &&
-          tooltipDiv
-            .style('opacity', 1)
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            .html(
-              tooltip?.html
-                ? tooltip.html(d)
-                : `${d[labelKey]} <br/>${d[dataKey]}/${d[targetKey]}`
-            );
+        tooltipDiv.attr(
+          'class',
+          mergeTailwindClasses(tooltip?.className, 'tooltip')
+        );
+        tooltipDiv
+          .style('opacity', 1)
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          .html(
+            tooltip?.html
+              ? tooltip.html(d)
+              : `${d[labelKey]} <br/>${d[dataKey]}/${d[targetKey]}`
+          );
       })
       .on('mousemove', function (event) {
         const [bX, bY] = pointer(event, select('body'));
