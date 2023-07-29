@@ -10,7 +10,7 @@ export default {
   tags: ['autodocs'],
 } as Meta;
 
-/** Default Bar Chart (Grouped). */
+/** Bullet chart is a single metric linear gauge. It shows achievement against 4 different metrics (base, target, threshold, max) */
 export const Default = {
   args: {
     data,
@@ -21,5 +21,18 @@ export const Default = {
     target: 80,
     threshold: 90,
     max: 100,
+  },
+};
+
+export const Styled = {
+  args: {
+    ...Default.args,
+    id: 'bullet-chart-styled',
+    className: 'bg-gray-100 rounded',
+    classNameData: 'fill-slate-500',
+    classNameTarget: 'fill-blue-500 stroke-blue-500',
+    classNameMax: 'fill-red-500',
+    classNameThreshold: 'fill-yellow-500',
+    classNameBase: 'fill-green-500',
   },
 };

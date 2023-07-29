@@ -35,6 +35,7 @@ export interface RingGaugeProps {
   minRadius?: number;
   startAngle?: number;
   endAngle?: number;
+  cornerRadius?: number;
   drawing?: {
     duration?: number;
     delay?: number;
@@ -64,6 +65,7 @@ const RingGauge = ({
     arc: 5,
   },
   minRadius = 10,
+  cornerRadius = 2,
   drawing = { duration: 1000, delay: 0 },
   startAngle = 0,
   endAngle = 270,
@@ -116,7 +118,7 @@ const RingGauge = ({
       .outerRadius((_d: any, i: number) => getOuterRadius(i))
       .startAngle(((startAngle / 90) * PI) / 2)
       .endAngle((d: any) => scale(d))
-      .cornerRadius(2);
+      .cornerRadius(cornerRadius);
 
     g.append('g')
       .attr('class', `background-arcs`)
@@ -169,13 +171,8 @@ const RingGauge = ({
         tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
       })
       .on('mouseleave', function () {
-        tooltip &&
-          tooltipDiv
-            .style('opacity', '0')
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            .style('left', `0px`)
-            .style('top', `0px`);
+        tooltipDiv.style('opacity', 0);
+        tooltipDiv.html('');
       })
       .transition()
       .duration(drawing?.duration || 1000)
@@ -228,6 +225,7 @@ const RingGauge = ({
     numArcs,
     padding.arc,
     startAngle,
+    cornerRadius,
     targetKey,
     tooltip,
   ]);
@@ -235,9 +233,9 @@ const RingGauge = ({
   useEffect(() => {
     refreshChart();
     return () => {
-      selectAll('.tooltip').remove();
+      selectAll('#tooltip').remove();
     };
-  }, [data]);
+  }, [data, refreshChart]);
   return (
     <svg
       id={id}

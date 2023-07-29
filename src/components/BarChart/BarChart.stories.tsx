@@ -3,6 +3,12 @@ import BarChart from '.';
 import { Meta } from '@storybook/react';
 import data from './sample.json';
 
+/**
+ * Bar charts are used to compare values across categories by using horizontal bars.  Bar charts are useful for showing data changes over a period of time or for comparing data among items. 
+ * 
+ * To create a bar chart, use the `<BarChart />` component. 
+ * 
+ * */
 export default {
   title: 'Linear/BarChart',
   component: BarChart,
@@ -41,14 +47,14 @@ export const Styled = {
       top: 0,
       right: 40,
       bottom: 40,
-      left: 40,
+      left: 60,
     },
     x: [
       {
         key: 'reading',
-        className: 'text-red-500 rounded',
+        className: 'fill-red-500 rounded',
       },
-      { key: 'value', className: 'text-blue-500' },
+      { key: 'value', className: 'fill-blue-500' },
     ],
     y: { key: 'name', className: 'text-red-500', padding: 10 },
   },

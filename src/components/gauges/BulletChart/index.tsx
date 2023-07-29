@@ -113,7 +113,10 @@ const BulletChart = ({
       .attr('y2', height - axisHeight - 5)
       .attr('x1', xFn(target))
       .attr('x2', xFn(target))
-      .attr('class', `stroke-1 stroke-current ${classNameTarget}`);
+      .attr(
+        'class',
+        mergeTailwindClasses(`stroke-1 stroke-current `, classNameTarget)
+      );
 
     transition();
 
