@@ -2,6 +2,7 @@
 
 import { ZoomTransform, zoom } from 'd3-zoom';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
+import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, min } from 'd3-array';
 import { pointer, select } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
@@ -18,7 +19,6 @@ import {
 
 import { ChartProps } from '../../../types';
 import React from 'react';
-import { mergeTailwindClasses } from '../../../utils';
 import { transition } from 'd3-transition';
 
 export interface DotPlotProps extends ChartProps {
@@ -27,13 +27,15 @@ export interface DotPlotProps extends ChartProps {
     axis?: 'left' | 'right';
   };
   x: {
-    minKey: string;
-    maxKey: string;
+    fromKey: string;
+    toKey: string;
     start?: number;
     end?: number;
     axis?: 'top' | 'bottom';
     axisTicks?: number;
     className?: string;
+    classNameTail?: string;
+    classNameHead?: string;
   };
   size?: number;
   shape?:
@@ -100,8 +102,8 @@ const DotPlot = ({
       .domain([
         Number.isFinite(x.start)
           ? x.start
-          : min(data.map((d: any) => d[x.minKey])),
-        Number.isFinite(x.end) ? x.end : max(data.map((d: any) => d[x.maxKey])),
+          : min(data.map((d: any) => d[x.fromKey])),
+        Number.isFinite(x.end) ? x.end : max(data.map((d: any) => d[x.toKey])),
       ])
       .range([margin.left, width - (padding.right || 0) - margin.right]);
 
@@ -189,7 +191,7 @@ const DotPlot = ({
               ? tooltip.keys
                   .map((key) => `${key}: ${d[key] || ''}`)
                   .join('<br/>')
-              : `${d[y.key]}: ${d[x.minKey]} to ${d[x.maxKey]}`
+              : `${d[y.key]}: ${d[x.fromKey]} to ${d[x.toKey]}`
           );
         }
       })
@@ -205,6 +207,7 @@ const DotPlot = ({
 
     transition();
 
+    // Draw the tails
     dotRowsG
       .append('polyline')
       .attr('clip-path', 'url(#clip)')
@@ -212,60 +215,60 @@ const DotPlot = ({
         mergeTailwindClasses(
           `comet-tail fill-current stroke-0`,
           x.className || '',
-          d.className || ''
+          d.className || '',
+          x.classNameTail
         )
       )
       .attr(
         'points',
         (d: any) =>
-          `${xFn(d[x.minKey])} ${
+          `${xFn(d[x.fromKey])} ${
             (yFn(d[y.key]) || 0) + yFn.bandwidth() / 2
-          }, ${xFn(d[x.minKey])} ${
+          }, ${xFn(d[x.fromKey])} ${
             (yFn(d[y.key]) || 0) +
             yFn.bandwidth() / 2 -
-            Math.sqrt((size || 100) / 4) -
-            1
-          }, ${xFn(d[x.minKey])} ${
+            Math.sqrt((size || 100) / 4)
+          }, ${xFn(d[x.fromKey])} ${
             (yFn(d[y.key]) || 0) +
             Math.sqrt((size || 100) / 4) +
-            yFn.bandwidth() / 2 +
-            1
-          }`
+            yFn.bandwidth() / 2
+          }, ${xFn(d[x.fromKey])} ${(yFn(d[y.key]) || 0) + yFn.bandwidth() / 2}`
       )
       .transition()
       .duration(1000)
       .attr(
         'points',
         (d: any) =>
-          `${xFn(d[x.minKey])} ${
+          // Draw a triangle From (minX midY) to (maxX midY-Sqrt(size)) to (maxX midY+Sqrt(size) to minX midY) and then close it
+          `${xFn(d[x.fromKey])} ${
             (yFn(d[y.key]) || 0) + yFn.bandwidth() / 2
-          }, ${xFn(d[x.maxKey])} ${
+          }, ${xFn(d[x.toKey])} ${
             (yFn(d[y.key]) || 0) -
             Math.sqrt((size || 100) / 4) +
-            yFn.bandwidth() / 2 -
-            1
-          }, ${xFn(d[x.maxKey])} ${
+            yFn.bandwidth() / 2
+          }, ${xFn(d[x.toKey])} ${
             (yFn(d[y.key]) || 0) +
             Math.sqrt((size || 100) / 4) +
-            yFn.bandwidth() / 2 +
-            1
-          }`
+            yFn.bandwidth() / 2
+          }, ${xFn(d[x.fromKey])} ${(yFn(d[y.key]) || 0) + yFn.bandwidth() / 2}`
       );
 
+    // Draw the head
     dotRowsG
       .append('path')
       .attr('class', (d: any) =>
         mergeTailwindClasses(
           `fill-current end-dots stroke-current stroke-0`,
           x.className || '',
-          d.className || ''
+          d.className || '',
+          x.classNameHead || ''
         )
       )
       .attr('d', () => symbol(shapeMapping[shape], size || 100)())
       .attr(
         'transform',
         (d: any) =>
-          `translate(${xFn(d[x.minKey])},${
+          `translate(${xFn(d[x.fromKey])},${
             (yFn(d[y.key]) || 0) + yFn.bandwidth() / 2
           })`
       )
@@ -274,7 +277,7 @@ const DotPlot = ({
       .attr(
         'transform',
         (d: any) =>
-          `translate(${xFn(d[x.maxKey])},${
+          `translate(${xFn(d[x.toKey])},${
             (yFn(d[y.key]) || 0) + yFn.bandwidth() / 2
           })`
       );
@@ -290,7 +293,7 @@ const DotPlot = ({
       };
 
       const zoomFn = zoom<SVGSVGElement, unknown>()
-        .scaleExtent([zooming.min || 1, zooming.max || 2])
+        .scaleExtent([zooming.min || 0.9, zooming.max || 2])
         .translateExtent([
           [0, 0],
           [width, height],
@@ -312,10 +315,7 @@ const DotPlot = ({
   return (
     <svg
       id={id}
-      className={mergeTailwindClasses(
-        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart h-64`,
-        className || ''
-      )}
+      className={mergeTailwindClasses(defaultChartClassNames, className || '')}
     />
   );
 };

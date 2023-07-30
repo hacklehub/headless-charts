@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
+import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, min } from 'd3-array';
 import { pointer, select } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
 
-import { ChartProps } from '../../types';
+import { ChartProps } from '../../../types';
 import React from 'react';
-import { mergeTailwindClasses } from '../../utils';
 import { transition } from 'd3-transition';
 
 interface ColumnType {
@@ -273,10 +273,7 @@ const BarChart = ({
   return (
     <svg
       id={id}
-      className={mergeTailwindClasses(
-        className,
-        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart h-80 fill-current stroke-current`
-      )}
+      className={mergeTailwindClasses(defaultChartClassNames, className)}
       data-testid='bar-chart'
     />
   );

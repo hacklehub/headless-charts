@@ -4,13 +4,20 @@ import { Meta } from '@storybook/react';
 
 const data = 85;
 
+/** Bullet chart is a single metric linear gauge. It shows achievement against 4 different metrics (base, target, threshold, max) 
+ * We can use it to show progress towards a goal.
+ * 
+ * Built in a headless fashion, you can apply individual styles to all elements
+*/
 export default {
   title: 'Gauge/BulletChart',
   component: BulletChart,
   tags: ['autodocs'],
 } as Meta;
 
-/** Bullet chart is a single metric linear gauge. It shows achievement against 4 different metrics (base, target, threshold, max) */
+/**
+ * Default BulletChart (Headless and unstyled). 
+ */
 export const Default = {
   args: {
     data,

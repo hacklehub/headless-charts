@@ -1,1 +1,1 @@
-export {default as BarChart} from "./components/BarChart";
+export { default as BarChart } from './components/linear/BarChart';

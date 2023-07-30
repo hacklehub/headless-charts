@@ -2,11 +2,11 @@ import { PieArcDatum, arc } from 'd3-shape';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect } from 'react';
+import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { pointer, select, selectAll } from 'd3-selection';
 
 // import { axisBottom } from 'd3-axis';
 import { interpolateNumber } from 'd3-interpolate';
-import { mergeTailwindClasses } from '../../../utils';
 import { min } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
 import { transition } from 'd3-transition';
@@ -239,10 +239,7 @@ const RingGauge = ({
   return (
     <svg
       id={id}
-      className={mergeTailwindClasses(
-        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 h-64 chart`,
-        className || ''
-      )}
+      className={mergeTailwindClasses(defaultChartClassNames, className || '')}
     />
   );
 };
