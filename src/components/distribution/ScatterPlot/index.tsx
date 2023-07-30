@@ -243,10 +243,17 @@ const ScatterPlot = ({
             .style('opacity', '0')
             .attr('class', mergeTailwindClasses(tooltip?.className));
 
-    tooltipDiv.attr('class', `tooltip ${tooltip?.className || ''}`);
+    svg
+      .append('clipPath')
+      .attr('id', 'clip')
+      .append('rect')
+      .attr('x', margin.left)
+      .attr('y', margin.top - (padding.top || 0) - 10)
+      .attr('width', width - margin.left)
+      .attr('height', height + (padding.bottom || 0) + 8);
 
     // Drawing
-    const pointsGroup = g.append('g');
+    const pointsGroup = g.append('g').attr('clip-path', 'url(#clip)');
 
     const points = pointsGroup
       .selectAll('.points')
@@ -352,7 +359,7 @@ const ScatterPlot = ({
 
     if (zooming?.enabled) {
       const zoomed = ({ transform }: any) => {
-        g.attr('transform', transform);
+        pointsGroup.attr('transform', transform);
         xAxisG.call(xAxis.scale(transform.rescaleX(xFn)));
         yAxisG.call(yAxis.scale(transform.rescaleY(yFn)));
       };

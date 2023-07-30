@@ -165,7 +165,14 @@ const DotPlot = ({
       .append('rect')
       .attr('x', margin.left)
       .attr('y', margin.top - (padding.top || 0) - 10)
-      .attr('width', width)
+      .attr(
+        'width',
+        width -
+          margin.left -
+          margin.right -
+          (padding.left || 0) -
+          (padding.right || 0)
+      )
       .attr('height', height + (padding.bottom || 0) + 8);
 
     const dataG = g
