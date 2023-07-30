@@ -137,6 +137,7 @@ const BoxPlotH = ({
 
     transition();
 
+    // End lines
     dotRowsG
       .append('line')
       .attr('clip-path', 'url(#clip)')
@@ -304,15 +305,10 @@ const BoxPlotH = ({
   }, [data, refreshChart]);
 
   return (
-    <>
-      <svg
-        id={id}
-        className={mergeTailwindClasses(
-          defaultChartClassNames,
-          className || ''
-        )}
-      />
-    </>
+    <svg
+      id={id}
+      className={mergeTailwindClasses(defaultChartClassNames, className || '')}
+    />
   );
 };
 
