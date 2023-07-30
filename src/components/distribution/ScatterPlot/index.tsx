@@ -292,7 +292,7 @@ const ScatterPlot = ({
     drawing?.delay &&
       points
         .transition()
-        .delay((d, i) => i * (drawing.delay || 0))
+        .delay((_, i) => i * (drawing.delay || 0))
 
         .attr('d', (d: any) =>
           symbol(

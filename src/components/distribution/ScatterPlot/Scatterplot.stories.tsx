@@ -166,3 +166,35 @@ export const WithZoom = {
   },
 };
 
+
+/**
+ * Connect the dots with a line. In this example, the dots are connected with a line.
+ * 
+ * */
+
+export const WithLine = {
+  args: {
+    ...WithZoom.args,
+    id: 'scatterplot-line',
+    connect: {
+      enabled: true,
+      className: 'stroke-purple-500',
+    },
+  },
+};
+
+/**
+ * Animated connected scatterplot. In this example, the dots are connected with a line and animated.
+ * 
+ * While it doesn't make sense in the current context, it can be useful for showing how a variable changes over time. 
+ */
+
+export const AnimatedWithLine = {
+  args: {
+    ...WithLine.args,
+    id: 'scatterplot-animated-line',
+    drawing: {
+      delay: 100,
+    },
+  },
+};
