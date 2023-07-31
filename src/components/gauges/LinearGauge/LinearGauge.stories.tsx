@@ -2,7 +2,7 @@ import LinearGauge from '.';
 import { Meta } from '@storybook/react';
 
 export default {
-  title: 'Gauges/LinearGauge',
+  title: 'Gauge/LinearGauge',
   component: LinearGauge,
   tags: ['lineargauges'],
 } as Meta;
