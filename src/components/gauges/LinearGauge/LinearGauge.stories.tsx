@@ -25,6 +25,7 @@ export const Default = {
 export const Drawing = {
   args: {
     ...Default.args,
+    label: 'Linear Gauge Graph With Drawing',
     drawing: { duration: 2000 },
   },
 };
