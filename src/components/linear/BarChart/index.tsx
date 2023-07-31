@@ -11,9 +11,10 @@ import { transition } from 'd3-transition';
 
 interface ColumnType {
   axis?: 'top' | 'bottom';
+  axisTicks?: number;
+  axisLabel?: string;
   className?: string;
   classNameNegative?: string;
-  axisTicks?: number;
   key: string;
   start?: number;
   end?: number;
@@ -53,9 +54,9 @@ const BarChart = ({
     bar: 0.1,
   },
   margin = {
-    top: x && x.some((column) => column.axis === 'top') ? 40 : 20,
+    top: x && x.some((column) => column.axis === 'top') ? 60 : 40,
     right: direction === 'right' ? 20 : 40,
-    bottom: x && x.some((column) => column.axis === 'bottom') ? 40 : 20,
+    bottom: x && x.some((column) => column.axis === 'bottom') ? 60 : 40,
     left: 60,
   },
   drawing = {
@@ -132,6 +133,8 @@ const BarChart = ({
       )
       .attr('data-testid', 'y-axis');
 
+    yAxisG.call(yAxis);
+
     xAxisG
       .attr(
         'transform',
@@ -142,7 +145,19 @@ const BarChart = ({
         })`
       )
       .call(xAxis);
-    yAxisG.call(yAxis);
+
+    xAxisG
+      .append('text')
+      .attr('class', mergeTailwindClasses('fill-current'))
+      .attr('x', width - (margin.right || 0))
+      .attr('text-anchor', 'end')
+      .attr('y', x && x.some((column) => column.axis === 'top') ? -20 : 30)
+      .text(
+        x
+          .map((column: ColumnType) => column.axisLabel || column.key || '')
+          .join(', ')
+      );
+
     const tooltipDiv = select('body')
       .append('div')
       .attr('id', 'tooltip')
