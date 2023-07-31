@@ -29,22 +29,33 @@ export const Drawing = {
   },
 };
 
+export const Error = {
+  args: {
+    id: 'linear-gauge-with-error',
+    label: 'linear Gauge With Error',
+    data: 23,
+    max: 25,
+    error: { data: 0.5, className: 'text-red' },
+  },
+};
+
 export const ToolTip = {
   args: {
     id: 'linear-gauge-with-tooltip',
     className: '',
     label: 'Linear Gauge Graph With Tooltip',
-    data: 28,
+    data: 67,
     max: 100,
     drawing: { duration: 2000 },
     tooltip: {
-      html: ({ data = 400, error = { data: 300, className: 'bg-red' } }) => {
-        <div className={error.className}>
-          <p>data: {data}</p>
-          <p>Error code: {error.data}</p>
-        </div>;
+      html: (data = 45, error = { data: 20, className: 'bg-red' }) => {
+        return (
+          <div>
+            <p>Data: ${data}</p>${error ? `<p>Error: ${error.data}</p>` : ''}
+          </div>
+        );
       },
-      className: 'bg-red-800 text-white',
+      className: 'custom-tooltip-class',
     },
   },
 };
