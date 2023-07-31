@@ -67,8 +67,8 @@ const LinearGauge = ({
 
     svg.selectAll('*').remove();
 
-    const width = +svg.style('width').split('px')[0],
-      height = +svg.style('height').split('px')[0];
+    const width = +svg.style('width').split('px')[0];
+    const height = +svg.style('height').split('px')[0];
 
     const xFn = scaleLinear()
       .domain([0, max])
@@ -192,8 +192,7 @@ const LinearGauge = ({
     const svg = select(`#${id}`);
     const width = +svg.style('width').split('px')[0];
     /* eslint-disable */
-     // @ts-ignore
-      height = +svg.style('height').split('px')[0];
+    const height = +svg.style('height').split('px')[0];
     /* eslint-enable */
     const xFn = scaleLinear()
       .domain([0, max])
@@ -217,9 +216,10 @@ const LinearGauge = ({
   return (
     <svg
       id={id}
-      className={`w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart  h-12 ${
-        className || ''
-      }`}
+      className={mergeTailwindClasses(
+        className,
+        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart  h-12`
+      )}
     />
   );
 };
