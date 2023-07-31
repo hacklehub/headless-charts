@@ -16,7 +16,7 @@ export default {
 export const Default = {
   args: {
     id: 'linear-gauge-default',
-    className: '',
+    className: 'h-12',
     label: 'Linear Gauge Graph',
     data: 0.47,
   },
