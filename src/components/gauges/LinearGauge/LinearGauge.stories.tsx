@@ -35,7 +35,7 @@ export const Error = {
     label: 'linear Gauge With Error',
     data: 23,
     max: 25,
-    error: { data: 0.5, className: 'text-red' },
+    error: { data: 15, className: '' },
   },
 };
 
@@ -49,11 +49,9 @@ export const ToolTip = {
     drawing: { duration: 2000 },
     tooltip: {
       html: (data = 45, error = { data: 20, className: 'bg-red' }) => {
-        return (
-          <div>
+        return `<div>
             <p>Data: ${data}</p>${error ? `<p>Error: ${error.data}</p>` : ''}
-          </div>
-        );
+          </div>`;
       },
       className: 'bg-gray-800 text-white p-2 rounded',
     },
