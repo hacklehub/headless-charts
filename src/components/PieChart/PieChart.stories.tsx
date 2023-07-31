@@ -22,12 +22,24 @@ export const Default = {
     ],
     id: 'default-pie-chart',
     paddingAngle: 45,
+  },
+};
+
+export const Styled = {
+  args: {
+    ...Default.args,
+    id: 'default-pie-chart',
     classNamePoints: { classMap },
-    innerRadius: 0.7,
     drawing: { duration: 1000 },
-    // // cornerRadius: 90,
-    // value: '100',
-    // labels: { key: 'name' },
-    // paddingBar: 50,
+  },
+};
+
+export const PieChartDonut = {
+  args: {
+    ...Styled.args,
+    paddingBar: 50,
+    value: '100',
+    labels: { key: 'name' },
+    innerRadius: 0.7,
   },
 };
