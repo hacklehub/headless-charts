@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Meta } from '@storybook/react';
 import PieChart from '.';
+import { ToolTip } from '../gauges/LinearGauge/LinearGauge.stories';
 
 export default {
   title: 'Linear/PieChart',
@@ -67,12 +68,22 @@ export const CornerRadius = {
 
 export const Tooltip = {
   args: {
-    ...CornerRadius,
+    ...CornerRadius.args,
     id: 'pie-chart-tooltip',
     tooltip: {
       className: 'bg-gray-800 text-white p-2 rounded',
-      keys: ['product-a', 'product-b', 'product-c'],
-      html: (d: any) => `<strong>${d.data.name}</strong>: ${d.data.value}`,
+    },
+  },
+};
+
+export const ToolTipWithCustomHtml = {
+  args: {
+    ...ToolTip.args,
+    id: 'pie-chart with -tooltip-custom-html',
+    tooltip: {
+      html: (d: any) => {
+        return `<div class='text-lg text-center'>${d.name}</div>`;
+      },
     },
   },
 };
