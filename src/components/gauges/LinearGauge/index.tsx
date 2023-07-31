@@ -210,7 +210,7 @@ const LinearGauge = ({
       id={id}
       className={mergeTailwindClasses(
         className,
-        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart  h-12`
+        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart `
       )}
     />
   );
