@@ -23,15 +23,24 @@ interface LinearGaugeProps {
   marginTop?: number;
   marginBottom?: number;
   drawing?: { duration: number };
-  tooltip?: {
-    html?: (
-      data: number,
-      error: { data: number; className?: string | undefined } | undefined
-      /* eslint-disable */
-    ) => any;
-    /* eslint-enable */
-    className: string;
-  };
+  tooltip?:
+    | {
+        html?:
+          | ((
+              data: number,
+              error:
+                | {
+                    data: number;
+                    className?: string | undefined;
+                  }
+                | undefined
+              /* eslint-disable */
+            ) => any)
+          /* eslint-enable */
+          | undefined;
+        className: string;
+      }
+    | undefined;
   classNameGauge?: string;
   classNameGaugeBg?: string;
 }
@@ -107,19 +116,16 @@ const LinearGauge = ({
       .attr('height', gaugeHeight)
       .attr('ry', gaugeHeight / 2)
       .on('mouseenter', function () {
-        // event, d
         tooltip &&
           tooltipDiv
             .style('opacity', 1)
             .html(tooltip.html ? tooltip.html(data, error) : data);
       })
       .on('mousemove', function (event) {
-        // d
         const [bX, bY] = pointer(event, select('body'));
         tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
       })
       .on('mouseleave', function () {
-        // event, d
         tooltip &&
           tooltipDiv
             .style('opacity', '0')
@@ -147,19 +153,16 @@ const LinearGauge = ({
         .attr('width', 0)
         .attr('height', gaugeHeight)
         .on('mouseenter', function () {
-          // event, d
           tooltip &&
             tooltipDiv
               .style('opacity', 1)
               .html(tooltip.html ? tooltip.html(data, error) : error);
         })
         .on('mousemove', function (event) {
-          // , d
           const [bX, bY] = pointer(event, select('body'));
           tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
         })
         .on('mouseleave', function () {
-          // event, d
           tooltip &&
             tooltipDiv
               .style('opacity', '0')
@@ -169,9 +172,8 @@ const LinearGauge = ({
         .transition()
         .duration(drawing.duration)
         .attr('x', () => xFn(max - (error.data || 0)))
-        // d
+
         .attr('width', () => {
-          // d
           return xFn(max) - xFn(max - (error.data || 0));
         });
 
@@ -189,8 +191,10 @@ const LinearGauge = ({
   const refreshChart = () => {
     const svg = select(`#${id}`);
     const width = +svg.style('width').split('px')[0];
-    //   height = +svg.style('height').split('px')[0];
-
+    /* eslint-disable */
+     // @ts-ignore
+      height = +svg.style('height').split('px')[0];
+    /* eslint-enable */
     const xFn = scaleLinear()
       .domain([0, max])
       .range([marginLeft, width - marginRight]);
