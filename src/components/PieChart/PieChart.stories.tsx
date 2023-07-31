@@ -43,3 +43,22 @@ export const PieChartDonut = {
     innerRadius: 0.7,
   },
 };
+
+export const PaddingAngle = {
+  args: {
+    ...Styled.args,
+    id: 'padding-angle',
+    className: 'md:w-6/12',
+    classNamePoints: { classMap },
+    innerRadius: 0.7,
+    paddingAngle: 0.04,
+    value: 'USA',
+  },
+};
+
+export const CornerRadius = {
+    args: {
+        ...PaddingAngle.args,
+        cornerRadius: 5
+    }
+}
