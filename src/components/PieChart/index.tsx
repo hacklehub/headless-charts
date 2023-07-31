@@ -40,16 +40,20 @@ interface PieChartProps {
   className?: string;
   classNamePoints?: ClassNamePoints;
   paddingBar?: number;
-  paddingLeft?: number;
-  paddingRight?: number;
-  paddingBottom?: number;
-  paddingTop?: number;
+  padding?: {
+    left: number;
+    right?: number;
+    top: number;
+    bottom?: number;
+  };
   paddingAngle?: number;
   cornerRadius?: number;
-  marginLeft?: number;
-  marginRight?: number;
-  marginTop?: number;
-  marginBottom?: number;
+  margin?: {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+  };
   innerRadius?: number;
   value: string;
   drawing?: DrawingOptions;
@@ -63,16 +67,18 @@ const PieChart = ({
   className = '',
   classNamePoints = { classMap: {} },
   //paddingBar = 0.3,
-  paddingLeft = 0,
-  //paddingRight = 0,
-  //paddingBottom = 0,
-  paddingTop = 0,
+  padding = {
+    left: 0,
+    top: 0,
+  },
   paddingAngle = 0,
   cornerRadius = 0,
-  marginLeft = 40,
-  marginRight = 40,
-  marginTop = 40,
-  marginBottom = 40,
+  margin = {
+    left: 40,
+    right: 40,
+    top: 40,
+    bottom: 40,
+  },
   innerRadius = 0,
   value,
   drawing,
@@ -94,8 +100,8 @@ const PieChart = ({
       .padAngle(paddingAngle);
 
     const chartArea = [
-      width - marginLeft - marginRight,
-      height - marginTop - marginBottom,
+      width - margin.left - margin.right,
+      height - margin.top - margin.bottom,
     ];
 
     const radius = min(chartArea.map((a) => a / 2)) || 0;
@@ -118,8 +124,8 @@ const PieChart = ({
       .append('g')
       .attr(
         'transform',
-        `translate(${paddingLeft + marginLeft + chartArea[0] / 2},${
-          marginTop + paddingTop + chartArea[1] / 2
+        `translate(${padding.left + margin.left + chartArea[0] / 2},${
+          margin.top + padding.top + chartArea[1] / 2
         })`
       );
 
