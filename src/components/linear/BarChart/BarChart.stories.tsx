@@ -153,3 +153,46 @@ export const BorderRadius = {
     ],
   },
 };
+
+export const LeftDirection = {
+  args: {
+    ...Default.args,
+    id: 'bar-chart-left-direction',
+    direction: 'left',
+  },
+};
+
+export const DifferentAxis = {
+  args: {
+    ...Default.args,
+    id: 'bar-chart-different-axis',
+    x: [
+      {
+        key: 'reading',
+        axis: 'top',
+      },
+      {
+        key: 'value',
+        axis: 'bottom',
+      },
+    ],
+  },
+};
+
+export const CustomAxisLabel = {
+  args: {
+    ...Default.args,
+    id: 'bar-chart-custom-axis-label',
+    x: [
+      {
+        key: 'reading',
+        axis: 'top',
+        axisLabel: 'Reading',
+      },
+      {
+        key: 'value',
+        axisLabel: 'Value',
+      },
+    ],
+  },
+};
