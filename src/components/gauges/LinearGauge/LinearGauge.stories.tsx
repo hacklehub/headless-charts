@@ -55,7 +55,7 @@ export const ToolTip = {
           </div>
         );
       },
-      className: 'custom-tooltip-class',
+      className: 'bg-gray-800 text-white p-2 rounded',
     },
   },
 };
