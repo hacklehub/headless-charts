@@ -23,11 +23,26 @@ export const Default = {
 };
 
 /**
+ * 
+ */
+
+
+export const Styled = {
+  args: {
+    ...Default.args,
+    id: 'linear-gauge-styled',
+    className: 'fill-gray-100 text-white rounded',
+    classNameGauge: 'fill-green-800 stroke-green-800',
+    classNameGaugeBg: 'fill-green-200 stroke-green-200',
+  },
+}
+/**
  * You can customize how slowly you can draw the gauge.
  */
 export const Drawing = {
   args: {
     ...Default.args,
+    id: 'linear-gauge-drawing',
     label: 'Linear Gauge Graph With Drawing',
     drawing: { duration: 2000 },
   },
@@ -69,6 +84,7 @@ export const ToolTip = {
 export const ToolTipWithCustomHtml = {
   args: {
     ...ToolTip.args,
+    id: 'linear-gauge-with-tooltip-custom-html',
     error: { data: 2 },
     tooltip: {
       html: `<div class='bg-gray-800 text-white p-2 rounded'>67% with 2% error</div>`,
