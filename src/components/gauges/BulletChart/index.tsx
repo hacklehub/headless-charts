@@ -1,6 +1,7 @@
+import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+
 import React from 'react';
 import { axisBottom } from 'd3-axis';
-import { mergeTailwindClasses } from '../../../utils';
 import { scaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
 import { transition } from 'd3-transition';
@@ -34,17 +35,17 @@ const BulletChart = ({
   id,
   className,
   data = 0,
-  classNameData = 'text-blue-500',
+  classNameData = 'fill-blue-500 stroke-blue-500',
   label = '',
   min = 0,
-  classNameBase = 'text-gray-400',
+  classNameBase = 'fill-gray-300 dark:fill-gray-500 dark:stroke-gray-500',
   base,
-  classNameTarget = 'text-black',
+  classNameTarget = 'fill-black stroke-black dark:fill-white dark:stroke-white',
   target,
   threshold,
-  classNameThreshold = `text-gray-300`,
+  classNameThreshold = `fill-gray-200 stroke-gray-200 dark:fill-gray-600 dark:stroke-gray-600`,
   max,
-  classNameMax = `text-gray-200`,
+  classNameMax = `fill-gray-100 stroke-grey-100 dark:fill-gray-700 dark:stroke-gray-700`,
   margin = {
     left: 120,
     top: 10,
@@ -70,7 +71,10 @@ const BulletChart = ({
 
     g.append('text')
       .text(label)
-      .attr('class', `stroke-current ${className}`)
+      .attr(
+        'class',
+        mergeTailwindClasses(`fill-current stroke-current `, className)
+      )
       .attr('text-anchor', 'end')
       .attr('font-size', '0.8em')
       .attr('x', margin.left - 10)
@@ -84,10 +88,7 @@ const BulletChart = ({
       .append('rect')
       .attr(
         'class',
-        mergeTailwindClasses(
-          'fill-current stroke-current text-red-200 bg-red-200',
-          classNameMax
-        )
+        mergeTailwindClasses('fill-current stroke-current ', classNameMax)
       )
       .attr('x', xFn(min))
       .attr('y', 0)
@@ -96,7 +97,10 @@ const BulletChart = ({
 
     bulletG
       .append('rect')
-      .attr('class', `${classNameThreshold} fill-current`)
+      .attr(
+        'class',
+        mergeTailwindClasses(`fill-current stroke-current `, classNameThreshold)
+      )
       .attr('x', xFn(min))
       .attr('y', 0)
       .attr('width', xFn(threshold))
@@ -104,7 +108,10 @@ const BulletChart = ({
 
     bulletG
       .append('rect')
-      .attr('class', `${classNameBase} fill-current`)
+      .attr(
+        'class',
+        mergeTailwindClasses(`fill-current stroke-current `, classNameBase)
+      )
       .attr('x', xFn(min))
       .attr('y', 0)
       .attr('width', xFn(base))
@@ -116,13 +123,19 @@ const BulletChart = ({
       .attr('y2', height - axisHeight - 5)
       .attr('x1', xFn(target))
       .attr('x2', xFn(target))
-      .attr('class', `stroke-1 stroke-current ${classNameTarget}`);
+      .attr(
+        'class',
+        mergeTailwindClasses(`stroke-1 stroke-current `, classNameTarget)
+      );
 
     transition();
 
     bulletG
       .append('rect')
-      .attr('class', `${classNameData} fill-current`)
+      .attr(
+        'class',
+        mergeTailwindClasses(`fill-current stroke-current `, classNameData)
+      )
       .attr('x', xFn(min))
       .attr('y', margin.top)
       .attr('width', 0)
@@ -167,7 +180,8 @@ const BulletChart = ({
     <svg
       id={id}
       className={mergeTailwindClasses(
-        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart h-6`,
+        defaultChartClassNames,
+        `h-12`,
         className
       )}
     />

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import BoxPlotH from '.';
+import BoxPlotV from '.';
 import { Meta } from '@storybook/react';
 import data from '../sample.json';
 
 export default {
-  title: 'Ranges/BoxPlotH',
-  component: BoxPlotH,
+  title: 'Ranges/BoxPlotV',
+  component: BoxPlotV,
   tags: ['autodocs'],
 } as Meta;
 
@@ -14,7 +14,7 @@ export const Default = {
   args: {
     data,
     id: 'box-plot-h-default',
-    x: {
+    y: {
       minKey: 'min',
       maxKey: 'max',
       midKey: 'mid',
@@ -22,7 +22,7 @@ export const Default = {
       boxEnd: 'lastQuartile',
       min: 0,
     },
-    y: { key: 'name' },
+    x: { key: 'name' },
   },
 };
 
@@ -31,8 +31,8 @@ export const CustomColors = {
   args: {
     ...Default.args,
     id: 'box-plot-h-custom-colors',
-    x: {
-      ...Default.args.x,
+    y: {
+      ...Default.args.y,
       classNameBoxes: 'text-blue-500 opacity-100',
     },
   },
@@ -42,8 +42,8 @@ export const CustomColorMap = {
   args: {
     ...Default.args,
     id: 'box-plot-h-custom-color-map',
-    x: {
-      ...Default.args.x,
+    y: {
+      ...Default.args.y,
     },
     data: data.map((d: any, idx: number) => ({
       ...d,

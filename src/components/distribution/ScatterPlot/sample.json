@@ -1,0 +1,202 @@
+[
+  {
+    "country": "United States",
+    "continent": "North America",
+    "system": "Democracy",
+    "gdp": 20412.87,
+    "population": 327167434,
+    "purchasing_power": 59501.66
+  },
+  {
+    "country": "China",
+    "continent": "Asia",
+    "system": "Democracy",
+    "gdp": 13608.15,
+    "population": 1427647786,
+    "purchasing_power": 18960.38
+  },
+  {
+    "country": "Japan",
+    "continent": "Asia",
+    "system": "Monarchy",
+    "gdp": 4970.92,
+    "population": 126529100,
+    "purchasing_power": 4280.64
+  },
+  {
+    "country": "Germany",
+    "continent": "Europe",
+    "system": "Democracy",
+    "gdp": 3997.75,
+    "population": 82927922,
+    "purchasing_power": 4762.35
+  },
+  {
+    "country": "United Kingdom",
+    "continent": "Europe",
+    "system": "Monarchy",
+    "gdp": 2824.23,
+    "population": 66488991,
+    "purchasing_power": 3972.09
+  },
+  {
+    "country": "India",
+    "continent": "Asia",
+    "system": "Democracy",
+    "gdp": 2716.29,
+    "population": 1354051854,
+    "purchasing_power": 9439.61
+  },
+  {
+    "country": "France",
+    "continent": "Europe",
+    "system": "Democracy",
+    "gdp": 2582.49,
+    "population": 66987244,
+    "purchasing_power": 3666.72
+  },
+  {
+    "country": "Italy",
+    "continent": "Europe",
+    "system": "Democracy",
+    "gdp": 2081.92,
+    "population": 60421760,
+    "purchasing_power": 2989.44
+  },
+  {
+    "country": "Brazil",
+    "continent": "South America",
+    "system": "Democracy",
+    "gdp": 1868.63,
+    "population": 210867954,
+    "purchasing_power": 8712.77
+  },
+  {
+    "country": "Canada",
+    "continent": "North America",
+    "system": "Democracy",
+    "gdp": 1737.78,
+    "population": 37057765,
+    "purchasing_power": 4623.17
+  },
+  {
+    "country": "South Korea",
+    "continent": "Asia",
+    "system": "Democracy",
+    "gdp": 1693.25,
+    "population": 51606633,
+    "purchasing_power": 2581.07
+  },
+  {
+    "country": "Russia",
+    "continent": "Europe",
+    "system": "Democracy",
+    "gdp": 1660.16,
+    "population": 145734038,
+    "purchasing_power": 10888.24
+  },
+  {
+    "country": "Spain",
+    "continent": "Europe",
+    "system": "Democracy",
+    "gdp": 1558.42,
+    "population": 46723749,
+    "purchasing_power": 3088.52
+  },
+  {
+    "country": "Australia",
+    "continent": "Oceania",
+    "system": "Democracy",
+    "gdp": 1532.51,
+    "population": 24992369,
+    "purchasing_power": 12524.4
+  },
+  {
+    "country": "Mexico",
+    "continent": "North America",
+    "system": "Democracy",
+    "gdp": 1212.83,
+    "population": 132328035,
+    "purchasing_power": 2561.92
+  },
+  {
+    "country": "Indonesia",
+    "continent": "Asia",
+    "system": "Democracy",
+    "gdp": 1074.97,
+    "population": 267670543,
+    "purchasing_power": 3555.64
+  },
+  {
+    "country": "Netherlands",
+    "continent": "Europe",
+    "system": "Democracy",
+    "gdp": 945.33,
+    "population": 17231624,
+    "purchasing_power": 5394.58
+  },
+  {
+    "country": "Saudi Arabia",
+    "continent": "Asia",
+    "system": "Monarchy",
+    "gdp": 910.86,
+    "population": 33699947,
+    "purchasing_power": 1857.94
+  },
+  {
+    "country": "Turkey",
+    "continent": "Asia",
+    "system": "Democracy",
+    "gdp": 851.11,
+    "population": 82319724,
+    "purchasing_power": 3135.9
+  },
+  {
+    "country": "Switzerland",
+    "continent": "Europe",
+    "system": "Democracy",
+    "gdp": 706.11,
+    "population": 8516543,
+    "purchasing_power": 6788.86
+  },
+  {
+    "country": "Taiwan",
+    "continent": "Asia",
+    "system": "Democracy",
+    "gdp": 602.12,
+    "population": 23773876,
+    "purchasing_power": 5293.07
+  },
+  {
+    "country": "Sweden",
+    "continent": "Europe",
+    "system": "Democracy",
+    "gdp": 554.76,
+    "population": 10183175,
+    "purchasing_power": 5379.9
+  },
+  {
+    "country": "Poland",
+    "continent": "Europe",
+    "system": "Democracy",
+    "gdp": 549.48,
+    "population": 37974750,
+    "purchasing_power": 1383.87
+  },
+  {
+    "country": "Belgium",
+    "continent": "Europe",
+    "system": "Democracy",
+    "gdp": 536.05,
+    "population": 11422068,
+    "purchasing_power": 4673.6
+  },
+  {
+    "country": "Thailand",
+    "continent": "Asia",
+    "system": "Democracy",
+    "gdp": 490.98,
+    "population": 69428524,
+    "purchasing_power": 2662.75
+  }
+]

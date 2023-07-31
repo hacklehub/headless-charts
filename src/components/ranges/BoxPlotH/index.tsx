@@ -1,4 +1,6 @@
+import { ZoomTransform, zoom } from 'd3-zoom';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
+import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, min } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
@@ -6,14 +8,10 @@ import { scaleBand, scaleLinear } from 'd3-scale';
 import { ChartProps } from '../../../types';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { mergeTailwindClasses } from '../../../utils';
 import { transition } from 'd3-transition';
-
-// import { zoom } from 'd3-zoom';
 
 export interface BoxPlotHProps extends ChartProps {
   classNameData?: string;
-
   x: {
     minKey: string;
     maxKey: string;
@@ -59,9 +57,12 @@ const BoxPlotH = ({
   x,
   tooltip,
   y,
+  zooming = {
+    enabled: false,
+  },
 }: BoxPlotHProps) => {
   const refreshChart = React.useCallback(() => {
-    const svg = select(`#${id}`);
+    const svg = select<SVGSVGElement, unknown>(`#${id}`);
     svg.selectAll('*').remove();
 
     const width = +svg.style('width').split('px')[0],
@@ -74,17 +75,17 @@ const BoxPlotH = ({
         Number.isFinite(x.min) ? x.min : min(data.map((d: any) => d[x.minKey])),
         x.max || max(data.map((d: any) => d[x.maxKey])),
       ])
-      .range([margin.left, width - padding.right - margin.right]);
+      .range([margin.left, width - (padding.right || 0) - margin.right]);
 
     // domainMin is x.min if it exists (including 0), otherwise the min of the data
 
     const yFn = scaleBand()
       .domain(data.map((d: any) => d[y.key]))
       .range([
-        margin.top + padding.top,
-        height - margin.bottom - padding.bottom,
+        margin.top + (padding.top || 0),
+        height - margin.bottom - (padding.bottom || 0),
       ])
-      .padding(padding.bar);
+      .padding(padding.bar || 0);
 
     // const clipPath =
     svg
@@ -92,9 +93,9 @@ const BoxPlotH = ({
       .attr('id', 'clip')
       .append('rect')
       .attr('x', margin.left)
-      .attr('y', margin.top - padding.top - 10)
+      .attr('y', margin.top - (padding.top || 0) - 10)
       .attr('width', width)
-      .attr('height', height + padding.bottom + 8);
+      .attr('height', height + (padding.bottom || 0) + 8);
 
     const dataG = g
       .append('g')
@@ -136,6 +137,7 @@ const BoxPlotH = ({
 
     transition();
 
+    // End lines
     dotRowsG
       .append('line')
       .attr('clip-path', 'url(#clip)')
@@ -177,6 +179,43 @@ const BoxPlotH = ({
       .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth());
 
     // Mid line
+
+    dotRowsG
+      .append('line')
+      .attr('clip-path', 'url(#clip)')
+      .attr('x1', (d: any) => xFn(d[x.maxKey]))
+      .attr('x2', (d: any) => xFn(d[x.maxKey]))
+      .attr('y1', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth())
+      .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth())
+      .attr(
+        'class',
+        mergeTailwindClasses(
+          `box-plot-line stroke-current`,
+          x.classNameLines || ''
+        )
+      )
+      .transition()
+      .duration(1000)
+      .attr('y1', (d: any) => yFn(d[y.key]) || 0)
+      .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth());
+
+    dotRowsG
+      .append('rect')
+      .attr('class', (d: any) =>
+        mergeTailwindClasses(
+          'box-plot-box stroke-current fill-current',
+          d.className,
+          x.classNameBoxes || ''
+        )
+      )
+      .attr('clip-path', 'url(#clip)')
+      .attr('x', (d: any) => xFn(d[x.boxStart]))
+      .attr('y', (d: any) => yFn(d[y.key]) || 0)
+      .attr('height', yFn.bandwidth())
+      .transition()
+      .duration(1000)
+      .attr('width', (d: any) => xFn(d[x.boxEnd]) - xFn(d[x.boxStart]));
+
     dotRowsG
       .append('line')
       .attr('clip-path', 'url(#clip)')
@@ -192,44 +231,6 @@ const BoxPlotH = ({
       .duration(1000)
       .attr('y1', (d: any) => yFn(d[y.key]) || 0)
       .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth());
-
-    dotRowsG
-      .append('line')
-      .attr('clip-path', 'url(#clip)')
-      .attr('x1', (d: any) => xFn(d[x.maxKey]))
-      .attr('x2', (d: any) => xFn(d[x.maxKey]))
-      .attr('y1', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth())
-      .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth())
-      .attr('class', (d: any) =>
-        mergeTailwindClasses(
-          `box-plot-line stroke-current`,
-          x.classNameMap
-            ? x.classNameMap[d[y.key]] || ''
-            : x.classNameLines || ''
-        )
-      )
-      .transition()
-      .duration(1000)
-      .attr('y1', (d: any) => yFn(d[y.key]) || 0)
-      .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth());
-
-    dotRowsG
-      .append('rect')
-      .attr('class', (d: any) =>
-        mergeTailwindClasses(
-          'box-plot-box stroke-current fill-current opacity-90 ',
-          x.classNameMap
-            ? x.classNameMap[d[y.key]] || ''
-            : x.classNameBoxes || ''
-        )
-      )
-      .attr('clip-path', 'url(#clip)')
-      .attr('x', (d: any) => xFn(d[x.boxStart]))
-      .attr('y', (d: any) => yFn(d[y.key]) || 0)
-      .attr('height', yFn.bandwidth())
-      .transition()
-      .duration(1000)
-      .attr('width', (d: any) => xFn(d[x.boxEnd]) - xFn(d[x.boxStart]));
 
     const tooltipDiv = select('body')
       .append('div')
@@ -274,7 +275,27 @@ const BoxPlotH = ({
         })`
       )
       .call(xAxis);
-  }, [data, id, margin, padding, x, y, tooltip, classNameData]);
+    if (zooming?.enabled) {
+      const zoomed = ({ transform }: { transform: ZoomTransform }) => {
+        // transform g across only x axis
+        dotRowsG.attr(
+          'transform',
+          `translate(${transform.x},0)scale(${transform.k},1)`
+        );
+        xAxisG.call(xAxis.scale(transform.rescaleX(xFn)));
+      };
+
+      const zoomFn = zoom<SVGSVGElement, unknown>()
+        .scaleExtent([zooming.min || 1, zooming.max || 2])
+        .translateExtent([
+          [0, 0],
+          [width, height],
+        ])
+        .on('zoom', zoomed);
+
+      svg.call(zoomFn);
+    }
+  }, [data, id, margin, padding, x, y, tooltip, classNameData, zooming]);
 
   React.useEffect(() => {
     refreshChart();
@@ -284,15 +305,10 @@ const BoxPlotH = ({
   }, [data, refreshChart]);
 
   return (
-    <>
-      <svg
-        id={id}
-        className={mergeTailwindClasses(
-          `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart h-64`,
-          className || ''
-        )}
-      />
-    </>
+    <svg
+      id={id}
+      className={mergeTailwindClasses(defaultChartClassNames, className || '')}
+    />
   );
 };
 

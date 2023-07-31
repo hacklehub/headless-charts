@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
+import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, min } from 'd3-array';
 import { pointer, select } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
 
-import { ChartProps } from '../../types';
+import { ChartProps } from '../../../types';
 import React from 'react';
-import { mergeTailwindClasses } from '../../utils';
 import { transition } from 'd3-transition';
 
 interface ColumnType {
@@ -83,8 +83,14 @@ const BarChart = ({
 
     const xFnRange =
       direction === 'left'
-        ? [width - margin.right - padding.right, margin.left + padding.left]
-        : [margin.left + padding.left, width - margin.right - padding.right];
+        ? [
+            width - margin.right - (padding.right || 0),
+            margin.left + (padding.left || 0),
+          ]
+        : [
+            margin.left + (padding.left || 0),
+            width - margin.right - (padding.right || 0),
+          ];
 
     const xFn = scaleLinear()
       .domain([
@@ -97,10 +103,10 @@ const BarChart = ({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .domain(data.map((d: any) => d[y.key]))
       .range([
-        margin.top + padding.top,
-        height - margin.bottom - padding.bottom,
+        margin.top + (padding.top || 0),
+        height - margin.bottom - (padding.bottom || 0),
       ])
-      .padding(padding.bar); // add paddingBar here
+      .padding(padding.bar || 0); // add paddingBar here
 
     const g = svg.append('g');
 
@@ -267,10 +273,7 @@ const BarChart = ({
   return (
     <svg
       id={id}
-      className={mergeTailwindClasses(
-        className,
-        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart h-80 fill-current stroke-current`
-      )}
+      className={mergeTailwindClasses(defaultChartClassNames, className)}
       data-testid='bar-chart'
     />
   );
