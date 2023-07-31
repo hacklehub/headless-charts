@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Meta } from '@storybook/react';
 import PieChart from '.';
 
@@ -57,8 +58,21 @@ export const PaddingAngle = {
 };
 
 export const CornerRadius = {
-    args: {
-        ...PaddingAngle.args,
-        cornerRadius: 5
-    }
-}
+  args: {
+    ...PaddingAngle.args,
+    id: 'pie-chart-corner-radius',
+    cornerRadius: 5,
+  },
+};
+
+export const Tooltip = {
+  args: {
+    ...CornerRadius,
+    id: 'pie-chart-tooltip',
+    tooltip: {
+      className: 'bg-gray-800 text-white p-2 rounded',
+      keys: ['product-a', 'product-b', 'product-c'],
+      html: (d: any) => `<strong>${d.data.name}</strong>: ${d.data.value}`,
+    },
+  },
+};

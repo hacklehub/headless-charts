@@ -1,4 +1,4 @@
-import { arc, pie } from 'd3';
+import { PieArcDatum, arc, pie } from 'd3';
 import { pointer, select, selectAll } from 'd3-selection';
 
 import { interpolate } from 'd3-interpolate';
@@ -18,12 +18,13 @@ interface ClassNamePoints {
 }
 
 interface DrawingOptions {
-  duration?: number;
+  duration: number;
 }
 
 interface TooltipOptions {
   html?: (d: any) => string;
   className?: string;
+  keys?: Array<PieArcDatum<DataItem> | any>;
 }
 
 interface LabelOptions {
@@ -66,7 +67,6 @@ const PieChart = ({
   id,
   className = '',
   classNamePoints = { classMap: {} },
-  //paddingBar = 0.3,
   padding = {
     left: 0,
     top: 0,
@@ -151,9 +151,9 @@ const PieChart = ({
           tooltipDiv.html(
             tooltip && tooltip.html
               ? tooltip.html(d)
-              : // @ts-ignore
+              : 
               tooltip.keys
-              ? // @ts-ignore
+              ? 
                 tooltip.keys
                   // @ts-ignore
                   .map((key) => `${key}: ${d[key] || ''}`)
