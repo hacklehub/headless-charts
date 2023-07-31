@@ -23,7 +23,7 @@ export const Default = {
 };
 
 /**
- * 
+ * Linear gauges can be styled with different className props
  */
 
 
