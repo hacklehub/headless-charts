@@ -1,10 +1,10 @@
 import { PieArcDatum, arc, pie } from 'd3';
 import { pointer, select, selectAll } from 'd3-selection';
+import { useCallback, useEffect } from 'react';
 
 import { interpolate } from 'd3-interpolate';
 import { mergeTailwindClasses } from '../../utils';
 import { min } from 'd3-array';
-import { useEffect } from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -85,7 +85,7 @@ const PieChart = ({
   tooltip,
   labels,
 }: PieChartProps) => {
-  const refreshChart = () => {
+  const refreshChart = useCallback(() => {
     const svg = select(`#${id}`);
     svg.selectAll('*').remove();
 
@@ -151,10 +151,8 @@ const PieChart = ({
           tooltipDiv.html(
             tooltip && tooltip.html
               ? tooltip.html(d)
-              : 
-              tooltip.keys
-              ? 
-                tooltip.keys
+              : tooltip.keys
+              ? tooltip.keys
                   // @ts-ignore
                   .map((key) => `${key}: ${d[key] || ''}`)
                   .join('<br/>')
@@ -211,20 +209,36 @@ const PieChart = ({
           labels.text ? labels.text(d.data) : d.data[labels.key]
         );
     /* eslint-enable */
-    const tooltipDiv = select('#root')
+    const tooltipDiv = select('body')
       .append('div')
       .attr('id', 'tooltip')
       .style('position', 'absolute')
       .style('opacity', '0')
-      .attr('class', `tooltip ${(tooltip && tooltip.className) || ''}`);
-  };
+      .attr(
+        'class',
+        mergeTailwindClasses('tooltip', tooltip && tooltip.className)
+      );
+  }, [
+    data,
+    drawing,
+    id,
+    cornerRadius,
+    innerRadius,
+    labels,
+    classNamePoints,
+    margin,
+    padding,
+    tooltip,
+    paddingAngle,
+    value,
+  ]);
 
   useEffect(() => {
     refreshChart();
     return () => {
       selectAll('.tooltip').remove();
     };
-  }, [data]);
+  }, [data, refreshChart]);
 
   return (
     <svg
