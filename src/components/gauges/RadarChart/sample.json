@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Arsenal",
+    "className": "stroke-red-600 fill-red-600",
+    "attack": 90,
+    "defense": 80,
+    "midfield": 90,
+    "goalkeeper": 80,
+    "overall": 80
+  },
+  {
+    "name": "Chelsea",
+    "className": "stroke-blue-600 fill-blue-600",
+    "attack": 80,
+    "defense": 80,
+    "midfield": 95,
+    "goalkeeper": 75,
+    "overall": 81
+  }
+]
