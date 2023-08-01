@@ -88,17 +88,17 @@ const SpineChart = ({
       // @ts-ignore
       x.axis === 'top'
         ? // @ts-ignore
-          axisTop(xLeftFn).ticks(x.axisTicks || 3)
+          axisTop(xLeftFn).ticks(x.axisTicks)
         : // @ts-ignore
-          axisBottom(xLeftFn).ticks(x.axisTicks || 3);
+          axisBottom(xLeftFn).ticks(x.axisTicks);
 
     const xRightAxis =
       // @ts-ignore
       x.axis === 'top'
         ? // @ts-ignore
-          axisTop(xRightFn).ticks(x.axisTicks || 3)
+          axisTop(xRightFn).ticks(x.axisTicks)
         : // @ts-ignore
-          axisBottom(xRightFn).ticks(x.axisTicks || 3);
+          axisBottom(xRightFn).ticks(x.axisTicks);
 
     const xRightAxisG = g.append('g').attr('class', 'right-axis--x axis ');
 
