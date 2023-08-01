@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Meta } from '@storybook/react';
 import PieChart from '.';
-import { ToolTip } from '../gauges/LinearGauge/LinearGauge.stories';
 
 export default {
   title: 'Linear/PieChart',
@@ -22,39 +21,51 @@ export const Default = {
       { name: 'Product B', USA: 9400, Europe: 9000, APAC: 4000 },
       { name: 'Product C', USA: 6000, Europe: 4000, APAC: 1000 },
     ],
+    value: 'USA',
     id: 'default-pie-chart',
-    paddingAngle: 45,
   },
 };
 
 export const Styled = {
   args: {
     ...Default.args,
-    id: 'default-pie-chart',
+    id: 'styled-pie-chart',
     classNamePoints: { classMap },
     drawing: { duration: 1000 },
+    value: 'USA',
+  },
+};
+
+export const Labelled = {
+  args: {
+    ...Styled.args,
+    id: 'labelled-pie-chart',
+    labels: {
+      radius: 1.4,
+      key: 'name',
+      text: (data: any) => `${data.name} (${data['USA']})`,
+      className: 'text-black',
+      labelsMap: { 'Product A': 'text-purple-700' },
+    },
   },
 };
 
 export const PieChartDonut = {
   args: {
     ...Styled.args,
-    paddingBar: 50,
-    value: '100',
-    labels: { key: 'name' },
+    id: 'donut-chart',
+    className: 'md:w-6/12',
+    classNamePoints: { classMap },
     innerRadius: 0.7,
   },
 };
 
 export const PaddingAngle = {
   args: {
-    ...Styled.args,
-    id: 'padding-angle',
-    className: 'md:w-6/12',
-    classNamePoints: { classMap },
+    ...Labelled.args,
     innerRadius: 0.7,
+    id: 'pie-chart-padding-angle',
     paddingAngle: 0.04,
-    value: 'USA',
   },
 };
 
@@ -72,21 +83,29 @@ export const Tooltip = {
     id: 'pie-chart-tooltip',
     tooltip: {
       className: 'bg-gray-800 text-white p-2 rounded',
-      keys: ['product A', 'product B', 'product C'],
     },
   },
 };
 
-export const ToolTipWithCustomHtml = {
+export const TooltipWithOtherKeys = {
   args: {
-    ...ToolTip.args,
-    id: 'pie-chart with -tooltip-custom-html',
+    ...Styled.args,
+    id: 'pie-chart-tooltip-with-other-keys',
     tooltip: {
-      html: (d: any) => {
-        return `<div class="flex flex-col">
-        <div class="text-lg text-center">${d.name}</div>
-      </div>`;
-      },
+      className: 'bg-gray-800 text-white p-2 rounded',
+      keys: ['USA', 'Europe'],
+    },
+  },
+};
+
+export const TooltipWithHtml = {
+  args: {
+    ...Styled.args,
+    id: 'pie-chart-tooltip-with-html',
+    tooltip: {
+      className: 'bg-gray-800 text-white p-2 rounded',
+      html: (d: any) =>
+        `<div>${d?.data?.name} sold ${d.data['USA']} in USA</div>`,
     },
   },
 };

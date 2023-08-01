@@ -138,12 +138,11 @@ const PieChart = ({
       .selectAll('path')
       .data(arcs)
       .join('path')
-      .attr(
-        'class',
-        (d) =>
-          `${
-            classNamePoints.classMap[d.data.name] || ''
-          } fill-current stroke-current`
+      .attr('class', (d) =>
+        mergeTailwindClasses(
+          classNamePoints.classMap[d.data.name],
+          'fill-current stroke-current'
+        )
       )
       /* eslint-disable */
       // @ts-ignore
@@ -158,7 +157,7 @@ const PieChart = ({
               ? tooltip.html(d)
               : tooltip.keys
               ? tooltip.keys
-                  .map((key) => `${key}: ${d[key] || ''}`)
+                  .map((key) => `${key}: ${d.data[key] || ''}`)
                   .join('<br/>')
               : `${d.data.name} = ${d.data[value]} `
           );
