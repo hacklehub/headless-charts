@@ -1,16 +1,13 @@
-//, Selection
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Arc, SymbolType, arc, symbol, symbolTriangle } from 'd3';
 import { ScaleLinear, scaleLinear } from 'd3-scale';
-// axisBottom
 import { select, selectAll } from 'd3-selection';
+import { useCallback, useEffect } from 'react';
 
-//min
 import { Axis } from 'd3-axis';
+import { defaultChartClassNames } from '../../../utils';
 import { max } from 'd3-array';
-//import { interpolate } from 'd3-interpolate';
 import { mergeTailwindClasses } from '../../../utils';
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect } from 'react';
 
 interface Region {
   limit: number;
@@ -27,10 +24,12 @@ interface SpeedometerChartProps {
   label?: Label;
   id: string;
   className?: string;
-  marginTop?: number;
-  marginBottom?: number;
-  marginLeft?: number;
-  marginRight?: number;
+  margin?: {
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
+  };
   regions?: Region[];
   axisTicks?: number;
   needleRadius?: number;
@@ -41,10 +40,12 @@ const SpeedometerChart = ({
   label,
   id,
   className,
-  marginTop = 0,
-  marginBottom = 20,
-  marginLeft = 40,
-  marginRight = 40,
+  margin = {
+    top: 0,
+    bottom: 20,
+    left: 40,
+    right: 40,
+  },
   regions = [],
   axisTicks = 5,
   needleRadius = 0.8,
@@ -56,7 +57,7 @@ const SpeedometerChart = ({
 
   regions.sort((a, b) => b.limit - a.limit);
 
-  const setup = (): void => {
+  const setup = useCallback(() => {
     const svg = select<SVGSVGElement, unknown>(`#${id}`);
 
     svg.selectAll('*').remove();
@@ -66,9 +67,9 @@ const SpeedometerChart = ({
     const width = +svg.style('width').split('px')[0];
     const height = +svg.style('height').split('px')[0];
 
-    g.attr('transform', `translate(${width / 2},${marginTop + width / 2})`);
+    g.attr('transform', `translate(${width / 2},${margin.top + width / 2})`);
 
-    const innerWidth = width - marginLeft - marginRight;
+    const innerWidth = width - margin.left - margin.right;
     const chartRadius = innerWidth / 2;
 
     const scale: ScaleLinear<number, number> = scaleLinear()
@@ -138,7 +139,7 @@ const SpeedometerChart = ({
         .attr('text-anchor', 'middle')
         .attr('class', `fill-current ${label?.className}`)
         .attr('x', 0)
-        .attr('y', height - marginBottom - marginTop - width / 2)
+        .attr('y', height - margin.bottom - margin.top - width / 2)
         .text(label.text);
     // @ts-ignore
     const xAxis: Axis<number> = (g) =>
@@ -178,9 +179,9 @@ const SpeedometerChart = ({
       );
 
     g.call(xAxis);
-  };
+  }, [id, margin, needleRadius]);
 
-  const refreshChart = (): void => {
+  const refreshChart = useCallback(() => {
     select<SVGElement, number>('.data-group')
       .data([data])
       .transition()
@@ -190,26 +191,23 @@ const SpeedometerChart = ({
           ((d / maxValue) * (MAX_ANGLE - MIN_ANGLE) * 180) / PI
         })`;
       });
-  };
-
-  useEffect(() => {
-    refreshChart();
   }, [data]);
 
   useEffect(() => {
     setup();
+  }, [setup]);
+
+  useEffect(() => {
+    refreshChart();
     return () => {
       selectAll<SVGGElement, unknown>('.tooltip').remove();
     };
-  }, []);
+  }, [data, max, refreshChart]);
   /* eslint-enable */
   return (
     <svg
       id={id}
-      className={mergeTailwindClasses(
-        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 h-64 chart`,
-        className || ''
-      )}
+      className={mergeTailwindClasses(defaultChartClassNames, className)}
     />
   );
 };
