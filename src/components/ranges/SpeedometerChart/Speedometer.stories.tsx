@@ -9,10 +9,47 @@ export default {
 
 export const Default = {
   args: {
-    data: 27,
+    data: 0.7,
     label: {
       text: 'Coverage',
     },
     id: 'speedometer-default',
+  },
+};
+
+export const WithRadius = {
+  args: {
+    ...Default.args,
+    id: 'speedometer-with-radius',
+    needleRadius: 0.5,
+  },
+};
+
+export const WithAxisTicks = {
+  args: {
+    ...Default.args,
+    id: 'speedometer-with-axis-ticks',
+    axisTicks: 10,
+  },
+};
+
+export const WithRegions = {
+  args: {
+    ...Default.args,
+    id: 'speedometer-with-regions',
+    regions: [
+      {
+        limit: 0,
+      },
+      {
+        limit: 1,
+      },
+      {
+        limit: 2,
+      },
+      {
+        limit: 3,
+      },
+    ],
   },
 };
