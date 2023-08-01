@@ -68,7 +68,7 @@ export const CornerRadius = {
 
 export const Tooltip = {
   args: {
-    ...CornerRadius.args,
+    ...Styled.args,
     id: 'pie-chart-tooltip',
     tooltip: {
       className: 'bg-gray-800 text-white p-2 rounded',
@@ -82,7 +82,9 @@ export const ToolTipWithCustomHtml = {
     id: 'pie-chart with -tooltip-custom-html',
     tooltip: {
       html: (d: any) => {
-        return `<div class='text-lg text-center'>${d.name}</div>`;
+        return `<div class="flex flex-col">
+        <div class="text-lg text-center">${d.name}</div>
+      </div>`;
       },
     },
   },

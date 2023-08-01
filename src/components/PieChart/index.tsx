@@ -2,6 +2,7 @@ import { PieArcDatum, arc, pie } from 'd3';
 import { pointer, select, selectAll } from 'd3-selection';
 import { useCallback, useEffect } from 'react';
 
+import { defaultChartClassNames } from '../../utils';
 import { interpolate } from 'd3-interpolate';
 import { mergeTailwindClasses } from '../../utils';
 import { min } from 'd3-array';
@@ -243,10 +244,7 @@ const PieChart = ({
   return (
     <svg
       id={id}
-      className={mergeTailwindClasses(
-        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart h-80`,
-        className || ''
-      )}
+      className={mergeTailwindClasses(defaultChartClassNames, className)}
     />
   );
 };
