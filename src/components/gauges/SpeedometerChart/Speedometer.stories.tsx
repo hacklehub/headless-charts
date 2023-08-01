@@ -2,7 +2,7 @@ import { Meta } from '@storybook/react';
 import SpeedometerChart from '.';
 
 export default {
-  title: 'ranges/Speedometer',
+  title: 'Gauge/Speedometer',
   component: SpeedometerChart,
   tags: ['autodocs'],
 } as Meta;
@@ -39,17 +39,23 @@ export const WithRegions = {
     id: 'speedometer-with-regions',
     regions: [
       {
-        limit: 0,
+        limit: 0.5,
+        className: 'fill-red-500',
+      },
+      {
+        limit: 0.8,
+        className: 'fill-yellow-500',
+      },
+      {
+        limit: 0.9,
+        className: 'fill-green-500',
       },
       {
         limit: 1,
-      },
-      {
-        limit: 2,
-      },
-      {
-        limit: 3,
+        className: 'fill-blue-500',
       },
     ],
   },
 };
+
+
