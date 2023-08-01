@@ -72,6 +72,7 @@ export const Tooltip = {
     id: 'pie-chart-tooltip',
     tooltip: {
       className: 'bg-gray-800 text-white p-2 rounded',
+      keys: ['product A', 'product B', 'product C'],
     },
   },
 };

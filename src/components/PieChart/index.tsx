@@ -1,5 +1,5 @@
-import { PieArcDatum, arc, pie } from 'd3';
-import { pointer, select, selectAll } from 'd3-selection';
+import { arc, pie } from 'd3';
+import { pointer, select } from 'd3-selection';
 import { useCallback, useEffect } from 'react';
 
 import { defaultChartClassNames } from '../../utils';
@@ -20,12 +20,6 @@ interface ClassNamePoints {
 
 interface DrawingOptions {
   duration: number;
-}
-
-interface TooltipOptions {
-  html?: (d: any) => string;
-  className?: string;
-  keys?: Array<PieArcDatum<DataItem> | any>;
 }
 
 interface LabelOptions {
@@ -59,7 +53,11 @@ interface PieChartProps {
   innerRadius?: number;
   value: string;
   drawing?: DrawingOptions;
-  tooltip?: TooltipOptions;
+  tooltip?: {
+    className?: string;
+    html?: (d: any) => string;
+    keys?: string[];
+  };
   labels: LabelOptions;
 }
 
@@ -129,6 +127,12 @@ const PieChart = ({
           margin.top + padding.top + chartArea[1] / 2
         })`
       );
+    const tooltipDiv = select('body')
+      .append('div')
+      .attr('id', 'tooltip')
+      .style('position', 'absolute')
+      .style('opacity', '0')
+      .attr('class', `${tooltip?.className || ''}`);
 
     const paths = pathsG
       .selectAll('path')
@@ -144,9 +148,9 @@ const PieChart = ({
       /* eslint-disable */
       // @ts-ignore
       .attr('d', arcFn)
-      .on('mouseenter', function (event, d) {
+      .on('mouseenter', function (event: MouseEvent, d: any) {
         if (tooltip) {
-          tooltipDiv.style('opacity', '1');
+          tooltipDiv.style('opacity', 1);
           const [bX, bY] = pointer(event, select('body'));
           tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
           tooltipDiv.html(
@@ -154,14 +158,13 @@ const PieChart = ({
               ? tooltip.html(d)
               : tooltip.keys
               ? tooltip.keys
-                  // @ts-ignore
                   .map((key) => `${key}: ${d[key] || ''}`)
                   .join('<br/>')
               : `${d.data.name} = ${d.data[value]} `
           );
         }
       })
-      .on('mousemove', function (event) {
+      .on('mousemove', function (event: MouseEvent) {
         const [bX, bY] = pointer(event, select('body'));
         tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
       })
@@ -210,15 +213,6 @@ const PieChart = ({
           labels.text ? labels.text(d.data) : d.data[labels.key]
         );
     /* eslint-enable */
-    const tooltipDiv = select('body')
-      .append('div')
-      .attr('id', 'tooltip')
-      .style('position', 'absolute')
-      .style('opacity', '0')
-      .attr(
-        'class',
-        mergeTailwindClasses('tooltip', tooltip && tooltip.className)
-      );
   }, [
     data,
     drawing,
@@ -236,9 +230,6 @@ const PieChart = ({
 
   useEffect(() => {
     refreshChart();
-    return () => {
-      selectAll('.tooltip').remove();
-    };
   }, [data, refreshChart]);
 
   return (
