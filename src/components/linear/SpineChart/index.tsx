@@ -1,9 +1,9 @@
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
+import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, sum } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { select, selectAll } from 'd3-selection';
 
-import { mergeTailwindClasses } from '../../../utils';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react';
 
@@ -210,10 +210,7 @@ const SpineChart = ({
   return (
     <svg
       id={id}
-      className={mergeTailwindClasses(
-        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart  h-64`,
-        className || ''
-      )}
+      className={mergeTailwindClasses(defaultChartClassNames, className)}
     />
   );
 };
