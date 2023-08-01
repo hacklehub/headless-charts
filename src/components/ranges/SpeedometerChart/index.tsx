@@ -191,7 +191,7 @@ const SpeedometerChart = ({
           ((d / maxValue) * (MAX_ANGLE - MIN_ANGLE) * 180) / PI
         })`;
       });
-  }, [data]);
+  }, [data, max]);
 
   useEffect(() => {
     setup();
