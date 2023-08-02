@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Meta } from '@storybook/react';
 import SpineChart from '.';
 
@@ -114,3 +115,30 @@ export const XAxisTop = {
   },
 };
 
+export const WithTooltip = {
+  args: {
+    ...Default.args,
+    id: 'spine-chart-with-tooltip',
+    tooltip: {
+      keys: ['value2', 'value3', 'value4'],
+      className: 'bg-gray-800 text-white p-2 rounded-md shadow-md',
+    },
+  },
+};
+
+export const WithCustomTooltip = {
+  args: {
+    ...Default.args,
+    id: 'spine-chart-with-custom-tooltip',
+    tooltip: {
+      html: (d: any) => `
+        <div class="bg-gray-800 text-white p-2 rounded-md shadow-md">
+          <div class="font-bold">${d.name}</div>
+          <div>${d.value2}</div>
+          <div>${d.value3}</div>
+          <div>${d.value4}</div>
+        </div>
+      `,
+    },
+  },
+};
