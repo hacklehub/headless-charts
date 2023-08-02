@@ -184,13 +184,11 @@ const BarChart = ({
         )
         .attr('rx', column.rx || 0)
         .attr('x', (d: any) =>
-          direction === 'left'
-            ? d[column.key] < 0
-              ? xFn(0)
-              : xFn(d[column.key])
+          drawing.duration
+            ? xFn(0)
             : d[column.key] < 0
             ? xFn(d[column.key])
-            : xFn(minStart || 0)
+            : xFn(0)
         )
         .attr(
           'y',
@@ -200,10 +198,10 @@ const BarChart = ({
           drawing?.duration
             ? 0
             : direction === 'left'
-            ? xFn(minStart || 0) - xFn(Math.abs(d[column.key]))
+            ? xFn(0) - xFn(Math.abs(d[column.key]))
             : d[column.key] < 0
-            ? xFn(minStart || 0) - xFn(d[column.key])
-            : xFn(Math.abs(d[column.key])) - xFn(minStart || 0)
+            ? xFn(0) - xFn(d[column.key])
+            : xFn(Math.abs(d[column.key])) - xFn(0)
         )
         .attr('height', yFn.bandwidth() / x.length - (y.padding || 0))
         .on('mouseenter', function (event: MouseEvent, d: any) {
@@ -245,12 +243,15 @@ const BarChart = ({
           .delay(
             (_: any, idx: number) => i * (drawing.delay || 100) + idx * 100
           )
+          .attr('x', (d: any) =>
+            d[column.key] < 0 ? xFn(d[column.key]) : xFn(0)
+          )
           .attr('width', (d: any) =>
             direction === 'left'
-              ? xFn(minStart || 0) - xFn(Math.abs(d[column.key]))
+              ? xFn(0) - xFn(Math.abs(d[column.key]))
               : d[column.key] < 0
-              ? xFn(minStart || 0) - xFn(d[column.key])
-              : xFn(Math.abs(d[column.key])) - xFn(minStart || 0)
+              ? xFn(0) - xFn(d[column.key])
+              : xFn(Math.abs(d[column.key])) - xFn(0)
           );
 
       dataLabel &&
