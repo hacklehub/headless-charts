@@ -89,7 +89,7 @@ export const YAxisRight = {
   },
 };
 
-export const WithPaddingBar = {
+export const WithCustomPaddingBar = {
   args: {
     ...Default.args,
     id: 'spine-chart-with-padding-bar',
