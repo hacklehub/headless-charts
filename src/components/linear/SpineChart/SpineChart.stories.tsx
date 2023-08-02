@@ -42,3 +42,21 @@ export const Default = {
     ],
   },
 };
+
+export const WithYDirectionToLeft = {
+  args: {
+    ...Default.args,
+    y: {
+      key: 'value1',
+      direction: 'left',
+      className: '',
+    },
+  },
+};
+
+export const WithPaddingBar = {
+  args: {
+    ...Default.args,
+    paddingBar: 0.9,
+  },
+};

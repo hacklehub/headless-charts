@@ -125,7 +125,6 @@ const SpineChart = ({
     leftSeries.map((column, i) => {
       const barsG = g.append('g');
       const columns = leftSeries.filter((_, idx) => idx >= i).map((c) => c.key);
-      // const bars =
       barsG
         .selectAll('g')
         .data(data)
