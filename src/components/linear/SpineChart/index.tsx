@@ -38,6 +38,8 @@ interface SpineChartProps {
   };
   y: Y;
   x: Array<any>;
+  axisTicks?: number;
+  xAxis?: 'top' | 'right';
 }
 
 const SpineChart = ({
@@ -64,6 +66,8 @@ const SpineChart = ({
     className: '',
   },
   x,
+  axisTicks = 5,
+  xAxis = 'top',
 }: SpineChartProps) => {
   const refreshChart = useCallback(() => {
     const svg = select(`#${id}`);
@@ -89,17 +93,6 @@ const SpineChart = ({
     const halfWidth =
       (width - padding.left - margin.left - padding.right - margin.right) / 2;
 
-    const xRightFn = scaleLinear()
-      // @ts-ignore
-      .domain([0, extreme])
-      .range([
-        padding.left +
-          margin.left +
-          halfWidth +
-          (y.axis === 'middle' ? margin.middle / 2 : 0),
-        width - margin.right,
-      ]);
-
     const xLeftFn = scaleLinear()
       // @ts-ignore
       .domain([0, extreme])
@@ -107,25 +100,36 @@ const SpineChart = ({
         padding.left +
           margin.left +
           halfWidth -
-          (y.axis === 'middle' ? margin.middle / 2 : 0),
+          (['left', 'right'].includes(y.axis) ? 0 : (margin.middle || 100) / 2),
         padding.left + margin.left,
+      ]);
+
+    const xRightFn = scaleLinear()
+      // @ts-ignore
+      .domain([0, extreme])
+      .range([
+        padding.left +
+          margin.left +
+          halfWidth +
+          (['left', 'right'].includes(y.axis) ? 0 : (margin.middle || 100) / 2),
+        width - margin.right,
       ]);
 
     const xLeftAxis =
       // @ts-ignore
-      x.axis === 'top'
+      xAxis === 'top'
         ? // @ts-ignore
-          axisTop(xLeftFn).ticks(x.axisTicks)
+          axisTop(xLeftFn).ticks(axisTicks)
         : // @ts-ignore
-          axisBottom(xLeftFn).ticks(x.axisTicks);
+          axisBottom(xLeftFn).ticks(axisTicks);
 
     const xRightAxis =
       // @ts-ignore
-      x.axis === 'top'
+      xAxis === 'top'
         ? // @ts-ignore
-          axisTop(xRightFn).ticks(x.axisTicks)
+          axisTop(xRightFn).ticks(axisTicks)
         : // @ts-ignore
-          axisBottom(xRightFn).ticks(x.axisTicks);
+          axisBottom(xRightFn).ticks(axisTicks);
 
     const xRightAxisG = g.append('g').attr('class', 'right-axis--x axis');
 
@@ -203,11 +207,7 @@ const SpineChart = ({
       .attr(
         'transform',
         // @ts-ignore
-        `translate(0, ${
-          x.some((column) => column.axis === 'top')
-            ? margin.top
-            : height - margin.bottom
-        })`
+        `translate(0, ${xAxis === 'top' ? margin.top : height - margin.bottom})`
       )
       .call(xRightAxis);
 
@@ -217,15 +217,11 @@ const SpineChart = ({
       .attr(
         'transform',
         // @ts-ignore
-        `translate(0, ${
-          x.some((column) => column.axis === 'top')
-            ? margin.top
-            : height - margin.bottom
-        })`
+        `translate(0, ${xAxis === 'top' ? margin.top : height - margin.bottom})`
       )
       .call(xLeftAxis);
 
-    const yAxis = y.axis === 'left' ? axisRight(yFn) : axisLeft(yFn);
+    const yAxis = y.axis === 'right' ? axisRight(yFn) : axisLeft(yFn);
     const yAxisG = g
       .append('g')
       .attr('class', 'yAxis axis')
@@ -233,10 +229,10 @@ const SpineChart = ({
         'transform',
         `translate(${
           y.axis === 'left'
-            ? width
-            : y.axis === 'middle'
-            ? margin.left + halfWidth + margin.middle / 2
-            : margin.left
+            ? margin.left
+            : y.axis === 'right'
+            ? width - margin.right
+            : margin.left + halfWidth + margin.middle / 2
         },0)`
       );
 

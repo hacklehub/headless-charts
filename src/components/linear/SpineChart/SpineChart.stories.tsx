@@ -32,33 +32,12 @@ export const Default = {
     id: 'spine-chart-default',
     y: {
       key: 'value1',
-      axis: 'middle',
-      className: '',
     },
     x: [
       { key: 'value2', direction: 'left', className: '' },
       { key: 'value3', direction: 'right', className: '' },
       { key: 'value4', direction: 'left', className: '' },
     ],
-  },
-};
-
-export const WithYAxisToLeft = {
-  args: {
-    ...Default.args,
-    id: 'spine-chart-y-direction-left',
-    y: {
-      key: 'value1',
-      axis: 'left',
-    },
-  },
-};
-
-export const WithPaddingBar = {
-  args: {
-    ...Default.args,
-    id: 'spine-chart-with-padding-bar',
-    paddingBar: 0.1,
   },
 };
 
@@ -71,6 +50,50 @@ export const WithStyle = {
       { key: 'value3', direction: 'right', className: 'fill-red-700' },
       { key: 'value4', direction: 'left', className: 'fill-orange-300' },
     ],
+  },
+};
+
+export const WithYAxisToLeft = {
+  args: {
+    ...WithStyle.args,
+    id: 'spine-chart-y-direction-left',
+    y: {
+      key: 'value1',
+      axis: 'left',
+    },
+    margin: {
+      top: 20,
+      bottom: 20,
+      left: 70,
+      right: 40,
+      middle: 0,
+    },
+  },
+};
+
+export const YAxisRight = {
+  args: {
+    ...WithStyle.args,
+    id: 'spine-chart-y-axis-middle',
+    margin: {
+      top: 20,
+      bottom: 20,
+      left: 40,
+      right: 70,
+      middle: 0,
+    },
+    y: {
+      key: 'value1',
+      axis: 'right',
+    },
+  },
+};
+
+export const WithPaddingBar = {
+  args: {
+    ...Default.args,
+    id: 'spine-chart-with-padding-bar',
+    paddingBar: 0.1,
   },
 };
 
@@ -91,20 +114,3 @@ export const XAxisTop = {
   },
 };
 
-export const YAxisRight = {
-  args: {
-    ...WithStyle.args,
-    id: 'spine-chart-y-axis-middle',
-    margin: {
-      top: 20,
-      bottom: 20,
-      left: 40,
-      right: 40,
-      middle: 70,
-    },
-    y: {
-      key: 'value1',
-      axis: 'right',
-    },
-  },
-};
