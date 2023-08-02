@@ -70,7 +70,7 @@ const PieChart = ({
     left: 0,
     top: 0,
   },
-  paddingAngle = 0,
+  paddingAngle = 1,
   cornerRadius = 0,
   margin = {
     left: 40,
@@ -108,7 +108,7 @@ const PieChart = ({
     const arcFn = arc()
       .innerRadius(radius * innerRadius)
       .outerRadius(radius)
-      .padAngle(paddingAngle)
+      .padAngle(paddingAngle * ((1 / 360) * (2 * Math.PI)))
       .cornerRadius(cornerRadius);
 
     const labelArc =
