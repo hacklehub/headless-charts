@@ -12,6 +12,7 @@ interface Y {
   key: string;
   axis: 'left' | 'right' | 'middle';
   className: string;
+  label?: string;
 }
 
 interface DataItem {
@@ -39,7 +40,7 @@ interface SpineChartProps {
   y: Y;
   x: Array<any>;
   axisTicks?: number;
-  xAxis?: 'top' | 'right';
+  xAxis?: 'top' | 'bottom';
 }
 
 const SpineChart = ({
@@ -67,7 +68,7 @@ const SpineChart = ({
   },
   x,
   axisTicks = 5,
-  xAxis = 'top',
+  xAxis = 'bottom',
 }: SpineChartProps) => {
   const refreshChart = useCallback(() => {
     const svg = select(`#${id}`);
@@ -187,7 +188,7 @@ const SpineChart = ({
         .enter()
         .append('rect')
         .attr('class', `${column.className} fill-current`)
-        .attr('x', (d) => xRightFn(0))
+        .attr('x', () => xRightFn(0))
         .attr('z-index', 100 - i)
         // @ts-ignore
         .attr('y', (d) => yFn(d[y.key]))
@@ -221,6 +222,22 @@ const SpineChart = ({
       )
       .call(xLeftAxis);
 
+    xLeftAxisG
+      .append('text')
+      .text(leftSeries.map((c) => c.label || c.key).join(', '))
+      .attr('class', 'fill-current')
+      .attr('x', 0)
+      .attr('y', xAxis === 'top' ? -20 : 30)
+      .attr('text-anchor', 'start');
+
+    xRightAxisG
+      .append('text')
+      .text(rightSeries.map((c) => c.label || c.key).join(', '))
+      .attr('class', 'fill-current')
+      .attr('x', width)
+      .attr('y', xAxis === 'top' ? -20 : 30)
+      .attr('text-anchor', 'end');
+
     const yAxis = y.axis === 'right' ? axisRight(yFn) : axisLeft(yFn);
     const yAxisG = g
       .append('g')
@@ -234,9 +251,15 @@ const SpineChart = ({
             ? width - margin.right
             : margin.left + halfWidth + margin.middle / 2
         },0)`
-      );
+      )
+      .call(yAxis);
 
-    yAxisG.call(yAxis);
+    yAxisG
+      .append('text')
+      .text(y.label || y.key)
+      .attr('class', 'fill-current')
+      .attr('x', y.axis === 'left' ? -20 : y.axis === 'right' ? 20 : -20)
+      .attr('y', xAxis === 'top' ? margin.top : height - margin.bottom);
   }, [data, x, padding, margin, paddingBar, y]);
 
   useEffect(() => {
