@@ -49,7 +49,6 @@ export const WithYDirectionToLeft = {
     y: {
       key: 'value1',
       direction: 'left',
-      className: '',
     },
   },
 };
@@ -58,5 +57,16 @@ export const WithPaddingBar = {
   args: {
     ...Default.args,
     paddingBar: 0.9,
+  },
+};
+
+export const WithStyle = {
+  args: {
+    ...Default.args,
+    x: [
+      { key: 'value2', direction: 'left', className: 'fill-purple-700' },
+      { key: 'value3', direction: 'right', className: 'fill-red-800' },
+      { key: 'value4', direction: 'left', className: 'fill-amber-300' },
+    ],
   },
 };
