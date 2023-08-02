@@ -28,8 +28,8 @@ interface DotPlotProps extends ChartProps {
   x: {
     start: number;
     end: number;
-    minKey: any;
-    maxKey: any;
+    minKey: string;
+    maxKey: string;
     axis: 'bottom' | 'top';
     axisTicks: number;
   };
@@ -78,8 +78,8 @@ const DotPlot = ({
 
     svg.selectAll('*').remove();
 
-    const width = +svg.style('width').split('px')[0],
-      height = +svg.style('height').split('px')[0];
+    const width = +svg.style('width').split('px')[0];
+    const height = +svg.style('height').split('px')[0];
 
     const g = svg.append('g');
 
