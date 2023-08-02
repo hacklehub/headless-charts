@@ -6,9 +6,11 @@ import { select, selectAll } from 'd3-selection';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect } from 'react';
 
+import { transition } from 'd3-transition';
+
 interface Y {
   key: string;
-  direction: 'left' | 'right';
+  axis: 'left' | 'right' | 'middle';
   className: string;
 }
 
@@ -32,6 +34,7 @@ interface SpineChartProps {
     right: number;
     top: number;
     bottom: number;
+    middle: number;
   };
   y: Y;
   x: Array<any>;
@@ -53,6 +56,7 @@ const SpineChart = ({
     bottom: 40,
     left: 40,
     right: 20,
+    middle: 60,
   },
   y,
   x,
@@ -84,12 +88,24 @@ const SpineChart = ({
     const xRightFn = scaleLinear()
       // @ts-ignore
       .domain([0, extreme])
-      .range([padding.left + margin.left + halfWidth, width - margin.right]);
+      .range([
+        padding.left +
+          margin.left +
+          halfWidth +
+          (y.axis === 'middle' ? margin.middle / 2 : 0),
+        width - margin.right,
+      ]);
 
     const xLeftFn = scaleLinear()
       // @ts-ignore
       .domain([0, extreme])
-      .range([padding.left + margin.left + halfWidth, padding.left + margin.left]);
+      .range([
+        padding.left +
+          margin.left +
+          halfWidth -
+          (y.axis === 'middle' ? margin.middle / 2 : 0),
+        padding.left + margin.left,
+      ]);
 
     const xLeftAxis =
       // @ts-ignore
@@ -119,8 +135,13 @@ const SpineChart = ({
     const yFn = scaleBand()
       // @ts-ignore
       .domain(data.map((d) => d[y.key]))
-      .range([margin.top + padding.top, height - padding.bottom - margin.bottom])
+      .range([
+        margin.top + padding.top,
+        height - padding.bottom - margin.bottom,
+      ])
       .padding(paddingBar);
+
+    transition();
 
     leftSeries.map((column, i) => {
       const barsG = g.append('g');
@@ -178,7 +199,11 @@ const SpineChart = ({
       .attr(
         'transform',
         // @ts-ignore
-        `translate(0, ${x.axis === 'top' ? margin.top : height - margin.bottom})`
+        `translate(0, ${
+          x.some((column) => column.axis === 'top')
+            ? margin.top
+            : height - margin.bottom
+        })`
       )
       .call(xRightAxis);
 
@@ -188,21 +213,31 @@ const SpineChart = ({
       .attr(
         'transform',
         // @ts-ignore
-        `translate(0, ${x.axis === 'top' ? margin.top : height - margin.bottom})`
+        `translate(0, ${
+          x.some((column) => column.axis === 'top')
+            ? margin.top
+            : height - margin.bottom
+        })`
       )
       .call(xLeftAxis);
 
-    const yAxis = y.direction === 'left' ? axisRight(yFn) : axisLeft(yFn);
+    const yAxis = y.axis === 'left' ? axisRight(yFn) : axisLeft(yFn);
     const yAxisG = g
       .append('g')
       .attr('class', 'yAxis axis')
       .attr(
         'transform',
-        `translate(${y.direction === 'left' ? width : margin.left},0)`
+        `translate(${
+          y.axis === 'left'
+            ? width
+            : y.axis === 'middle'
+            ? margin.left + halfWidth + margin.middle / 2
+            : margin.left
+        },0)`
       );
 
     yAxisG.call(yAxis);
-  },[data, x, padding, margin, paddingBar, y]);
+  }, [data, x, padding, margin, paddingBar, y]);
 
   useEffect(() => {
     refreshChart();
