@@ -107,7 +107,7 @@ const SpineChart = ({
         : // @ts-ignore
           axisBottom(xRightFn).ticks(x.axisTicks);
 
-    const xRightAxisG = g.append('g').attr('class', 'right-axis--x axis ');
+    const xRightAxisG = g.append('g').attr('class', 'right-axis--x axis');
 
     g.append('line')
       .attr('x1', xLeftFn(0))
