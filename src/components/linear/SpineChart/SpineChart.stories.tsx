@@ -32,7 +32,7 @@ export const Default = {
     id: 'spine-chart-default',
     y: {
       key: 'value1',
-      direction: 'right',
+      axis: 'middle',
       className: '',
     },
     x: [
@@ -43,13 +43,13 @@ export const Default = {
   },
 };
 
-export const WithYDirectionToLeft = {
+export const WithYAxisToLeft = {
   args: {
     ...Default.args,
     id: 'spine-chart-y-direction-left',
     y: {
       key: 'value1',
-      direction: 'left',
+      axis: 'left',
     },
   },
 };
@@ -91,7 +91,7 @@ export const XAxisTop = {
   },
 };
 
-export const YAxisMiddle = {
+export const YAxisRight = {
   args: {
     ...WithStyle.args,
     id: 'spine-chart-y-axis-middle',
@@ -104,7 +104,7 @@ export const YAxisMiddle = {
     },
     y: {
       key: 'value1',
-      axis: 'middle',
+      axis: 'right',
     },
   },
 };

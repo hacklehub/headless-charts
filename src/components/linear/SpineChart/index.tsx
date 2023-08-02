@@ -58,7 +58,11 @@ const SpineChart = ({
     right: 20,
     middle: 60,
   },
-  y,
+  y = {
+    key: '',
+    axis: 'middle',
+    className: '',
+  },
   x,
 }: SpineChartProps) => {
   const refreshChart = useCallback(() => {
