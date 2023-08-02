@@ -50,6 +50,8 @@ interface PieChartProps {
     top: number;
     bottom: number;
   };
+  startAngle?: number;
+  endAngle?: number;
   innerRadius?: number;
   value: string;
   drawing?: DrawingOptions;
@@ -71,6 +73,8 @@ const PieChart = ({
     top: 0,
   },
   paddingAngle = 1,
+  startAngle = 0,
+  endAngle = 360,
   cornerRadius = 0,
   margin = {
     left: 40,
@@ -94,8 +98,9 @@ const PieChart = ({
     const g = svg.append('g');
 
     const pieFn = pie<DataItem>()
-      .sort(null)
       .value((d: { [x: string]: any }) => d[value])
+      .startAngle((startAngle / 180) * Math.PI || 0)
+      .endAngle((endAngle / 180) * Math.PI || 2 * Math.PI)
       .padAngle(paddingAngle);
 
     const chartArea = [
@@ -103,12 +108,15 @@ const PieChart = ({
       height - margin.top - margin.bottom,
     ];
 
-    const radius = min(chartArea.map((a) => a / 2)) || 0;
+    const radius =
+      min(
+        endAngle - startAngle <= 180 ? chartArea : chartArea.map((a) => a / 2)
+      ) || 0;
 
     const arcFn = arc()
       .innerRadius(radius * innerRadius)
       .outerRadius(radius)
-      .padAngle(paddingAngle * ((1 / 360) * (2 * Math.PI)))
+      .padAngle((paddingAngle / 360) * (2 * Math.PI))
       .cornerRadius(cornerRadius);
 
     const labelArc =
@@ -124,7 +132,9 @@ const PieChart = ({
       .attr(
         'transform',
         `translate(${padding.left + margin.left + chartArea[0] / 2},${
-          margin.top + padding.top + chartArea[1] / 2
+          endAngle - startAngle <= 180
+            ? height - margin.bottom - (padding.bottom || 0)
+            : margin.top + padding.top + chartArea[1] / 2
         })`
       );
     const tooltipDiv = select('body')
@@ -213,18 +223,20 @@ const PieChart = ({
         );
     /* eslint-enable */
   }, [
-    data,
-    drawing,
     id,
-    cornerRadius,
-    innerRadius,
-    labels,
-    classNamePoints,
+    startAngle,
+    endAngle,
+    paddingAngle,
     margin,
+    innerRadius,
+    cornerRadius,
+    labels,
+    data,
     padding,
     tooltip,
-    paddingAngle,
+    drawing,
     value,
+    classNamePoints,
   ]);
 
   useEffect(() => {

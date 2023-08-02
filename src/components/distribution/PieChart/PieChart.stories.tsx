@@ -109,3 +109,18 @@ export const TooltipWithHtml = {
     },
   },
 };
+
+export const SemiCircle = {
+  args: {
+    ...Styled.args,
+    id: 'semi-circle',
+    startAngle: -90,
+    endAngle: 90,
+    labels: {
+      radius: 1.1,
+      key: 'name',
+      text: (data: any) => `${data.name} `,
+      className: 'text-black',
+    },
+  },
+};
