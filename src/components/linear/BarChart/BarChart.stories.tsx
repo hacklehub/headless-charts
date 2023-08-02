@@ -52,9 +52,9 @@ export const Styled = {
     x: [
       {
         key: 'reading',
-        className: 'fill-red-500 rounded',
+        className: 'fill-amber-500 rounded',
       },
-      { key: 'value', className: 'fill-blue-500' },
+      { key: 'value', className: 'fill-purple-400' },
     ],
     y: { key: 'name', className: 'text-red-500', padding: 10 },
   },
