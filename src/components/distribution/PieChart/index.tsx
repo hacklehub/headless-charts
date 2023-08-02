@@ -2,9 +2,9 @@ import { arc, pie } from 'd3';
 import { pointer, select } from 'd3-selection';
 import { useCallback, useEffect } from 'react';
 
-import { defaultChartClassNames } from '../../utils';
+import { defaultChartClassNames } from '../../../utils';
 import { interpolate } from 'd3-interpolate';
-import { mergeTailwindClasses } from '../../utils';
+import { mergeTailwindClasses } from '../../../utils';
 import { min } from 'd3-array';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
