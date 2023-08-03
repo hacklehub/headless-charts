@@ -8,7 +8,7 @@ import data from './sample.json';
  * Radar charts are also useful for seeing which variables are scoring high or low within a dataset, making them ideal for displaying performance.
  */
 export default {
-  title: 'Gauges/RadarChart',
+  title: 'Gauge/RadarChart',
   component: RadarChart,
   tags: ['autodocs'],
 } as Meta;
@@ -35,9 +35,21 @@ export const Default = {
 export const Styled = {
   args: {
     ...Default.args,
+    id: 'radar-chart-styled',
     classNameMap: {
       Arsenal: 'stroke-red-500 fill-red-500',
       Chelsea: 'stroke-blue-500 fill-blue-500',
+    },
+  },
+};
+
+export const Drawing = {
+  args: {
+    ...Styled.args,
+    id: 'radar-chart-drawing',
+    drawing: {
+      duration: 1000,
+      delay: 1000,
     },
   },
 };
