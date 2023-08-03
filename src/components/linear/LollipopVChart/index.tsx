@@ -15,6 +15,7 @@ import {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect } from 'react';
 
+import { defaultChartClassNames } from '../../../utils';
 import { mergeTailwindClasses } from '../../../utils';
 
 interface DataItem {
@@ -252,10 +253,7 @@ const LollipopVChart = ({
   return (
     <svg
       id={id}
-      className={mergeTailwindClasses(
-        `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart  h-48`,
-        className || ''
-      )}
+      className={mergeTailwindClasses(defaultChartClassNames, className)}
     />
   );
 };
