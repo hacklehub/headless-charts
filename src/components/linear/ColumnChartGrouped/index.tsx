@@ -99,7 +99,12 @@ const ColumnChartGrouped = ({
 
     const width = +svg.style('width').split('px')[0],
       height = +svg.style('height').split('px')[0];
-
+    console.log(
+      minStart,
+      height,
+      margin,
+      height - margin.bottom - padding.bottom
+    );
     const xFn = scaleBand()
       // @ts-ignore
       .domain(data.map((d) => d[x.key]))
@@ -108,7 +113,10 @@ const ColumnChartGrouped = ({
 
     const yFn = scaleLinear()
       // @ts-ignore
-      .domain([Number.isFinite(minStart) ? minStart : minY, maxEnd || maxY])
+      .domain([
+        Number.isFinite(minStart) ? minStart : minY || 0,
+        maxEnd || maxY,
+      ])
       .range([
         height - margin.bottom - padding.bottom,
         margin.top + padding.top,
@@ -144,7 +152,7 @@ const ColumnChartGrouped = ({
             ? 0
             : d[column.key]
             ? // @ts-ignore
-              height - margin.bottom - yFn(d[column.key])
+              height - margin.bottom - padding.bottom - yFn(d[column.key])
             : 0
         )
         .on('mouseenter', function (event, d) {
@@ -186,7 +194,7 @@ const ColumnChartGrouped = ({
           .attr('height', (d) =>
             Number.isFinite(d[column.key])
               ? // @ts-ignore
-                height - marginBottom - yFn(d[column.key])
+                height - margin.bottom - padding.bottom - yFn(d[column.key])
               : 0
           );
     });
@@ -219,7 +227,7 @@ const ColumnChartGrouped = ({
         });
     });
 
-    const tooltipDiv = select('#root')
+    const tooltipDiv = select('body')
       .append('div')
       .attr('id', 'tooltip')
       .style('position', 'absolute')
