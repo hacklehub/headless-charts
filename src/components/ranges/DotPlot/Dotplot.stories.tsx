@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import DotPlot from '.';
 import { Meta } from '@storybook/react';
+import data from './sample.json';
 
 export default {
   title: 'Ranges/Dotplot',
@@ -10,24 +12,51 @@ export default {
 export const Default = {
   args: {
     id: 'dot-plot-default',
-    data: [
-      { label: '1', minKey: 0.2, maxKey: 0.4 },
-      { label: '2', minKey: 0.2, maxKey: 0.6 },
-      { label: '3', minKey: 0.4, maxKey: 0.8 },
-      { label: '4', minKey: 0.6, maxKey: 1.0 },
-    ],
-    shape: 'star',
+    data,
+
     y: {
       key: 'label',
-      axis: "left"
+      axis: 'left',
     },
     x: {
-      start: 0,
-      end: 1,
-      minKey: 0,
-      maxKey: 1,
-      axis: 'bottom',
-      axisTicks: 5,
+      minKey: 'minTemp',
+      maxKey: 'maxTemp',
+    },
+  },
+};
+
+export const CustomShape = {
+  args: {
+    ...Default.args,
+    id: 'dot-plot-custom-shape',
+    shape: 'star',
+  },
+};
+
+export const CustomTooltip = {
+  args: {
+    ...Default.args,
+    id: 'dot-plot-custom-tooltip',
+    tooltip: {
+      keys: ['minTemp', 'maxTemp'],
+    },
+  },
+};
+
+export const CustomTooltipHtml = {
+  args: {
+    ...Default.args,
+    id: 'dot-plot-custom-tooltip-html',
+    tooltip: {
+      html: (d: any) => {
+        return `
+          <div>
+            <div>${d.label}</div>
+            <div>Min: ${d.minTemp}</div>
+            <div>Max: ${d.maxTemp}</div>
+          </div>
+        `;
+      },
     },
   },
 };

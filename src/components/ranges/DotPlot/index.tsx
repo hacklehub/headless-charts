@@ -17,6 +17,7 @@ import {
 import { useCallback, useEffect } from 'react';
 
 import { ChartProps } from '../../../types';
+import { transition } from 'd3-transition';
 import { zoom } from 'd3-zoom';
 
 interface DotPlotProps extends ChartProps {
@@ -148,6 +149,8 @@ const DotPlot = ({
             .style('left', `0px`)
             .style('top', `0px`);
       });
+
+    transition();
 
     dotRowsG
       .append('line')
