@@ -1,11 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useCallback, useEffect } from 'react';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, min } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface DataItem {
   [key: string]: number | string;
@@ -38,7 +37,6 @@ interface ColumnChartGroupedProps {
     top: number;
   };
   paddingBar?: number;
-
   drawing?: { duration?: number };
   tooltip?: {
     html?: (data: any) => string;
@@ -146,7 +144,7 @@ const ColumnChartGrouped = ({
             ? 0
             : d[column.key]
             ? // @ts-ignore
-              height - marginBottom - yFn(d[column.key])
+              height - margin.bottom - yFn(d[column.key])
             : 0
         )
         .on('mouseenter', function (event, d) {
@@ -236,7 +234,7 @@ const ColumnChartGrouped = ({
       .attr(
         'transform',
         // @ts-ignore
-        `translate(${y.axis === 'right' ? marginLeft + width : marginLeft},0)`
+        `translate(${y.axis === 'right' ? margin.left + width : margin.left},0)`
       );
     yAxisG.call(yAxis);
 
