@@ -52,9 +52,9 @@ export const Styled = {
     x: [
       {
         key: 'reading',
-        className: 'fill-red-500 rounded',
+        className: 'fill-amber-500 rounded',
       },
-      { key: 'value', className: 'fill-blue-500' },
+      { key: 'value', className: 'fill-purple-400' },
     ],
     y: { key: 'name', className: 'text-red-500', padding: 10 },
   },
@@ -69,6 +69,8 @@ export const NegativeStyling = {
         key: 'reading',
         className: 'text-red-500 rounded',
         classNameNegative: 'text-green-500 rounded',
+        start: -25,
+        end: 25,
       },
       { key: 'value', className: 'text-blue-500' },
     ],
@@ -194,5 +196,52 @@ export const CustomAxisLabel = {
         axisLabel: 'Value',
       },
     ],
+  },
+};
+
+export const DivergingBarChart = {
+  args: {
+    data: [
+      {
+        name: 'Product A',
+        reading: 10000,
+      },
+      {
+        name: 'Product B',
+        reading: 9000,
+      },
+      {
+        name: 'Product C',
+        reading: 6000,
+      },
+      {
+        name: 'Product D',
+        reading: -1000,
+      },
+    ],
+    id: 'bar-chart-diverging',
+    x: [
+      {
+        key: 'reading',
+        className: 'text-green-500 rounded',
+        classNameNegative: 'text-red-500 rounded',
+        axis: 'top',
+        start: -10000,
+        end: 10000,
+      },
+    ],
+    y: { key: 'name', padding: 10 },
+  },
+};
+
+export const DrawingDivergingBarChart = {
+  args: {
+    ...DivergingBarChart.args,
+    id: 'bar-chart-diverging-drawing',
+    drawing: {
+      enabled: true,
+      duration: 1000,
+      delay: 100,
+    },
   },
 };
