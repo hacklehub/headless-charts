@@ -15,12 +15,28 @@ export const Default = {
     x: {
       axis: 'bottom',
       axisTicks: 2,
-      key: 'value',
+      key: 'name',
     },
     y: {
       axis: 'left',
       axisTicks: 4,
-      key: 'name',
+      key: 'reading',
+      start: 0,
     },
+  },
+};
+
+export const WithCustomShape = {
+  args: {
+    ...Default.args,
+    shape: 'star',
+  },
+};
+
+export const WithCustomStyles = {
+  args: {
+    ...WithCustomShape.args,
+    classNameLines: 'fill-red-500 stroke-red-500',
+    classNameSymbols: 'fill-blue-500 stroke-blue-500',
   },
 };
