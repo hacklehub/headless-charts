@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Meta } from '@storybook/react';
 import SpineChart from '.';
 
@@ -11,19 +12,19 @@ export const Default = {
   args: {
     data: [
       {
-        value1: 'Bangalore',
+        name: 'Product A',
         value2: 6,
         value3: 7,
         value4: 8,
       },
       {
-        value1: 'Chennai',
+        name: 'Product B',
         value2: 4,
         value3: 6,
         value4: 8,
       },
       {
-        value1: 'Mumbai',
+        name: 'Product C',
         value2: 1,
         value3: 2,
         value4: 3,
@@ -31,12 +32,12 @@ export const Default = {
     ],
     id: 'spine-chart-default',
     y: {
-      key: 'value1',
+      key: 'name',
     },
     x: [
-      { key: 'value2', direction: 'left', className: '' },
-      { key: 'value3', direction: 'right', className: '' },
-      { key: 'value4', direction: 'left', className: '' },
+      { key: 'value2', direction: 'left' },
+      { key: 'value3', direction: 'right' },
+      { key: 'value4', direction: 'left' },
     ],
   },
 };
@@ -58,7 +59,7 @@ export const WithYAxisToLeft = {
     ...WithStyle.args,
     id: 'spine-chart-y-direction-left',
     y: {
-      key: 'value1',
+      key: 'name',
       axis: 'left',
     },
     margin: {
@@ -83,13 +84,13 @@ export const YAxisRight = {
       middle: 0,
     },
     y: {
-      key: 'value1',
+      key: 'name',
       axis: 'right',
     },
   },
 };
 
-export const WithPaddingBar = {
+export const WithCustomPaddingBar = {
   args: {
     ...Default.args,
     id: 'spine-chart-with-padding-bar',
@@ -106,11 +107,38 @@ export const XAxisTop = {
         key: 'value2',
         direction: 'left',
         className: 'fill-purple-700',
-        axis: 'top',
       },
       { key: 'value3', direction: 'right', className: 'fill-red-700' },
       { key: 'value4', direction: 'left', className: 'fill-orange-300' },
     ],
+    xAxis: 'top',
   },
 };
 
+export const WithTooltip = {
+  args: {
+    ...Default.args,
+    id: 'spine-chart-with-tooltip',
+    tooltip: {
+      keys: ['value2', 'value3', 'value4'],
+      className: 'bg-gray-800 text-white p-2 rounded-md shadow-md',
+    },
+  },
+};
+
+export const WithCustomTooltip = {
+  args: {
+    ...Default.args,
+    id: 'spine-chart-with-custom-tooltip',
+    tooltip: {
+      html: (d: any) => `
+        <div class="bg-gray-800 text-white p-2 rounded-md shadow-md">
+          <div class="font-bold">${d.name}</div>
+          <div>${d.value2}</div>
+          <div>${d.value3}</div>
+          <div>${d.value4}</div>
+        </div>
+      `,
+    },
+  },
+};

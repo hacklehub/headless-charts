@@ -1,8 +1,8 @@
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, sum } from 'd3-array';
+import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
-import { select, selectAll } from 'd3-selection';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect } from 'react';
 
@@ -12,6 +12,7 @@ interface Y {
   key: string;
   axis: 'left' | 'right' | 'middle';
   className: string;
+  label?: string;
 }
 
 interface DataItem {
@@ -39,7 +40,12 @@ interface SpineChartProps {
   y: Y;
   x: Array<any>;
   axisTicks?: number;
-  xAxis?: 'top' | 'right';
+  xAxis?: 'top' | 'bottom';
+  tooltip?: {
+    className?: string;
+    html?: (d: any) => string;
+    keys?: string[];
+  };
 }
 
 const SpineChart = ({
@@ -67,7 +73,8 @@ const SpineChart = ({
   },
   x,
   axisTicks = 5,
-  xAxis = 'top',
+  xAxis = 'bottom',
+  tooltip = undefined,
 }: SpineChartProps) => {
   const refreshChart = useCallback(() => {
     const svg = select(`#${id}`);
@@ -149,6 +156,13 @@ const SpineChart = ({
       ])
       .padding(paddingBar);
 
+    const tooltipDiv = select('body')
+      .append('div')
+      .attr('id', 'tooltip')
+      .style('position', 'absolute')
+      .style('opacity', '0')
+      .attr('class', `${tooltip?.className || ''}`);
+
     transition();
 
     leftSeries.map((column, i) => {
@@ -165,6 +179,35 @@ const SpineChart = ({
         .attr('x', xLeftFn(0))
         .attr('width', 0)
         .attr('height', yFn.bandwidth())
+        .on('mouseenter', function (event: MouseEvent, d: any) {
+          if (tooltip) {
+            tooltipDiv.style('opacity', 1);
+            const [bX, bY] = pointer(event, select('body'));
+            tooltipDiv
+              .style('left', `${bX + 10}px`)
+              .style('top', `${bY + 10}px`);
+            tooltipDiv.html(
+              tooltip && tooltip.html
+                ? tooltip.html(d)
+                : tooltip.keys
+                ? tooltip.keys
+                    .map((key) => `${key}: ${d[key] || ''}`)
+                    .join('<br/>')
+                : `${d[y.key]} <br/> ${column.key} ${d[column.key]}`
+            );
+          }
+        })
+        .on('mousemove', function (event: MouseEvent) {
+          const [bX, bY] = pointer(event, select('body'));
+          tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
+        })
+        .on('mouseleave', function () {
+          tooltip &&
+            tooltipDiv
+              .style('opacity', '0')
+              .style('left', `0px`)
+              .style('top', `0px`);
+        })
         .transition()
         .duration(1000)
         // @ts-ignore
@@ -187,11 +230,40 @@ const SpineChart = ({
         .enter()
         .append('rect')
         .attr('class', `${column.className} fill-current`)
-        .attr('x', (d) => xRightFn(0))
+        .attr('x', () => xRightFn(0))
         .attr('z-index', 100 - i)
         // @ts-ignore
         .attr('y', (d) => yFn(d[y.key]))
         .attr('height', yFn.bandwidth())
+        .on('mouseenter', function (event: MouseEvent, d: any) {
+          if (tooltip) {
+            tooltipDiv.style('opacity', 1);
+            const [bX, bY] = pointer(event, select('body'));
+            tooltipDiv
+              .style('left', `${bX + 10}px`)
+              .style('top', `${bY + 10}px`);
+            tooltipDiv.html(
+              tooltip && tooltip.html
+                ? tooltip.html(d)
+                : tooltip.keys
+                ? tooltip.keys
+                    .map((key) => `${key}: ${d[key] || ''}`)
+                    .join('<br/>')
+                : `${d[y.key]} <br/> ${column.key} ${d[column.key]}`
+            );
+          }
+        })
+        .on('mousemove', function (event: MouseEvent) {
+          const [bX, bY] = pointer(event, select('body'));
+          tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
+        })
+        .on('mouseleave', function () {
+          tooltip &&
+            tooltipDiv
+              .style('opacity', '0')
+              .style('left', `0px`)
+              .style('top', `0px`);
+        })
         .transition()
         .duration(1000)
         .attr(
@@ -221,6 +293,22 @@ const SpineChart = ({
       )
       .call(xLeftAxis);
 
+    xLeftAxisG
+      .append('text')
+      .text(leftSeries.map((c) => c.label || c.key).join(', '))
+      .attr('class', 'fill-current')
+      .attr('x', 0)
+      .attr('y', xAxis === 'top' ? -20 : 30)
+      .attr('text-anchor', 'start');
+
+    xRightAxisG
+      .append('text')
+      .text(rightSeries.map((c) => c.label || c.key).join(', '))
+      .attr('class', 'fill-current')
+      .attr('x', width)
+      .attr('y', xAxis === 'top' ? -20 : 30)
+      .attr('text-anchor', 'end');
+
     const yAxis = y.axis === 'right' ? axisRight(yFn) : axisLeft(yFn);
     const yAxisG = g
       .append('g')
@@ -234,9 +322,15 @@ const SpineChart = ({
             ? width - margin.right
             : margin.left + halfWidth + margin.middle / 2
         },0)`
-      );
+      )
+      .call(yAxis);
 
-    yAxisG.call(yAxis);
+    yAxisG
+      .append('text')
+      .text(y.label || y.key)
+      .attr('class', 'fill-current')
+      .attr('x', y.axis === 'left' ? -20 : y.axis === 'right' ? 20 : -20)
+      .attr('y', xAxis === 'top' ? margin.top : height - margin.bottom);
   }, [data, x, padding, margin, paddingBar, y]);
 
   useEffect(() => {
