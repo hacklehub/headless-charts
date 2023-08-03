@@ -11,24 +11,23 @@ export const Default = {
   args: {
     id: 'dot-plot-default',
     data: [
-      //   { set1: 1, set2: 2, set3: 3 },
-      //   { set1: 4, set2: 5, set3: 6 },
-      //   { set1: 7, set2: 8, set3: 9 },
-      { set1: 1 },
-      { set2: 2 },
-      { set3: 3 },
+      { label: '1', minKey: 0.2, maxKey: 0.4 },
+      { label: '2', minKey: 0.2, maxKey: 0.6 },
+      { label: '3', minKey: 0.4, maxKey: 0.8 },
+      { label: '4', minKey: 0.6, maxKey: 1.0 },
     ],
-    shape: 'circle',
+    shape: 'star',
     y: {
       key: 'label',
+      axis: "left"
     },
     x: {
       start: 0,
       end: 1,
-      minKey: 'min',
-      maxKey: 'max',
+      minKey: 0,
+      maxKey: 1,
       axis: 'bottom',
-      axisTicks: 454,
+      axisTicks: 5,
     },
   },
 };

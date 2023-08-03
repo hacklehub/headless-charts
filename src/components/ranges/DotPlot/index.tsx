@@ -13,10 +13,10 @@ import {
   symbolTriangle,
   symbolWye,
 } from 'd3-shape';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useCallback, useEffect } from 'react';
 
 import { ChartProps } from '../../../types';
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect } from 'react';
 import { zoom } from 'd3-zoom';
 
 interface DotPlotProps extends ChartProps {
@@ -24,6 +24,7 @@ interface DotPlotProps extends ChartProps {
   shape: 'circle';
   y: {
     [key: string]: string;
+    axis: 'left' | 'right';
   };
   x: {
     start: number;
@@ -35,7 +36,7 @@ interface DotPlotProps extends ChartProps {
   };
   tooltip?: {
     className?: string;
-    kays?: string[];
+    keys?: string[];
     html?: (d: any) => string;
   };
 }
@@ -45,7 +46,7 @@ const DotPlot = ({
   className,
   data = [],
   classNameData,
-  y = { key: 'label' },
+  y = { key: 'label', axis: 'left' },
   x,
   margin = {
     top: 40,
@@ -63,7 +64,7 @@ const DotPlot = ({
   tooltip = {},
   zooming,
 }: DotPlotProps) => {
-  const refreshChart = async () => {
+  const refreshChart = useCallback(() => {
     const shapeMapping = {
       circle: symbolCircle,
       diamond: symbolDiamond,
@@ -303,14 +304,14 @@ const DotPlot = ({
       /* eslint-enable */
       svg.call(zoomFunc);
     }
-  };
+  }, [classNameData, data, id, margin, padding, shape, tooltip, x, y, zooming]);
 
   useEffect(() => {
     refreshChart();
     return () => {
       selectAll('.tooltip').remove();
     };
-  }, [data]);
+  }, [data, refreshChart]);
   return (
     <svg
       id={id}
