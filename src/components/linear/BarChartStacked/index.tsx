@@ -3,6 +3,7 @@ import { max, sum } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
 
+import { defaultChartClassNames } from '../../../utils';
 import { format } from 'd3-format';
 import { mergeTailwindClasses } from '../../../utils';
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -265,7 +266,7 @@ const BarChartStacked = ({
         });
     });
 
-    const tooltipDiv = select('#root')
+    const tooltipDiv = select('body')
       .append('div')
       .attr('id', 'tooltip')
       .style('position', 'absolute')
@@ -315,15 +316,12 @@ const BarChartStacked = ({
     return () => {
       selectAll('.tooltip').remove();
     };
-  }, [data]);
+  }, [data, refreshChart]);
   return (
     <>
       <svg
         id={id}
-        className={mergeTailwindClasses(
-          `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart h-64`,
-          className || ''
-        )}
+        className={mergeTailwindClasses(defaultChartClassNames, className)}
       />
     </>
   );

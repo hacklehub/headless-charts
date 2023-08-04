@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import BarChartStacked from '.';
 import { Meta } from '@storybook/react';
 import data from './sample.json';
@@ -43,10 +44,40 @@ export const Styled = {
     x: [
       {
         key: 'reading',
-        className: 'fill-amber-500 rounded',
+        className: 'fill-blue-500',
       },
       { key: 'value', className: 'fill-purple-400' },
     ],
     y: { key: 'name', className: 'text-red-500', padding: 10 },
+  },
+};
+
+export const Tooltip = {
+  args: {
+    ...Styled.args,
+    id: 'bar-chart-stacked-tooltip',
+    tooltip: {
+      className: 'bg-gray-800 text-white p-2 rounded',
+      keys: ['name', 'reading', 'value'],
+    },
+  },
+};
+
+export const CustomTooltip = {
+  args: {
+    ...Styled.args,
+    id: 'bar-chart-custom-tooltip',
+    tooltip: {
+      className: 'bg-gray-800 text-white p-2 rounded',
+      html: (d: any) => {
+        return `
+            <div class="flex flex-col">
+              <div class="text-lg text-center">${d.name}</div>
+              <div class="text-sm text-center">${d.reading}</div>
+              <div class="text-sm text-center">${d.value}</div>
+            </div>
+          `;
+      },
+    },
   },
 };
