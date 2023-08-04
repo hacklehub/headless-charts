@@ -2,18 +2,18 @@ import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { max, sum } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useCallback, useEffect } from 'react';
 
 import { defaultChartClassNames } from '../../../utils';
 import { format } from 'd3-format';
 import { mergeTailwindClasses } from '../../../utils';
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect } from 'react';
 
 interface DataItem {
   [key: string]: any;
 }
 
-interface Column {
+interface AxisItems {
   key: string;
   className: string;
   axis?: string;
@@ -32,10 +32,10 @@ interface Drawing {
 }
 
 interface DataLabel {
-  text?: (data: DataItem, column: Column) => string;
+  text?: (data: DataItem, column: AxisItems) => string;
 }
 
-interface ReferenceLine {
+interface ReferenceLines {
   x?: number;
   className?: string;
 }
@@ -45,20 +45,24 @@ interface BarChartStackedProps {
   id: string;
   className?: string;
   direction?: string;
-  paddingBar?: number;
-  paddingLeft?: number;
-  paddingRight?: number;
-  paddingBottom?: number;
-  paddingTop?: number;
-  marginLeft?: number;
-  marginRight?: number;
-  marginTop?: number;
-  marginBottom?: number;
-  referenceLines?: ReferenceLine[];
+  padding?: {
+    left: number;
+    right: number;
+    bottom: number;
+    top: number;
+    bar: number;
+  };
+  margin?: {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+  };
+  referenceLines?: ReferenceLines[];
   waterfall?: any;
-  x: Column[];
+  x: AxisItems[];
   tickFormat?: string;
-  y: Column;
+  y: AxisItems;
   tooltip?: ToolTip;
   drawing?: Drawing;
   dataLabel?: DataLabel;
@@ -69,15 +73,19 @@ const BarChartStacked = ({
   id,
   className,
   direction = 'right',
-  paddingBar = 0.3,
-  paddingLeft = 0,
-  paddingBottom = 0,
-  paddingTop = 0,
-  paddingRight = 0,
-  marginLeft = 60,
-  marginRight = 20,
-  marginTop = 20,
-  marginBottom = 40,
+  padding = {
+    left: 0,
+    right: 0,
+    bottom: 0,
+    top: 0,
+    bar: 0.3,
+  },
+  margin = {
+    left: 60,
+    right: 20,
+    top: 20,
+    bottom: 40,
+  },
   referenceLines = [],
   waterfall,
   x,
@@ -96,7 +104,7 @@ const BarChartStacked = ({
     SI: '.2s',
   };
 
-  const refreshChart = () => {
+  const refreshChart = useCallback(() => {
     const svg = select(`#${id}`);
     svg.selectAll('*').remove();
 
@@ -107,13 +115,16 @@ const BarChartStacked = ({
 
     const yFn = scaleBand()
       .domain(data.map((d) => d[y.key]))
-      .range([marginTop + paddingTop, height - marginBottom - paddingBottom])
-      .padding(paddingBar);
+      .range([
+        margin.top + padding.top,
+        height - margin.bottom - padding.bottom,
+      ])
+      .padding(padding.bar);
 
     const xFnRange =
       direction === 'left'
-        ? [width - marginRight - paddingRight, marginLeft + paddingLeft]
-        : [marginLeft + paddingLeft, width - marginRight - paddingRight];
+        ? [width - margin.right - padding.right, margin.left + padding.left]
+        : [margin.left + padding.left, width - margin.right - padding.right];
 
     const xFn = scaleLinear()
       // @ts-ignore
@@ -244,7 +255,7 @@ const BarChartStacked = ({
         // @ts-ignore
         .attr('x2', x)
         .attr('y1', y)
-        .attr('y2', height - marginBottom - paddingBottom)
+        .attr('y2', height - margin.bottom - padding.bottom)
         .attr('stroke', 'currentColor')
         .attr('clip-path', 'url(#clip)')
         .style('stroke-width', 1);
@@ -296,19 +307,33 @@ const BarChartStacked = ({
       .attr('class', 'yAxis axis')
       .attr(
         'transform',
-        `translate(${direction === 'left' ? width : marginLeft},0)`
+        `translate(${direction === 'left' ? width : margin.left},0)`
       );
 
     xAxisG
       .attr(
         'transform',
         // @ts-ignore
-        `translate(0, ${x.axis === 'top' ? marginTop : height - marginBottom})`
+        `translate(0, ${x.axis === 'top' ? marginTop : height - margin.bottom})`
       )
       .call(xAxis);
 
     yAxisG.call(yAxis);
-  };
+  }, [
+    data,
+    id,
+    direction,
+    padding,
+    margin,
+    referenceLines,
+    waterfall,
+    x,
+    tickFormat,
+    y,
+    tooltip,
+    drawing,
+    dataLabel,
+  ]);
   /* eslint-enable */
 
   useEffect(() => {
