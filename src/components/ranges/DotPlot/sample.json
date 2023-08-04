@@ -1,0 +1,14 @@
+[
+  { "label": "January", "minTemp": 25, "maxTemp": 31 },
+  { "label": "February", "minTemp": 26, "maxTemp": 32 },
+  { "label": "March", "minTemp": 30, "maxTemp": 38 },
+  { "label": "April", "minTemp": 31, "maxTemp": 40 },
+  { "label": "May", "minTemp": 32, "maxTemp": 42 },
+  { "label": "June", "minTemp": 30, "maxTemp": 38 },
+  { "label": "July", "minTemp": 29, "maxTemp": 36 },
+  { "label": "August", "minTemp": 29, "maxTemp": 36 },
+  { "label": "September", "minTemp": 29, "maxTemp": 36 },
+  { "label": "October", "minTemp": 29, "maxTemp": 36 },
+  { "label": "November", "minTemp": 29, "maxTemp": 36 },
+  { "label": "December", "minTemp": 25, "maxTemp": 31 }
+]
