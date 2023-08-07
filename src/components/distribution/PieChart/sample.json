@@ -1,0 +1,11 @@
+[
+  {
+    "name": "Product A",
+    "USA": 1000,
+    "Europe": 4000,
+    "APAC": 5000,
+    "Africa": 1000
+  },
+  { "name": "Product B", "USA": 36000, "Europe": 9000, "APAC": 4000 },
+  { "name": "Product C", "USA": 6000, "Europe": 4000, "APAC": 1000 }
+]

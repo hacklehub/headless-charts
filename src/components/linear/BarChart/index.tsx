@@ -2,12 +2,13 @@
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, min } from 'd3-array';
-import { pointer, select } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
 
 import { ChartProps } from '../../../types';
 import React from 'react';
+import { select } from 'd3-selection';
 import { transition } from 'd3-transition';
+import useTooltip from '../../../hooks/useTooltip';
 
 interface ColumnType {
   axis?: 'top' | 'bottom';
@@ -65,6 +66,8 @@ const BarChart = ({
   dataLabel,
   tooltip,
 }: BarChartProps) => {
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip(tooltip);
+
   const refreshData = React.useCallback(() => {
     const svg = select(`#${id}`);
     svg.selectAll('*').remove();
@@ -158,13 +161,6 @@ const BarChart = ({
           .join(', ')
       );
 
-    const tooltipDiv = select('body')
-      .append('div')
-      .attr('id', 'tooltip')
-      .style('position', 'absolute')
-      .style('opacity', '0')
-      .attr('class', `${tooltip?.className || ''}`);
-
     x.map((column, i) => {
       const barsG = g.append('g');
 
@@ -204,35 +200,14 @@ const BarChart = ({
             : xFn(Math.abs(d[column.key])) - xFn(0)
         )
         .attr('height', yFn.bandwidth() / x.length - (y.padding || 0))
-        .on('mouseenter', function (event: MouseEvent, d: any) {
-          if (tooltip) {
-            tooltipDiv.style('opacity', 1);
-            const [bX, bY] = pointer(event, select('body'));
-            tooltipDiv
-              .style('left', `${bX + 10}px`)
-              .style('top', `${bY + 10}px`);
-            tooltipDiv.html(
-              tooltip && tooltip.html
-                ? tooltip.html(d)
-                : tooltip.keys
-                ? tooltip.keys
-                    .map((key) => `${key}: ${d[key] || ''}`)
-                    .join('<br/>')
-                : `${d[y.key]} <br/> ${column.key} ${d[column.key]}`
-            );
-          }
-        })
-        .on('mousemove', function (event: MouseEvent) {
-          const [bX, bY] = pointer(event, select('body'));
-          tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-        })
-        .on('mouseleave', function () {
-          tooltip &&
-            tooltipDiv
-              .style('opacity', '0')
-              .style('left', `0px`)
-              .style('top', `0px`);
-        });
+        .on(
+          'mouseenter',
+          onMouseOver(
+            (d: any) => `${d[y.key]} <br/> ${column.key} ${d[column.key]}`
+          )
+        )
+        .on('mousemove', onMouseMove)
+        .on('mouseleave', onMouseLeave);
 
       transition();
 

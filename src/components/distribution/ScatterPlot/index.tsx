@@ -14,7 +14,8 @@ import {
   symbolWye,
 } from 'd3-shape';
 import { max, min } from 'd3-array';
-import { pointer, select, selectAll } from 'd3-selection';
+import { select, selectAll } from 'd3-selection';
+import useTooltip, { TooltipProps } from '../../../hooks/useTooltip';
 
 import { ChartProps } from '../../../types';
 import { scaleLinear } from 'd3-scale';
@@ -57,11 +58,7 @@ export interface ScatterPlotProps extends ChartProps {
       [key: string]: any;
     };
   };
-  tooltip?: {
-    html?: (d: any) => string;
-    keys?: string[];
-    className?: string;
-  };
+  tooltip?: TooltipProps;
   onClick?: (event: any, d: any) => void;
   connect?: {
     enabled?: boolean;
@@ -104,6 +101,7 @@ const ScatterPlot = ({
   drawing,
   connect = {},
 }: ScatterPlotProps) => {
+  const { onMouseOver, onMouseLeave, onMouseMove } = useTooltip(tooltip);
   const refreshChart = React.useCallback(() => {
     const svg = select(`#${id}`);
     // Clear svg
@@ -233,15 +231,15 @@ const ScatterPlot = ({
     };
 
     // Tooltips
-    const tooltipDiv =
-      tooltip && select('#tooltip').node()
-        ? select('#tooltip')
-        : select('body')
-            .append('div')
-            .attr('id', 'tooltip')
-            .style('position', 'absolute')
-            .style('opacity', '0')
-            .attr('class', mergeTailwindClasses(tooltip?.className));
+    // const tooltipDiv =
+    //   tooltip && select('#tooltip').node()
+    //     ? select('#tooltip')
+    //     : select('body')
+    //         .append('div')
+    //         .attr('id', 'tooltip')
+    //         .style('position', 'absolute')
+    //         .style('opacity', '0')
+    //         .attr('class', mergeTailwindClasses(tooltip?.className));
 
     svg
       .append('clipPath')
@@ -282,7 +280,7 @@ const ScatterPlot = ({
         'transform',
         (d: any) => `translate(${xFn(d[x.key])},${yFn(d[y.key])})`
       )
-      .on('mouseenter', onMouseOverG)
+      .on('mouseenter', onMouseOver)
       .on('mousemove', onMouseMove)
       .on('mouseleave', onMouseLeave)
       .on('click', (event, d) => {
@@ -327,33 +325,33 @@ const ScatterPlot = ({
       }
     }
 
-    function onMouseMove(event: MouseEvent) {
-      const [bX, bY] = pointer(event, select('body'));
-      tooltipDiv.style('left', `${bX + 10}px`);
-      tooltipDiv.style('top', `${bY + 10}px`);
-    }
+    // function onMouseMove(event: MouseEvent) {
+    //   const [bX, bY] = pointer(event, select('body'));
+    //   tooltipDiv.style('left', `${bX + 10}px`);
+    //   tooltipDiv.style('top', `${bY + 10}px`);
+    // }
 
-    function onMouseOverG(event: MouseEvent, row: any) {
-      tooltip && tooltipDiv.style('opacity', 1);
+    // function onMouseOverG(event: MouseEvent, row: any) {
+    //   tooltip && tooltipDiv.style('opacity', 1);
 
-      const [bX, bY] = pointer(event, select('body'));
-      tooltipDiv.style('left', `${bX + 10}px`);
-      tooltipDiv.style('top', `${bY + 10}px`);
-      tooltipDiv.html(
-        tooltip?.html
-          ? tooltip.html(row)
-          : tooltip?.keys
-          ? tooltip.keys.map((key) => `${key}: ${row[key] || ''}`).join('<br/>')
-          : Object.entries(row)
-              .map(([key, value]) => `${key}: ${value}`)
-              .join('<br/>')
-      );
-    }
+    //   const [bX, bY] = pointer(event, select('body'));
+    //   tooltipDiv.style('left', `${bX + 10}px`);
+    //   tooltipDiv.style('top', `${bY + 10}px`);
+    //   tooltipDiv.html(
+    //     tooltip?.html
+    //       ? tooltip.html(row)
+    //       : tooltip?.keys
+    //       ? tooltip.keys.map((key) => `${key}: ${row[key] || ''}`).join('<br/>')
+    //       : Object.entries(row)
+    //           .map(([key, value]) => `${key}: ${value}`)
+    //           .join('<br/>')
+    //   );
+    // }
 
-    function onMouseLeave() {
-      tooltipDiv.style('opacity', '0');
-      tooltipDiv.style('left', `-1000px`);
-    }
+    // function onMouseLeave() {
+    //   tooltipDiv.style('opacity', '0');
+    //   tooltipDiv.style('left', `-1000px`);
+    // }
 
     //Add styles from style prop
 

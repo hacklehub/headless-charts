@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { arc, pie } from 'd3';
-import { pointer, select } from 'd3-selection';
 import { useCallback, useEffect } from 'react';
 
 import { defaultChartClassNames } from '../../../utils';
 import { interpolate } from 'd3-interpolate';
 import { mergeTailwindClasses } from '../../../utils';
 import { min } from 'd3-array';
+import { select } from 'd3-selection';
+import useTooltip from '../../../hooks/useTooltip';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -14,8 +16,8 @@ interface DataItem {
   [key: string]: any;
 }
 
-interface ClassNamePoints {
-  classMap: { [key: string]: string };
+interface ClassNameMap {
+  [key: string]: string;
 }
 
 interface DrawingOptions {
@@ -24,18 +26,16 @@ interface DrawingOptions {
 
 interface LabelOptions {
   radius?: number;
-  key: string;
   text?: (data: DataItem) => string;
   className?: string;
-  labelsMap?: { [key: string]: string };
+  classNameMap?: { [key: string]: string };
 }
 
 interface PieChartProps {
   data: DataItem[];
   id: string;
   className?: string;
-  classNamePoints?: ClassNamePoints;
-  paddingBar?: number;
+  classNameMap?: ClassNameMap;
   padding?: {
     left: number;
     right?: number;
@@ -53,28 +53,29 @@ interface PieChartProps {
   startAngle?: number;
   endAngle?: number;
   innerRadius?: number;
-  value: string;
+  nameKey: string;
+  valueKey: string;
   drawing?: DrawingOptions;
   tooltip?: {
     className?: string;
     html?: (d: any) => string;
     keys?: string[];
   };
-  labels: LabelOptions;
+  labels?: LabelOptions;
 }
 
 const PieChart = ({
   data,
   id,
   className = '',
-  classNamePoints = { classMap: {} },
+  classNameMap = {},
   padding = {
     left: 0,
     top: 0,
   },
-  paddingAngle = 1,
+  paddingAngle = 0,
   startAngle = 0,
-  endAngle = 360,
+  endAngle = 360 + startAngle,
   cornerRadius = 0,
   margin = {
     left: 40,
@@ -83,11 +84,13 @@ const PieChart = ({
     bottom: 40,
   },
   innerRadius = 0,
-  value,
+  nameKey = 'name',
+  valueKey,
   drawing,
   tooltip,
   labels,
 }: PieChartProps) => {
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip(tooltip);
   const refreshChart = useCallback(() => {
     const svg = select(`#${id}`);
     svg.selectAll('*').remove();
@@ -98,10 +101,10 @@ const PieChart = ({
     const g = svg.append('g');
 
     const pieFn = pie<DataItem>()
-      .value((d: { [x: string]: any }) => d[value])
       .startAngle((startAngle / 180) * Math.PI || 0)
       .endAngle((endAngle / 180) * Math.PI || 2 * Math.PI)
-      .padAngle(paddingAngle);
+      .padAngle(paddingAngle / 180)
+      .value((d) => d[valueKey]);
 
     const chartArea = [
       width - margin.left - margin.right,
@@ -110,10 +113,12 @@ const PieChart = ({
 
     const radius =
       min(
-        endAngle - startAngle <= 180 ? chartArea : chartArea.map((a) => a / 2)
+        endAngle - startAngle <= 180
+          ? [chartArea[0] / 2, chartArea[1]]
+          : chartArea.map((a) => a / 2)
       ) || 0;
 
-    const arcFn = arc()
+    const arcFn = arc<DataItem>()
       .innerRadius(radius * innerRadius)
       .outerRadius(radius)
       .padAngle((paddingAngle / 360) * (2 * Math.PI))
@@ -134,64 +139,40 @@ const PieChart = ({
         `translate(${padding.left + margin.left + chartArea[0] / 2},${
           endAngle - startAngle <= 180
             ? height - margin.bottom - (padding.bottom || 0)
-            : margin.top + padding.top + chartArea[1] / 2
+            : margin.top + (padding.top || 0) + chartArea[1] / 2
         })`
       );
-    const tooltipDiv = select('body')
-      .append('div')
-      .attr('id', 'tooltip')
-      .style('position', 'absolute')
-      .style('opacity', '0')
-      .attr('class', `${tooltip?.className || ''}`);
 
     const paths = pathsG
       .selectAll('path')
       .data(arcs)
       .join('path')
-      .attr('class', (d) =>
-        mergeTailwindClasses(
-          classNamePoints.classMap[d.data.name],
-          'fill-current stroke-current'
-        )
+      .attr('id', (d) => d.data[nameKey])
+      .attr('data-testid', (d) => d.data[nameKey])
+      .attr('class', (d: any) =>
+        mergeTailwindClasses('fill-black', classNameMap[d.data[nameKey]])
       )
-      /* eslint-disable */
       // @ts-ignore
       .attr('d', arcFn)
-      .on('mouseenter', function (event: MouseEvent, d: any) {
-        if (tooltip) {
-          tooltipDiv.style('opacity', 1);
-          const [bX, bY] = pointer(event, select('body'));
-          tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-          tooltipDiv.html(
-            tooltip && tooltip.html
-              ? tooltip.html(d)
-              : tooltip.keys
-              ? tooltip.keys
-                  .map((key) => `${key}: ${d.data[key] || ''}`)
-                  .join('<br/>')
-              : `${d.data.name} = ${d.data[value]} `
-          );
-        }
-      })
-      .on('mousemove', function (event: MouseEvent) {
-        const [bX, bY] = pointer(event, select('body'));
-        tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-      })
-      .on('mouseleave', function () {
-        tooltip &&
-          tooltipDiv
-            .style('opacity', '0')
-            .style('left', '0px')
-            .style('top', '0px');
-      });
+      .on(
+        'mouseenter',
+        onMouseOver((d: any) => `${d.data[nameKey]} = ${d.value}`)
+      )
+      .on('mousemove', onMouseMove)
+      .on('mouseleave', onMouseLeave);
 
-    drawing &&
-      drawing.duration &&
+    drawing?.duration &&
       paths
         .transition()
-        .duration(drawing.duration)
+        .duration(drawing?.duration || 1000)
         .attrTween('d', function (d) {
-          const i = interpolate({ startAngle: 0, endAngle: 0 }, d);
+          const i = interpolate(
+            {
+              startAngle: (startAngle / 180) * Math.PI,
+              endAngle: (startAngle / 180) * Math.PI,
+            },
+            d
+          );
 
           // @ts-ignore
           return (t) => arcFn(i(t));
@@ -212,16 +193,16 @@ const PieChart = ({
           (d: { data: DataItem }) => `translate(${labelArc.centroid(d)})`
         )
         .attr('text-anchor', 'middle')
-        .attr(
-          'class',
-          `${labels?.className || ''} ${
-            (labels.labelsMap && labels.labelsMap[labels.key]) || ''
-          } fill-current`
+        .attr('class', (d: any) =>
+          mergeTailwindClasses(
+            labels?.className,
+            labels?.classNameMap && labels.classNameMap[d.data[nameKey]],
+            `fill-current`
+          )
         )
         .text((d: { data: DataItem }) =>
-          labels.text ? labels.text(d.data) : d.data[labels.key]
+          labels.text ? labels.text(d.data) : d.data[nameKey]
         );
-    /* eslint-enable */
   }, [
     id,
     startAngle,
@@ -230,13 +211,16 @@ const PieChart = ({
     margin,
     innerRadius,
     cornerRadius,
+    onMouseLeave,
+    onMouseMove,
+    onMouseOver,
     labels,
     data,
     padding,
-    tooltip,
     drawing,
-    value,
-    classNamePoints,
+    valueKey,
+    nameKey,
+    classNameMap,
   ]);
 
   useEffect(() => {
@@ -245,6 +229,7 @@ const PieChart = ({
 
   return (
     <svg
+      data-testid={id}
       id={id}
       className={mergeTailwindClasses(defaultChartClassNames, className)}
     />
