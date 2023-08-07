@@ -22,7 +22,7 @@ export const Default = {
 
 export const Styled = {
   args: {
-    data,
+    ...Default.args,
     id: 'column-chart-stack-styled',
     className: 'bg-gray-100 rounded',
     padding: {
@@ -38,7 +38,6 @@ export const Styled = {
       bottom: 40,
       left: 60,
     },
-    x: { key: 'name', className: 'text-purple-300' },
     y: [
       { key: 'value1', className: 'text-purple-500' },
       { key: 'value2', className: 'text-purple-700' },
@@ -49,7 +48,7 @@ export const Styled = {
 
 export const WithTooltip = {
   args: {
-    ...Default.args,
+    ...Styled.args,
     tooltip: {
       className: 'bg-gray-100 rounded p-2',
     },
@@ -58,7 +57,7 @@ export const WithTooltip = {
 
 export const WithCustomTooltip = {
   args: {
-    ...Default.args,
+    ...Styled.args,
     tooltip: {
       html: (data: any) => {
         return `
@@ -68,6 +67,31 @@ export const WithCustomTooltip = {
           </div>
         `;
       },
+    },
+  },
+};
+
+export const WithDrawing = {
+  args: {
+    ...WithTooltip.args,
+    drawing: {
+      duration: 1000,
+    },
+  },
+};
+export const Waterfall = {
+  args: {
+    ...Styled.args,
+    id: 'column-chart-stack-waterfall',
+    waterfall: true,
+  },
+};
+
+export const WaterfallDrawing = {
+  args: {
+    ...Waterfall.args,
+    drawing: {
+      duration: 1000,
     },
   },
 };

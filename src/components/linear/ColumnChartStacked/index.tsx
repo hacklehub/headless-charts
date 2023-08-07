@@ -7,6 +7,7 @@ import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
 
 import { format } from 'd3-format';
+import { transition } from 'd3';
 
 interface DataItem {
   [key: string]: number | string;
@@ -49,6 +50,9 @@ interface ColumnChartStackedProps {
     className?: string;
   }[];
   tickFormat?: string;
+  drawing?: {
+    duration?: number;
+  };
 }
 
 interface drawHLineProps {
@@ -82,6 +86,7 @@ const ColumnChartStacked = ({
   tooltip,
   referenceLines = [],
   tickFormat,
+  drawing = undefined,
 }: ColumnChartStackedProps) => {
   const formatMapping = {
     '%': '.0%',
@@ -116,10 +121,15 @@ const ColumnChartStacked = ({
       .domain([0, max(data.map((d) => sum(y.map((value) => d[value.key]))))])
       .range(yFnRange);
 
+    console.log(yFn(30));
+    console.log(yFn(20));
+    console.log(yFn(0));
+
     y.map((column, i) => {
       const barsG = g.append('g');
+      const beforeColumns = y.filter((_, idx) => idx <= i).map((c) => c.key);
 
-      const afterColumns = y.filter((_, idx) => idx > i).map((c) => c.key);
+      const afterColumns = y.filter((_, idx) => idx >= i).map((c) => c.key);
 
       const bars = barsG
         .selectAll('g')
@@ -134,10 +144,7 @@ const ColumnChartStacked = ({
             // @ts-ignore
             xFn(d[x.key]) + (waterfall ? (xFn.bandwidth() / y.length) * i : 0)
         )
-        .attr('y', (d) =>
-          // @ts-ignore
-          yFn(sum(afterColumns.map((c) => d[c])) + d[column.key])
-        )
+        .attr('y', (d: any) => yFn(sum(beforeColumns.map((c: any) => d[c]))))
         .style('z-index', 10 + i)
         .attr('width', () =>
           waterfall
@@ -145,13 +152,8 @@ const ColumnChartStacked = ({
               xFn.bandwidth() / y.length - (waterfall.padding || 0)
             : xFn.bandwidth()
         )
-        .attr('height', (d) =>
-          waterfall
-            ? // @ts-ignore
-              yFn(0) - yFn(d[column.key] || 0)
-            : yFn(0) -
-              // @ts-ignore
-              yFn(sum(afterColumns.map((c) => d[c])) + (d[column.key] || 0))
+        .attr('height', (d: any) =>
+          drawing?.duration ? 0 : yFn(0) - yFn(d[column.key])
         )
         .on('mouseenter', function (event, d) {
           if (tooltip) {
@@ -190,6 +192,15 @@ const ColumnChartStacked = ({
               .style('left', `0px`)
               .style('top', `0px`);
         });
+
+      transition();
+
+      if (drawing?.duration) {
+        bars
+          .transition()
+          .duration(drawing.duration)
+          .attr('height', (d: any) => yFn(0) - yFn(d[column.key]));
+      }
     });
 
     function drawHLine({
@@ -256,7 +267,9 @@ const ColumnChartStacked = ({
     xAxisG
       .attr(
         'transform',
-        `translate(0, ${x.axis === 'top' ? margin.top : height - margin.bottom})`
+        `translate(0, ${
+          x.axis === 'top' ? margin.top : height - margin.bottom
+        })`
       )
       .call(xAxis);
   }, [data]);

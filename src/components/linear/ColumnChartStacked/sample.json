@@ -1,5 +1,5 @@
 [
   { "name": "A", "value1": 30, "value2": 20, "value3": 10 },
   { "name": "B", "value1": 40, "value2": 25, "value3": 15 },
-  { "name": "C", "value1": 20, "value2": 35, "value3": 5 }
+  { "name": "C", "value1": 20, "value2": 35, "value3": 45 }
 ]
