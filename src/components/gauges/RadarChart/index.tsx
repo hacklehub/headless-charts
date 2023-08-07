@@ -27,6 +27,7 @@ const RadarChart = ({
   min = 0,
   max = 1,
   margin = { top: 20, bottom: 20, left: 20, right: 20 },
+  drawing = undefined,
 }: RadarChartProps) => {
   const refreshChart = useCallback(() => {
     const svg = select(`#${id}`);
@@ -107,7 +108,8 @@ const RadarChart = ({
 
     transition();
 
-    g.selectAll('path')
+    const radarArcs = g
+      .selectAll('path')
       .data(data)
       .enter()
       .append('path')
@@ -120,9 +122,29 @@ const RadarChart = ({
         )
       )
       .attr('d', (d: any) => {
+        if (drawing) {
+          const zeroObject = {
+            name: d[label.key],
+            ...metrics.reduce((acc: any, metric: any) => {
+              acc[metric.key] = 0;
+              return acc;
+            }, {}),
+          };
+
+          return radarLine(getPathCoordinates(zeroObject));
+        }
         return radarLine(getPathCoordinates(d));
       });
-  }, [classNameMap, data, id, label, margin, max, metrics, min]);
+
+    if (drawing)
+      radarArcs
+        .transition()
+        .duration(drawing?.duration || 1000)
+        .delay(drawing.delay || 0)
+        .attr('d', (d: any) => {
+          return radarLine(getPathCoordinates(d));
+        });
+  }, [classNameMap, data, id, label, margin, max, metrics, min, drawing]);
 
   React.useEffect(() => {
     refreshChart();
