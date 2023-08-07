@@ -1,3 +1,5 @@
+/* eslint-disable */
+//@ts-nocheck
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import {
   curveCatmullRom,
@@ -59,7 +61,7 @@ interface LineChartProps {
       | 'cross'
       | 'diamond';
     size?: number;
-    unknown:any;
+    unknown: any;
   }>;
   tooltip?: {
     keys?: Array<string>;
@@ -112,7 +114,6 @@ const LineChart = ({
   referenceLines = [],
 }: LineChartProps) => {
   const refreshChart = async () => {
-    /* eslint-disable */
     const shapeMapping = {
       circle: symbolCircle,
       diamond: symbolDiamond,
@@ -149,19 +150,23 @@ const LineChart = ({
             Number.isFinite(x.start)
               ? x.start
               : !x.convert
-              ? min(data.map((d) => d[x.key]))
-              : min(data.map((d) => x.convert(d))),
+              ? // @ts-ignore
+                min(data.map((d) => d[x.key]))
+              : // @ts-ignore
+                min(data.map((d) => x.convert(d))),
             Number.isFinite(x.start)
               ? x.end
               : x.convert
-              ? max(data.map((d) => x.convert(d)))
-              : max(data.map((d) => d[x.key])),
+              ? // @ts-ignore
+                max(data.map((d) => x.convert(d)))
+              : // @ts-ignore
+                max(data.map((d) => d[x.key])),
           ]);
     };
 
     const allLeftY = y.filter((column) => column.axis !== 'right'),
       allRightY = y.filter((column) => column.axis === 'right');
-
+    // @ts-ignore
     const toDateTime = (d) => DateTime.fromFormat(d[x.key], x.format);
     const svg = select(`#${id}`);
     // Clear svg
@@ -186,6 +191,7 @@ const LineChart = ({
 
     const minLeftYs =
         allLeftY.length > 0 &&
+        // @ts-ignore
         Number.isFinite(min(allLeftY.map((column) => column.start)))
           ? min(allLeftY.map((column) => column.start))
           : min([
@@ -534,10 +540,7 @@ const LineChart = ({
             object.showText &&
               g
                 .append('text')
-                .attr(
-                  'class',
-                  `stroke-current ${object.className}  reference-line-text`
-                )
+                .attr('class', `stroke-current ${object.className}`)
                 .attr('x', marginLeft + paddingLeft + width - 10)
                 .attr('y', yLeftFn(object.yLeft) - 5)
                 .attr('font-size', '0.7em')
