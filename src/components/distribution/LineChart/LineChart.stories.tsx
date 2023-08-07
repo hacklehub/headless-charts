@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import './index.css';
 
+import { DateTime } from 'luxon';
 import LineChart from '.';
 import { Meta } from '@storybook/react';
 
@@ -18,6 +19,24 @@ const data = [
   { id: 5, value: 1351, reading: 1000 },
   { id: 6, value: 1451, reading: 1200 },
 ];
+
+const randBetween = ({ x, y }: any) => x + Math.random() * (y - x);
+
+const arrayLength = 200;
+/* eslint-disable */
+// @ts-ignore
+const dataForTimeSeriesChart = new Array(arrayLength)
+  .fill('')
+  .map((_, index) => ({
+    date: DateTime.now()
+      .startOf('day')
+      .minus({ days: arrayLength - index })
+      .toFormat('yyyy-MM-dd hh:mm:ss'),
+    // @ts-ignore
+    value: randBetween(1000, 1004) + randBetween(index - 10, index),
+    // @ts-ignore
+    reading: randBetween(1000, 996) - randBetween(index - 10, index),
+  }));
 
 export const Default = {
   args: {
@@ -148,6 +167,7 @@ export const WithTooltip = {
     showGuideLines: true,
   },
 };
+/* eslint-enable */
 
 export const XAxisLabel = {
   args: {
@@ -363,3 +383,34 @@ export const LineChartHorizontal = {
   },
 };
 
+export const WithTimeSeriesForLineChart = {
+  args: {
+    dataForTimeSeriesChart,
+    id: 'time-series',
+    x: {
+      key: 'data',
+      scalingFunction: 'time',
+      format: 'yyyy-MM-dd hh:mm:ss',
+      axisLabel: 'Date',
+    },
+    y: [
+      {
+        key: 'value',
+        axis: 'left',
+        start: 0,
+        className: 'text-red-200 dark:text-red-700 stroke-current',
+        curve: 'rounded',
+        circleFill: true,
+      },
+      {
+        key: 'reading',
+        className: 'text-blue-200 dark:text-red-700',
+        axis: 'left',
+        symbol: 'none',
+      },
+    ],
+    referenceLines: [
+      { yLeft: 1000, className: 'text-gray-200 dashed', showText: true },
+    ],
+  },
+};
