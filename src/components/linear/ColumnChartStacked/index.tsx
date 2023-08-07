@@ -121,10 +121,6 @@ const ColumnChartStacked = ({
       .domain([0, max(data.map((d) => sum(y.map((value) => d[value.key]))))])
       .range(yFnRange);
 
-    console.log(yFn(30));
-    console.log(yFn(20));
-    console.log(yFn(0));
-
     y.map((column, i) => {
       const barsG = g.append('g');
       const beforeColumns = y.filter((_, idx) => idx <= i).map((c) => c.key);
