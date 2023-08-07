@@ -99,12 +99,7 @@ const ColumnChartGrouped = ({
 
     const width = +svg.style('width').split('px')[0],
       height = +svg.style('height').split('px')[0];
-    console.log(
-      minStart,
-      height,
-      margin,
-      height - margin.bottom - padding.bottom
-    );
+
     const xFn = scaleBand()
       // @ts-ignore
       .domain(data.map((d) => d[x.key]))

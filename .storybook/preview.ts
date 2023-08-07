@@ -8,6 +8,11 @@ import { withThemeByClassName } from '@storybook/addon-styling';
 const preview: Preview = {
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
+    options: {
+      storySort: {
+        order: ['Introduction', 'Distribution', 'Linear'],
+      },
+    },
   },
 
   decorators: [

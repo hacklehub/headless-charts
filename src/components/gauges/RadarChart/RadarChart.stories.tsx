@@ -8,7 +8,7 @@ import data from './sample.json';
  * Radar charts are also useful for seeing which variables are scoring high or low within a dataset, making them ideal for displaying performance.
  */
 export default {
-  title: 'Gauges/RadarChart',
+  title: 'Gauge/RadarChart',
   component: RadarChart,
   tags: ['autodocs'],
 } as Meta;
