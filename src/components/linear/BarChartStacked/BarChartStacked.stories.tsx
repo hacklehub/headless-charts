@@ -44,7 +44,7 @@ export const Styled = {
     x: [
       {
         key: 'reading',
-        className: 'fill-blue-500',
+        className: 'fill-purple-700',
       },
       { key: 'value', className: 'fill-purple-400' },
     ],
@@ -78,6 +78,27 @@ export const CustomTooltip = {
             </div>
           `;
       },
+    },
+  },
+};
+
+export const WithDrawing = {
+  args: {
+    ...Styled.args,
+    id: 'bar-chart-stacked-drawing',
+    drawing: {
+      duration: 1000,
+    },
+  },
+};
+
+export const WithDrawingDelay = {
+  args: {
+    ...Styled.args,
+    id: 'bar-chart-stacked-drawing-delay',
+    drawing: {
+      duration: 1000,
+      delay: 100,
     },
   },
 };

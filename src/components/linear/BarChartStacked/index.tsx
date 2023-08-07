@@ -8,6 +8,7 @@ import { useCallback, useEffect } from 'react';
 import { defaultChartClassNames } from '../../../utils';
 import { format } from 'd3-format';
 import { mergeTailwindClasses } from '../../../utils';
+import { transition } from 'd3-transition';
 
 interface DataItem {
   [key: string]: any;
@@ -158,12 +159,7 @@ const BarChartStacked = ({
         )
         .style('z-index', 10 + i)
         .attr('width', (d) =>
-          drawing && drawing.duration
-            ? 0
-            : waterfall
-            ? xFn(d[column.key] || 0) - xFn(0)
-            : xFn(sum(afterColumns.map((c) => d[c])) + (d[column.key] || 0)) -
-              xFn(0)
+          drawing?.duration ? 0 : xFn(d[column.key] || 0) - xFn(0)
         )
         .attr(
           'height',
@@ -209,14 +205,15 @@ const BarChartStacked = ({
               .style('top', `0px`);
         });
 
-      drawing &&
-        drawing.duration &&
+      transition();
+
+      drawing?.duration &&
         bars
           .transition()
           .duration(drawing.duration)
           // @ts-ignore
-          .delay((idx) => i * (drawing.delay || 100) + idx * 100)
-          .attr('width', (d) => {
+          .delay((_, idx) => i * drawing.delay + (drawing.delay || 0) * idx)
+          .attr('width', (d, idx) => {
             const columns = x.filter((_, idx) => idx >= i).map((c) => c.key);
             return waterfall
               ? xFn(d[column.key]) - xFn(0)
