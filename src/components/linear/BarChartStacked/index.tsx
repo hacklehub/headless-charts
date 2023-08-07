@@ -212,7 +212,9 @@ const BarChartStacked = ({
           .transition()
           .duration(drawing.duration)
           // @ts-ignore
-          .delay((_, idx) => i * drawing.delay + (drawing.delay || 0) * idx)
+          .delay(
+            (_, idx) => i * (drawing.delay || 0) + (drawing.delay || 0) * idx
+          )
           .attr('width', (d, idx) => {
             const columns = x.filter((_, idx) => idx >= i).map((c) => c.key);
             return waterfall
