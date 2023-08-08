@@ -71,6 +71,7 @@ export const WithTooltip = {
     ...Default.args,
     tooltip: {
       className: 'bg-gray-100 rounded p-2',
+      keys: ['name', 'USA', 'Europe', 'APAC'],
     },
   },
 };

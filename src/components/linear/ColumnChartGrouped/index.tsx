@@ -1,10 +1,12 @@
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, min } from 'd3-array';
-import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
+import { select, selectAll } from 'd3-selection';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect } from 'react';
+
+import useTooltip from '../../../hooks/useTooltip';
 
 interface DataItem {
   [key: string]: number | string;
@@ -37,6 +39,7 @@ interface ColumnChartGroupedProps {
     top: number;
   };
   paddingBar?: number;
+  nameKey: string;
   drawing?: { duration?: number };
   tooltip?: {
     html?: (data: any) => string;
@@ -76,10 +79,16 @@ const ColumnChartGrouped = ({
     bottom: 0,
   },
   paddingBar = 0.2,
+  nameKey = 'name',
   drawing,
   tooltip,
   referenceLines = [],
 }: ColumnChartGroupedProps) => {
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
+    tooltip,
+    defaultHtml: (d: any) => `${d.data[nameKey]} = ${d.value}`,
+  });
+
   const refreshChart = useCallback(() => {
     /* eslint-disable */
     const svg = select(`#${id}`);
@@ -150,35 +159,9 @@ const ColumnChartGrouped = ({
               height - margin.bottom - padding.bottom - yFn(d[column.key])
             : 0
         )
-        .on('mouseenter', function (event, d) {
-          if (tooltip) {
-            tooltipDiv.style('opacity', 1);
-            const [bX, bY] = pointer(event, select('body'));
-            tooltipDiv
-              .style('left', `${bX + 10}px`)
-              .style('top', `${bY + 10}px`);
-            tooltipDiv.html(
-              tooltip && tooltip.html
-                ? tooltip.html(d)
-                : tooltip.keys
-                ? tooltip.keys
-                    .map((key) => `${key}: ${d[key] || ''}`)
-                    .join('<br/>')
-                : `${d[x.key]} <br/> ${column.key} ${d[column.key]}`
-            );
-          }
-        })
-        .on('mousemove', function (event) {
-          const [bX, bY] = pointer(event, select('body'));
-          tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-        })
-        .on('mouseleave', function () {
-          tooltip &&
-            tooltipDiv
-              .style('opacity', '0')
-              .style('left', `0px`)
-              .style('top', `0px`);
-        });
+        .on('mouseenter', onMouseOver)
+        .on('mousemove', onMouseMove)
+        .on('mouseleave', onMouseLeave);
 
       drawing?.duration &&
         bars
@@ -222,12 +205,6 @@ const ColumnChartGrouped = ({
         });
     });
 
-    const tooltipDiv = select('body')
-      .append('div')
-      .attr('id', 'tooltip')
-      .style('position', 'absolute')
-      .style('opacity', '0')
-      .attr('class', `tooltip ${(tooltip && tooltip.className) || ''}`);
     // @ts-ignore
     const yAxis = y.axis === 'right' ? axisRight(yFn) : axisLeft(yFn);
 
