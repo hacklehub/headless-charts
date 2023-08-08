@@ -52,11 +52,12 @@ export const TooltipStyled: Story = {
 /**
  * The `tooltip.keys` prop can be used to specify which keys in the data array to show in the tooltip (Even those not used in creating the pie).
  * */
-export const TooltipCustom: Story = {
+export const TooltipKeys: Story = {
   args: {
     ...Tooltip.args,
     id: 'tooltip-custom',
     tooltip: {
+      ...TooltipStyled.args?.tooltip,
       keys: ['name', 'USA'],
     },
   },
@@ -70,7 +71,7 @@ export const TooltipCustomHtml: Story = {
     ...Tooltip.args,
     id: 'tooltip-custom-html',
     tooltip: {
-      className: 'bg-purple-800 text-white p-2 rounded',
+      ...TooltipStyled.args?.tooltip,
       html: (d: any) =>
         `${d.data.name} sold ${d.value} in USA and ${d.data['Europe']} in Europe`,
     },

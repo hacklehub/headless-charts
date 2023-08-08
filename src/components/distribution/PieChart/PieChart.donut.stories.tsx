@@ -44,7 +44,6 @@ export const Labelled: Story = {
     ...Donut.args,
     id: 'labelled-donut',
     labels: {
-      key: 'name',
       radius: 1.2,
     },
   },
@@ -76,6 +75,17 @@ export const DrawingWithLabels: Story = {
 };
 
 /**
+ * The paddingAngle prop is used to add padding between slices (in degrees).
+ */
+export const PaddingAngle: Story = {
+  args: {
+    ...Drawing.args,
+    id: 'padding-angle-donut',
+    paddingAngle: 1,
+  },
+};
+
+/**
  * The cornerRadius prop is used to add rounded corners to the slices.
  */
 export const CornerRadius: Story = {
@@ -86,13 +96,3 @@ export const CornerRadius: Story = {
   },
 };
 
-/**
- * The paddingAngle prop is used to add padding between slices (in degrees).
- */
-export const PaddingAngle: Story = {
-  args: {
-    ...Drawing.args,
-    id: 'padding-angle-donut',
-    paddingAngle: 1,
-  },
-};
