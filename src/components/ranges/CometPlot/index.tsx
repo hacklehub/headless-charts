@@ -4,7 +4,6 @@ import { ZoomTransform, zoom } from 'd3-zoom';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, min } from 'd3-array';
-import { pointer, select } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import {
   symbol,
@@ -19,7 +18,9 @@ import {
 
 import { ChartProps } from '../../../types';
 import React from 'react';
+import { select } from 'd3-selection';
 import { transition } from 'd3-transition';
+import useTooltip from '../../../hooks/useTooltip';
 
 export interface DotPlotProps extends ChartProps {
   y: {
@@ -78,6 +79,7 @@ const DotPlot = ({
     enabled: false,
   },
 }: DotPlotProps) => {
+  const { onMouseLeave, onMouseMove, onMouseOver } = useTooltip(tooltip);
   const refreshChart = React.useCallback(() => {
     const shapeMapping = {
       circle: symbolCircle,
@@ -149,15 +151,15 @@ const DotPlot = ({
       )
       .call(xAxis);
 
-    const tooltipDiv =
-      tooltip && select('#tooltip').node()
-        ? select('#tooltip')
-        : select('body')
-            .append('div')
-            .attr('id', 'tooltip')
-            .style('position', 'absolute')
-            .style('opacity', '0')
-            .attr('class', mergeTailwindClasses(tooltip.className));
+    // const tooltipDiv =
+    //   tooltip && select('#tooltip').node()
+    //     ? select('#tooltip')
+    //     : select('body')
+    //         .append('div')
+    //         .attr('id', 'tooltip')
+    //         .style('position', 'absolute')
+    //         .style('opacity', '0')
+    //         .attr('class', mergeTailwindClasses(tooltip.className));
 
     svg
       .append('clipPath')
@@ -185,32 +187,29 @@ const DotPlot = ({
       .data(data)
       .enter()
       .append('g')
-      .on('mouseenter', function (event: MouseEvent, d: any) {
-        if (tooltip) {
-          tooltipDiv.style('opacity', 1);
-          const [bX, bY] = pointer(event, select('body'));
-          tooltipDiv.style('left', `${bX + 10}px`);
-          tooltipDiv.style('top', `${bY + 10}px`);
-          tooltipDiv.html(
-            tooltip && tooltip.html
-              ? tooltip.html(d)
-              : tooltip.keys
-              ? tooltip.keys
-                  .map((key) => `${key}: ${d[key] || ''}`)
-                  .join('<br/>')
-              : `${d[y.key]}: ${d[x.fromKey]} to ${d[x.toKey]}`
-          );
-        }
-      })
-      .on('mousemove', function (event: MouseEvent) {
-        const [bX, bY] = pointer(event, select('body'));
-        tooltipDiv.style('left', `${bX + 10}px`);
-        tooltipDiv.style('top', `${bY + 10}px`);
-      })
-      .on('mouseleave', function () {
-        tooltipDiv.style('opacity', 0);
-        tooltipDiv.text('');
-      });
+      .on(
+        'mouseenter',
+        // function (event: MouseEvent, d: any) {
+        //   if (tooltip) {
+        //     tooltipDiv.style('opacity', 1);
+        //     const [bX, bY] = pointer(event, select('body'));
+        //     tooltipDiv.style('left', `${bX + 10}px`);
+        //     tooltipDiv.style('top', `${bY + 10}px`);
+        //     tooltipDiv.html(
+        //       tooltip && tooltip.html
+        //         ? tooltip.html(d)
+        //         : tooltip.keys
+        //         ? tooltip.keys
+        //             .map((key) => `${key}: ${d[key] || ''}`)
+        //             .join('<br/>')
+        //         : `${d[y.key]}: ${d[x.fromKey]} to ${d[x.toKey]}`
+        //     );
+        //   }
+        // }
+        onMouseOver((d: any) => `${d[y.key]}: ${d[x.fromKey]} to ${d[x.toKey]}`)
+      )
+      .on('mousemove', onMouseMove)
+      .on('mouseleave', onMouseLeave);
 
     transition();
 
@@ -309,7 +308,20 @@ const DotPlot = ({
 
       svg.call(zoomFn);
     }
-  }, [data, id, margin, padding, shape, size, tooltip, x, y, zooming]);
+  }, [
+    data,
+    id,
+    margin,
+    padding,
+    shape,
+    size,
+    x,
+    y,
+    zooming,
+    onMouseLeave,
+    onMouseMove,
+    onMouseOver,
+  ]);
 
   React.useEffect(() => {
     refreshChart();
