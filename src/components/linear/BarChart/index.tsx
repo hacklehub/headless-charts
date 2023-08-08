@@ -182,7 +182,7 @@ const BarChart = ({
         .attr('x', (d: any) =>
           drawing.duration
             ? xFn(0)
-            : d[column.key] < 0
+            : direction === 'left' || d[column.key] < 0
             ? xFn(d[column.key])
             : xFn(0)
         )
@@ -219,14 +219,12 @@ const BarChart = ({
             (_: any, idx: number) => i * (drawing.delay || 100) + idx * 100
           )
           .attr('x', (d: any) =>
-            d[column.key] < 0 ? xFn(d[column.key]) : xFn(0)
+            direction === 'left' || d[column.key] < 0
+              ? xFn(d[column.key])
+              : xFn(0)
           )
           .attr('width', (d: any) =>
-            direction === 'left'
-              ? xFn(0) - xFn(Math.abs(d[column.key]))
-              : d[column.key] < 0
-              ? xFn(0) - xFn(d[column.key])
-              : xFn(Math.abs(d[column.key])) - xFn(0)
+            Math.abs(xFn(0) - xFn(Math.abs(d[column.key])))
           );
 
       dataLabel &&

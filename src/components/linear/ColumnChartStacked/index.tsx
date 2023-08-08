@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useCallback, useEffect } from 'react';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, sum } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useCallback, useEffect } from 'react';
 
 import { format } from 'd3-format';
 import { transition } from 'd3';
@@ -124,8 +124,6 @@ const ColumnChartStacked = ({
     y.map((column, i) => {
       const barsG = g.append('g');
       const beforeColumns = y.filter((_, idx) => idx <= i).map((c) => c.key);
-
-      const afterColumns = y.filter((_, idx) => idx >= i).map((c) => c.key);
 
       const bars = barsG
         .selectAll('g')

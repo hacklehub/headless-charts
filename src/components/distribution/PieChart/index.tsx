@@ -73,7 +73,7 @@ const PieChart = ({
     left: 0,
     top: 0,
   },
-  paddingAngle = 0,
+  paddingAngle = 2,
   startAngle = 0,
   endAngle = 360 + startAngle,
   cornerRadius = 0,
@@ -90,7 +90,10 @@ const PieChart = ({
   tooltip,
   labels,
 }: PieChartProps) => {
-  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip(tooltip);
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
+    tooltip,
+    defaultHtml: (d: any) => `${d.data[nameKey]} = ${d.value}`,
+  });
   const refreshChart = useCallback(() => {
     const svg = select(`#${id}`);
     svg.selectAll('*').remove();
@@ -154,10 +157,7 @@ const PieChart = ({
       )
       // @ts-ignore
       .attr('d', arcFn)
-      .on(
-        'mouseenter',
-        onMouseOver((d: any) => `${d.data[nameKey]} = ${d.value}`)
-      )
+      .on('mouseenter', onMouseOver)
       .on('mousemove', onMouseMove)
       .on('mouseleave', onMouseLeave);
 

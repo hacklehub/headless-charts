@@ -5,12 +5,15 @@ import { pointer, select } from 'd3-selection';
 import { mergeTailwindClasses } from '../utils';
 
 export interface TooltipProps {
-  className?: string;
-  html?: (d: any) => string;
-  keys?: string[];
+  tooltip?: {
+    className?: string;
+    html?: (d: any) => string;
+    keys?: string[];
+  };
+  defaultHtml?: (d: any) => string;
 }
 
-const useTooltip = (tooltip: TooltipProps | undefined) => {
+const useTooltip = ({ tooltip, defaultHtml }: TooltipProps) => {
   const tooltipDiv =
     tooltip && select('#tooltip').node()
       ? select('#tooltip')
@@ -22,30 +25,30 @@ const useTooltip = (tooltip: TooltipProps | undefined) => {
             mergeTailwindClasses('absolute opacity-0', tooltip?.className)
           );
 
-  const onMouseOver =
-    (defaultHtml: (d: any) => string | undefined) => (event: any, d: any) => {
-      tooltip &&
-        tooltipDiv.attr(
-          'class',
-          mergeTailwindClasses('absolute opacity-100 ', tooltip?.className)
-        );
-
-      const [bX, bY] = pointer(event, select('body'));
-      tooltipDiv.style('left', `${bX + 10}px`);
-      tooltipDiv.style('top', `${bY + 20}px`);
-      tooltipDiv.html(
-        tooltip?.html
-          ? tooltip.html(d)
-          : tooltip?.keys
-          ? tooltip.keys
-              .map((key) => `${key}: ${d[key] || d.data[key] || ''}`)
-              .join('<br/>')
-          : defaultHtml(d) ||
-            Object.entries(d)
-              .map(([key, value]) => `${key}: ${value}`)
-              .join('<br/>')
+  const onMouseOver = (event: any, d: any) => {
+    tooltip &&
+      tooltipDiv.attr(
+        'class',
+        mergeTailwindClasses('absolute opacity-100 ', tooltip?.className)
       );
-    };
+
+    const [bX, bY] = pointer(event, select('body'));
+    tooltipDiv.style('left', `${bX + 10}px`);
+    tooltipDiv.style('top', `${bY + 20}px`);
+    tooltipDiv.html(
+      tooltip?.html // If tooltip.html exists
+        ? tooltip.html(d) // Call it
+        : tooltip?.keys // Else if keys exists
+        ? tooltip.keys // iterate over the keys and show the data
+            .map((key: string) => `${key}: ${d[key] || d.data[key] || ''}`)
+            .join('<br/>')
+        : defaultHtml // else if defaultHtml is given for a chart type
+        ? defaultHtml(d) // call it
+        : Object.entries(d) // otherwise show all entries of the data object
+            .map(([key, value]) => `${key}: ${value}`)
+            .join('<br/>')
+    );
+  };
 
   const onMouseMove = () => {
     const [bX, bY] = pointer(event, select('body'));

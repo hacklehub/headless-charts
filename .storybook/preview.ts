@@ -10,7 +10,16 @@ const preview: Preview = {
     actions: { argTypesRegex: '^on[A-Z].*' },
     options: {
       storySort: {
-        order: ['Introduction', 'Distribution', 'Linear'],
+        order: [
+          'Introduction',
+          'Distribution',
+          [
+            'ScatterPlot',
+            'PieChart',
+            ['Intro', 'Tooltips', 'Donuts', 'SemiCircle'],
+          ],
+          'Linear',
+        ],
       },
     },
   },

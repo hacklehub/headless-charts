@@ -101,7 +101,16 @@ const ScatterPlot = ({
   drawing,
   connect = {},
 }: ScatterPlotProps) => {
-  const { onMouseOver, onMouseLeave, onMouseMove } = useTooltip(tooltip);
+  const defaultHtml = (d: any) =>
+    `${x.key} ${d[x.key]}<br/>${y.key} ${d[y.key]}<br/>
+    ${color?.key ? `${color.key} ${d[color.key]}<br/>` : ''}
+    ${size?.key ? `${size.key} ${d[size.key]}<br/>` : ''}
+    ${shape?.key ? `${shape.key} ${d[shape.key]}<br/>` : ''}`;
+
+  const { onMouseOver, onMouseLeave, onMouseMove } = useTooltip({
+    ...tooltip,
+    html: tooltip?.html || defaultHtml,
+  });
   const refreshChart = React.useCallback(() => {
     const svg = select(`#${id}`);
     // Clear svg
@@ -280,7 +289,7 @@ const ScatterPlot = ({
         'transform',
         (d: any) => `translate(${xFn(d[x.key])},${yFn(d[y.key])})`
       )
-      .on('mouseenter', onMouseOver)
+      .on('mouseenter', onMouseOver())
       .on('mousemove', onMouseMove)
       .on('mouseleave', onMouseLeave)
       .on('click', (event, d) => {
