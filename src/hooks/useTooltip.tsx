@@ -36,15 +36,15 @@ const useTooltip = ({ tooltip, defaultHtml }: TooltipProps) => {
     tooltipDiv.style('left', `${bX + 10}px`);
     tooltipDiv.style('top', `${bY + 20}px`);
     tooltipDiv.html(
-      tooltip?.html
-        ? tooltip.html(d)
-        : tooltip?.keys
-        ? tooltip.keys
+      tooltip?.html // If tooltip.html exists
+        ? tooltip.html(d) // Call it
+        : tooltip?.keys // Else if keys exists
+        ? tooltip.keys // iterate over the keys and show the data
             .map((key: string) => `${key}: ${d[key] || d.data[key] || ''}`)
             .join('<br/>')
-        : defaultHtml
-        ? defaultHtml(d)
-        : Object.entries(d)
+        : defaultHtml // else if defaultHtml is given for a chart type
+        ? defaultHtml(d) // call it
+        : Object.entries(d) // otherwise show all entries of the data object
             .map(([key, value]) => `${key}: ${value}`)
             .join('<br/>')
     );
