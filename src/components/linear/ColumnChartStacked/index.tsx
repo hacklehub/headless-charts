@@ -1,13 +1,14 @@
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, sum } from 'd3-array';
-import { pointer, select, selectAll } from 'd3-selection';
+import { select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect } from 'react';
 
 import { format } from 'd3-format';
 import { transition } from 'd3';
+import useTooltip from '../../../hooks/useTooltip';
 
 interface DataItem {
   [key: string]: number | string;
@@ -88,6 +89,8 @@ const ColumnChartStacked = ({
   tickFormat,
   drawing = undefined,
 }: ColumnChartStackedProps) => {
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip(tooltip);
+
   const formatMapping = {
     '%': '.0%',
     $: '($.2f',
@@ -149,43 +152,15 @@ const ColumnChartStacked = ({
         .attr('height', (d: any) =>
           drawing?.duration ? 0 : yFn(0) - yFn(d[column.key])
         )
-        .on('mouseenter', function (event, d) {
-          if (tooltip) {
-            tooltipDiv.style('opacity', 1);
-            const [bX, bY] = pointer(event, select('body'));
-            tooltipDiv
-              .style('left', `${bX + 10}px`)
-              .style('top', `${bY + 10}px`);
-            tooltipDiv.html(
-              tooltip && tooltip.html
-                ? tooltip.html(d)
-                : tooltip.keys
-                ? tooltip.keys
-                    .map((key) => `${key}: ${d[key] || ''}`)
-                    .join('<br/>')
-                : `${d[x.key]} <br/> ${column.key} ${
-                    tickFormat
-                      ? // @ts-ignore
-                        formatMapping[tickFormat]
-                        ? // @ts-ignore
-                          format(formatMapping[tickFormat])(d[column.key])
-                        : format(tickFormat)
-                      : d[column.key]
-                  }`
-            );
-          }
-        })
-        .on('mousemove', function (event) {
-          const [bX, bY] = pointer(event, select('body'));
-          tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-        })
-        .on('mouseleave', function () {
-          tooltip &&
-            tooltipDiv
-              .style('opacity', '0')
-              .style('left', `0px`)
-              .style('top', `0px`);
-        });
+        .on(
+          'mouseenter',
+          onMouseOver(
+            // @ts-ignore
+            (d: any) => `${d[y.key]} <br/> ${column.key} ${d[column.key]}`
+          )
+        )
+        .on('mousemove', onMouseMove)
+        .on('mouseleave', onMouseLeave);
 
       transition();
 
@@ -224,13 +199,6 @@ const ColumnChartStacked = ({
           className: `${object.className || ''} reference-line`,
         });
     });
-
-    const tooltipDiv = select('body')
-      .append('div')
-      .attr('id', 'tooltip')
-      .style('position', 'absolute')
-      .style('opacity', '0')
-      .attr('class', `tooltip ${(tooltip && tooltip.className) || ''}`);
 
     // @ts-ignore
     const yAxis = y.axis === 'right' ? axisRight(yFn) : axisLeft(yFn);

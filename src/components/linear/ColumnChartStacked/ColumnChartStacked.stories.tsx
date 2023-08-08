@@ -51,6 +51,7 @@ export const WithTooltip = {
     ...Styled.args,
     tooltip: {
       className: 'bg-gray-100 rounded p-2',
+      keys: ['name', 'value1', 'value2', 'value3'],
     },
   },
 };
