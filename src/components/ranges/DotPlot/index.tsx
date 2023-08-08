@@ -1,8 +1,8 @@
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, min } from 'd3-array';
-import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
+import { select, selectAll } from 'd3-selection';
 import {
   symbol,
   symbolCircle,
@@ -18,6 +18,7 @@ import { useCallback, useEffect } from 'react';
 
 import { ChartProps } from '../../../types';
 import { transition } from 'd3-transition';
+import useTooltip from '../../../hooks/useTooltip';
 import { zoom } from 'd3-zoom';
 
 interface DotPlotProps extends ChartProps {
@@ -65,6 +66,7 @@ const DotPlot = ({
   tooltip = {},
   zooming,
 }: DotPlotProps) => {
+  const { onMouseOver, onMouseLeave } = useTooltip(tooltip);
   const refreshChart = useCallback(() => {
     const shapeMapping = {
       circle: symbolCircle,
@@ -127,28 +129,36 @@ const DotPlot = ({
       .data(data)
       .enter()
       .append('g')
-      .on('mouseenter', function (event, d) {
-        tooltip && tooltipDiv.style('opacity', 1);
-        const [bX, bY] = pointer(event, select('body'));
-        tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-        tooltipDiv.html(
-          tooltip && tooltip.html
-            ? tooltip.html(d)
-            : // @ts-ignore
-            tooltip.keys
-            ? // @ts-ignore
-              tooltip.keys.map((key) => `${key}: ${d[key] || ''}`).join('<br/>')
-            : // @ts-ignore
-              `${d[y.key]}: ${d[x.minKey]} to ${d[x.maxKey]}`
-        );
-      })
-      .on('mouseleave', function () {
-        tooltip &&
-          tooltipDiv
-            .style('opacity', '0')
-            .style('left', `0px`)
-            .style('top', `0px`);
-      });
+      .on(
+        'mouseenter',
+        // function (event, d) {
+        //   tooltip && tooltipDiv.style('opacity', 1);
+        //   const [bX, bY] = pointer(event, select('body'));
+        //   tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
+        //   tooltipDiv.html(
+        //     tooltip && tooltip.html
+        //       ? tooltip.html(d)
+        //       : // @ts-ignore
+        //       tooltip.keys
+        //       ? // @ts-ignore
+        //         tooltip.keys.map((key) => `${key}: ${d[key] || ''}`).join('<br/>')
+        //       : // @ts-ignore
+        //         `${d[y.key]}: ${d[x.minKey]} to ${d[x.maxKey]}`
+        //   );
+        // }
+        onMouseOver((d: any) => `${d[y.key]}: ${d[x.minKey]} to ${d[x.maxKey]}`)
+      )
+      .on(
+        'mouseleave',
+        // function () {
+        //   tooltip &&
+        //     tooltipDiv
+        //       .style('opacity', '0')
+        //       .style('left', `0px`)
+        //       .style('top', `0px`);
+        // }
+        onMouseLeave
+      );
 
     transition();
 
@@ -272,12 +282,12 @@ const DotPlot = ({
       )
       .call(xAxis);
 
-    const tooltipDiv = select('body')
-      .append('div')
-      .attr('id', 'tooltip')
-      .style('position', 'absolute')
-      .style('opacity', '0')
-      .attr('class', `tooltip ${(tooltip && tooltip.className) || ''}`);
+    // const tooltipDiv = select('body')
+    //   .append('div')
+    //   .attr('id', 'tooltip')
+    //   .style('position', 'absolute')
+    //   .style('opacity', '0')
+    //   .attr('class', `tooltip ${(tooltip && tooltip.className) || ''}`);
 
     if (zooming) {
       const extent = [
@@ -307,7 +317,19 @@ const DotPlot = ({
       /* eslint-enable */
       svg.call(zoomFunc);
     }
-  }, [classNameData, data, id, margin, padding, shape, tooltip, x, y, zooming]);
+  }, [
+    classNameData,
+    data,
+    id,
+    margin,
+    padding,
+    shape,
+    x,
+    y,
+    zooming,
+    onMouseLeave,
+    onMouseOver,
+  ]);
 
   useEffect(() => {
     refreshChart();
