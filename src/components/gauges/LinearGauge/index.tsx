@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ValueFn, pointer, select, selectAll } from 'd3';
+import { ValueFn, select, selectAll } from 'd3';
 
 import { mergeTailwindClasses } from '../../../utils';
 import { scaleLinear } from 'd3';
+import useTooltip from '../../../hooks/useTooltip';
 
 interface LinearGaugeProps {
   id: string;
@@ -26,8 +27,9 @@ interface LinearGaugeProps {
   };
   drawing?: { duration: number };
   tooltip?: {
-    html?: string;
+    html?: (d: any) => string;
     className?: string;
+    keys?: string[];
   };
   classNameGauge?: string;
   classNameGaugeBg?: string;
@@ -48,10 +50,11 @@ const LinearGauge = ({
     bottom: 10,
   },
   drawing = { duration: 1000 },
-  tooltip = undefined,
+  tooltip,
   classNameGauge = '',
   classNameGaugeBg = '',
 }: LinearGaugeProps) => {
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip(tooltip);
   const setup = React.useCallback(() => {
     const svg = select(`#${id}`);
 
@@ -94,25 +97,12 @@ const LinearGauge = ({
       .attr('width', width - (margin.left || 0) - (margin.right || 0))
       .attr('height', gaugeHeight)
       .attr('ry', gaugeHeight / 2)
-      .on('mouseenter', function () {
-        tooltip &&
-          tooltipDiv
-            .style('opacity', 1)
-            .html(
-              tooltip?.html || `Data: ${data} <br/> Error: ${error?.data || 0} `
-            );
-      })
-      .on('mousemove', function (event) {
-        const [bX, bY] = pointer(event, select('body'));
-        tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-      })
-      .on('mouseleave', function () {
-        tooltip &&
-          tooltipDiv
-            .style('opacity', '0')
-            .style('left', `0px`)
-            .style('top', `0px`);
-      });
+      .on(
+        'mouseenter',
+        onMouseOver(() => `Data: ${data} <br/> Error: ${error?.data || 0}`)
+      )
+      .on('mousemove', onMouseMove)
+      .on('mouseleave', onMouseLeave);
 
     gaugeG
       .append('rect')
@@ -155,15 +145,15 @@ const LinearGauge = ({
           return xFn(max) - xFn(max - (error.data || 0));
         });
 
-    const tooltipDiv = select('body')
-      .append('div')
-      .attr('id', 'tooltip')
-      .style('position', 'absolute')
-      .style('opacity', '0')
-      .attr(
-        'class',
-        mergeTailwindClasses('tooltip ', tooltip && tooltip.className)
-      );
+    // const tooltipDiv = select('body')
+    //   .append('div')
+    //   .attr('id', 'tooltip')
+    //   .style('position', 'absolute')
+    //   .style('opacity', '0')
+    //   .attr(
+    //     'class',
+    //     mergeTailwindClasses('tooltip ', tooltip && tooltip.className)
+    //   );
   }, [
     classNameGauge,
     classNameGaugeBg,
@@ -175,7 +165,9 @@ const LinearGauge = ({
     label,
     margin,
     max,
-    tooltip,
+    onMouseLeave,
+    onMouseMove,
+    onMouseOver,
   ]);
 
   const refreshChart = React.useCallback(() => {
