@@ -6,7 +6,7 @@ import LineChart from '.';
 import { Meta } from '@storybook/react';
 
 export default {
-  title: 'distribution/LineChart',
+  title: 'Linear/LineChart',
   component: LineChart,
   tags: ['autodocs'],
 } as Meta;
@@ -47,41 +47,10 @@ export const Default = {
   },
 };
 
-export const WithStyle = {
-  args: {
-    data,
-    x: { key: 'id' },
-    y: [
-      {
-        key: 'value',
-        className: 'text-green-500 stroke-2 hover:text-green-900',
-      },
-      {
-        key: 'reading',
-        className: 'text-blue-500',
-      },
-    ],
-    id: 'styled-line-chart',
-  },
-};
-
-export const WithCustomStyles = {
-  args: {
-    data,
-    id: 'custom-styled-line-chart',
-    x: { key: 'id' },
-    y: [
-      { key: 'value', className: 'text-green-500' },
-      { key: 'reading', className: 'text-blue-500 running stroke-2' },
-    ],
-  },
-};
-
 export const WithStyleChart = {
   args: {
-    data,
-    id: 'entire-chart-styled',
-    x: { key: 'id' },
+    ...Default.args,
+    id: 'with-style-chart',
     y: [
       { key: 'value', className: 'text-green-500' },
       { key: 'reading', className: 'text-blue-500' },
@@ -93,9 +62,8 @@ export const WithStyleChart = {
 
 export const WithPaddedChart = {
   args: {
-    data,
+    ...Default.args,
     id: 'padding-for-line-chart',
-    x: { key: 'id' },
     y: [
       { key: 'value', className: 'text-green-500' },
       { key: 'reading', className: 'text-blue-500' },
