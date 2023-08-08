@@ -4,8 +4,8 @@ import React, { useEffect } from 'react';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, min } from 'd3-array';
-import { pointer, select, selectAll } from 'd3-selection';
 import { scaleLinear, scalePoint } from 'd3-scale';
+import { select, selectAll } from 'd3-selection';
 import {
   symbol,
   symbolCircle,
@@ -19,6 +19,7 @@ import {
 
 import { ChartProps } from '../../../types';
 import { transition } from 'd3-transition';
+import useTooltip from '../../../hooks/useTooltip';
 
 export interface LollipopHChartProps extends ChartProps {
   classNamePoints?: string;
@@ -74,6 +75,8 @@ const LollipopHChart = ({
   x = { key: 'x', axis: 'bottom', axisTicks: 2 },
   y = { key: 'y', axis: 'left' },
 }: LollipopHChartProps) => {
+  const { onMouseOver, onMouseLeave } = useTooltip(tooltip);
+
   const refreshChart = React.useCallback(() => {
     const svg = select(`#${id}`);
 
@@ -172,23 +175,11 @@ const LollipopHChart = ({
         .data(data)
         .enter()
         .append('g')
-        .on('mouseover', function (event, d: any) {
-          tooltip && tooltipDiv.style('opacity', 1);
-          const [bX, bY] = pointer(event, select('body'));
-          tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-          tooltipDiv.html(
-            tooltip && tooltip.html
-              ? tooltip.html(d)
-              : tooltip?.keys
-              ? tooltip?.keys
-                  .map((key) => `${key}: ${d[key] || ''}`)
-                  .join('<br/>')
-              : `${d[y.key]}: ${d[x.key]}`
-          );
-        })
-        .on('mouseleave', function () {
-          tooltip && tooltipDiv.style('opacity', '0');
-        });
+        .on(
+          'mouseover',
+          onMouseOver((d: any) => `${d[y.key]}: ${d[x.key]}`)
+        )
+        .on('mouseleave', onMouseLeave);
 
       transition();
 
@@ -233,25 +224,30 @@ const LollipopHChart = ({
     };
 
     drawLinesAndCircles();
-
-    const tooltipDiv = select('body')
-      .append('div')
-      .attr('id', 'tooltip')
-      .style('position', 'absolute')
-      .style('opacity', '0')
-      .attr('class', mergeTailwindClasses(`tooltip`, tooltip?.className || ''));
   }, [
     classNameLines,
     classNamePoints,
     classNameSymbols,
     data,
     id,
-    margin,
-    padding,
+    margin.bottom,
+    margin.left,
+    margin.right,
+    margin.top,
+    onMouseLeave,
+    onMouseOver,
+    padding.bottom,
+    padding.left,
+    padding.right,
+    padding.top,
     shape,
-    tooltip,
-    x,
-    y,
+    x.axis,
+    x.axisTicks,
+    x.end,
+    x.key,
+    x.start,
+    y.axis,
+    y.key,
   ]);
 
   useEffect(() => {
