@@ -5,7 +5,6 @@ import React, { useEffect } from 'react';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { select, selectAll } from 'd3-selection';
 
-// import { axisBottom } from 'd3-axis';
 import { interpolateNumber } from 'd3-interpolate';
 import { min } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
@@ -86,16 +85,6 @@ const RingGauge = ({
     const svg = select(`#${id}`);
 
     svg.selectAll('*').remove();
-
-    // const tooltipDiv =
-    //   tooltip && select('#tooltip').node()
-    //     ? select('#tooltip')
-    //     : select('body')
-    //         .append('div')
-    //         .attr('id', 'tooltip')
-    //         .style('position', 'absolute')
-    //         .style('opacity', '0')
-    //         .attr('class', mergeTailwindClasses(tooltip?.className));
 
     const g = svg.append('g');
 

@@ -145,15 +145,6 @@ const LinearGauge = ({
           return xFn(max) - xFn(max - (error.data || 0));
         });
 
-    // const tooltipDiv = select('body')
-    //   .append('div')
-    //   .attr('id', 'tooltip')
-    //   .style('position', 'absolute')
-    //   .style('opacity', '0')
-    //   .attr(
-    //     'class',
-    //     mergeTailwindClasses('tooltip ', tooltip && tooltip.className)
-    //   );
   }, [
     classNameGauge,
     classNameGaugeBg,
