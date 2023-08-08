@@ -58,7 +58,7 @@ export const TooltipKeys: Story = {
     id: 'tooltip-custom',
     tooltip: {
       ...TooltipStyled.args?.tooltip,
-      keys: ['name', 'USA'],
+      keys: ['name', 'USA', 'Europe', 'Africa'],
     },
   },
 };
@@ -73,7 +73,11 @@ export const TooltipCustomHtml: Story = {
     tooltip: {
       ...TooltipStyled.args?.tooltip,
       html: (d: any) =>
-        `${d.data.name} sold ${d.value} in USA and ${d.data['Europe']} in Europe`,
+        `${d.data.name} sold ${d.value || 0} in USA , ${
+          d.data['Europe'] || 0
+        } in Europe, ${d.data['Africa'] || 0} in Africa and ${
+          d.data['APAC'] || 0
+        } in Asia/Pacific.`,
     },
   },
 };
