@@ -10,6 +10,7 @@ import { interpolateNumber } from 'd3-interpolate';
 import { min } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
 import { transition } from 'd3-transition';
+import useTooltip from '../../../hooks/useTooltip';
 
 export interface RingGaugeProps {
   id: string;
@@ -73,6 +74,7 @@ const RingGauge = ({
   classNameGaugeBg = '',
   labels = { position: 'top' },
 }: RingGaugeProps) => {
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip(tooltip);
   const PI = Math.PI,
     numArcs = data.length;
 
@@ -149,31 +151,14 @@ const RingGauge = ({
         mergeTailwindClasses('data-arc fill-current ', d.className)
       )
       .attr('d', '')
-      .on('mouseenter', function (_event, d) {
-        tooltipDiv.attr(
-          'class',
-          mergeTailwindClasses(tooltip?.className, 'tooltip')
-        );
-        tooltipDiv
-          .style('opacity', 1)
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          .html(
-            tooltip?.html
-              ? tooltip.html(d)
-              : `${d[labelKey]} <br/>${d[dataKey]}/${d[targetKey]}`
-          );
-      })
-      .on('mousemove', function (event) {
-        const [bX, bY] = pointer(event, select('body'));
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-      })
-      .on('mouseleave', function () {
-        tooltipDiv.style('opacity', 0);
-        tooltipDiv.html('');
-      })
+      .on(
+        'mouseenter',
+        onMouseOver(
+          (d: any) => `${d[labelKey]} <br/>${d[dataKey]}/${d[targetKey]}`
+        )
+      )
+      .on('mousemove', onMouseMove)
+      .on('mouseleave', onMouseLeave)
       .transition()
       .duration(drawing?.duration || 1000)
       .delay(drawing?.delay || 0)
@@ -228,6 +213,9 @@ const RingGauge = ({
     cornerRadius,
     targetKey,
     tooltip,
+    onMouseLeave,
+    onMouseMove,
+    onMouseOver,
   ]);
 
   useEffect(() => {
