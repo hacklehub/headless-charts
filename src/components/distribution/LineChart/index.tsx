@@ -74,14 +74,18 @@ interface LineChartProps {
     min: number;
     max: number;
   };
-  paddingTop?: number;
-  paddingBottom?: number;
-  paddingLeft?: number;
-  paddingRight?: number;
-  marginTop?: number;
-  marginBottom?: number;
-  marginLeft?: number;
-  marginRight?: number;
+  padding?: {
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
+  };
+  margin?: {
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
+  };
   showGuideLines?: boolean;
   referenceLines?: Array<{
     x?: number | string;
@@ -101,14 +105,18 @@ const LineChart = ({
   tooltip,
   drawing = {},
   zooming,
-  paddingLeft = 0,
-  paddingRight = 0,
-  paddingTop = 0,
-  paddingBottom = 0,
-  marginLeft = 40,
-  marginRight = 20,
-  marginTop = 40,
-  marginBottom = 40,
+  padding={
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0
+  },
+  margin = {
+    left: 40,
+    right: 20,
+    top: 40,
+    bottom: 40
+  },
   referenceLines = [],
 }: LineChartProps) => {
   const refreshChart = useCallback(() => {
@@ -176,7 +184,7 @@ const LineChart = ({
       x.scalingFunction === 'time' ? scaleTime().nice() : scaleLinear();
 
     setDefaultXDomain(xFn);
-    xFn.range([marginLeft + paddingLeft, width - marginRight - paddingRight]);
+    xFn.range([margin.left + padding.left, width - margin.right - padding.right]);
 
     const xAxis =
       x.axis === 'top'
@@ -209,8 +217,8 @@ const LineChart = ({
 
     const yRange =
       x.axis === 'top'
-        ? [marginTop + paddingTop, height - marginBottom - paddingBottom]
-        : [height - marginBottom - paddingBottom, marginTop + paddingTop];
+        ? [margin.top + padding.top, height - margin.bottom - padding.bottom]
+        : [height - margin.bottom - padding.bottom, margin.top + padding.top];
 
     const yLeftFn =
       allLeftY.length > 0 &&
@@ -261,24 +269,24 @@ const LineChart = ({
     xAxisG
       .attr(
         'transform',
-        `translate(0, ${x.axis === 'top' ? marginTop : height - marginBottom})`
+        `translate(0, ${x.axis === 'top' ? margin.top : height - margin.bottom})`
       )
       .call(xAxis);
 
-    paddingLeft &&
+    padding.left &&
       xAxisG
         .append('line')
-        .attr('x1', marginLeft)
-        .attr('x2', marginLeft + width)
+        .attr('x1', margin.left)
+        .attr('x2', margin.left + width)
         .attr('y1', 0)
         .attr('y2', 0)
         .attr('stroke', 'currentColor');
 
-    paddingRight &&
+    padding.right &&
       xAxisG
         .append('line')
-        .attr('x1', marginLeft + width)
-        .attr('x2', marginLeft + width + paddingRight)
+        .attr('x1', margin.left + width)
+        .attr('x2', margin.left + width + padding.right)
         .attr('y1', 0)
         .attr('y2', 0)
         .attr('stroke', 'currentColor');
@@ -297,18 +305,18 @@ const LineChart = ({
       g
         .append('g')
         .attr('class', 'axis axis--left-y')
-        .attr('transform', `translate(${marginLeft},0)`);
+        .attr('transform', `translate(${margin.left},0)`);
     // @ts-ignore
     yLeftAxisG.call(yLeftAxis);
 
-    paddingBottom &&
+    padding.bottom &&
       yLeftAxisG
         //@ts-ignore
         .append('line')
         .attr('x1', 0)
         .attr('x2', 0)
-        .attr('y1', marginTop + height - paddingBottom)
-        .attr('y2', marginTop + height)
+        .attr('y1', margin.top + height - padding.bottom)
+        .attr('y2', margin.top + height)
         .attr('stroke', 'currentColor');
 
     const yRightAxisG =
@@ -316,18 +324,18 @@ const LineChart = ({
       g
         .append('g')
         .attr('class', 'axis axis--right-y')
-        .attr('transform', `translate(${width - marginRight},0)`);
+        .attr('transform', `translate(${width - margin.right},0)`);
 
     yRightAxisG && yRightAxisG.call(yRightAxis);
 
-    paddingBottom &&
+    padding.bottom &&
       yRightAxisG &&
       yRightAxisG
         .append('line')
         .attr('x1', 0)
         .attr('x2', 0)
-        .attr('y1', marginTop + height - paddingBottom)
-        .attr('y2', marginTop + height)
+        .attr('y1', margin.top + height - padding.bottom)
+        .attr('y2', margin.top + height)
         .attr('stroke', 'currentColor');
 
     yLeftLabels &&
@@ -341,7 +349,7 @@ const LineChart = ({
         .attr('x', 0)
         .attr(
           'y',
-          x.axis === 'top' ? height - marginBottom + 20 : marginTop - 15
+          x.axis === 'top' ? height - margin.bottom + 20 : margin.top - 15
         )
         .style('font-size', '1.1em');
 
@@ -356,7 +364,7 @@ const LineChart = ({
         .attr('x', 0)
         .attr(
           'y',
-          x.axis === 'top' ? height - marginBottom + 20 : marginTop - 15
+          x.axis === 'top' ? height - margin.bottom + 20 : margin.top - 15
         )
         .style('font-size', '1.1em');
 
@@ -364,10 +372,10 @@ const LineChart = ({
       .append('clipPath')
       .attr('id', 'clip')
       .append('rect')
-      .attr('x', marginLeft)
-      .attr('y', marginTop - paddingTop)
-      .attr('width', width - paddingRight - marginRight - marginLeft)
-      .attr('height', height - paddingBottom - marginBottom - marginTop);
+      .attr('x', margin.left)
+      .attr('y', margin.top - padding.top)
+      .attr('width', width - padding.right - margin.right - margin.left)
+      .attr('height', height - padding.bottom - margin.bottom - margin.top);
 
     const leftG = g
       .append('g')
@@ -544,7 +552,7 @@ const LineChart = ({
                 ? xFn(toDateTime({ [x.key]: object.x }))
                 : // @ts-ignore
                   xFn(object.x),
-            y: marginTop,
+            y: margin.top,
             // @ts-ignore
             className: `${object.className || ''} reference-line`,
           });
@@ -555,7 +563,7 @@ const LineChart = ({
             drawHLine({
               // @ts-ignore
               y: yLeftFn(object.yLeft),
-              x: marginLeft,
+              x: margin.left,
               className: `stroke-current ${object.className} reference-line`,
               direction: 'right',
             });
@@ -564,7 +572,7 @@ const LineChart = ({
               g
                 .append('text')
                 .attr('class', `stroke-current ${object.className}`)
-                .attr('x', marginLeft + paddingLeft + width - 10)
+                .attr('x', margin.left + padding.left + width - 10)
                 // @ts-ignore
                 .attr('y', yLeftFn(object.yLeft) - 5)
                 .attr('font-size', '0.7em')
@@ -576,7 +584,7 @@ const LineChart = ({
           drawHLine({
             // @ts-ignore
             y: yRightFn(object.yRight),
-            x: marginLeft,
+            x: margin.left,
             className: `${object.className || ''} reference-line`,
             direction: 'right',
           });
@@ -631,8 +639,8 @@ const LineChart = ({
       const horizontalLine = g
         .append('line')
         .attr('class', className || 'axis-point-line')
-        .attr('x1', direction === 'left' ? marginLeft : x)
-        .attr('x2', direction === 'left' ? x : width + marginLeft)
+        .attr('x1', direction === 'left' ? margin.left : x)
+        .attr('x2', direction === 'left' ? x : width + margin.left)
         .attr('y1', y)
         .attr('y2', y)
         .attr('clip-path', 'url(#clip)')
@@ -656,7 +664,7 @@ const LineChart = ({
         .attr('x1', x)
         .attr('x2', x)
         .attr('y1', y)
-        .attr('y2', height + marginTop)
+        .attr('y2', height + margin.top)
         .attr('stroke', 'currentColor')
         .attr('clip-path', 'url(#clip)')
         .style('stroke-width', 1);
@@ -681,8 +689,8 @@ const LineChart = ({
         drawVLine({
           x: xValue(dataClosest),
           y: min([
-            (yLeftFn && yLeftFn(max(dataLeft))) || height - marginBottom,
-            (yRightFn && yRightFn(max(dataRight))) || height - marginBottom,
+            (yLeftFn && yLeftFn(max(dataLeft))) || height - margin.bottom,
+            (yRightFn && yRightFn(max(dataRight))) || height - margin.bottom,
           ]),
           // @ts-ignore
           className: 'axis-point-line text-gray-200 stroke-current',
@@ -742,7 +750,7 @@ const LineChart = ({
     //Todo Zoom
 
     const extent = [
-      [marginLeft, marginTop],
+      [margin.left, margin.top],
       [width, height],
     ];
 
@@ -757,7 +765,7 @@ const LineChart = ({
 
       function zoomed(event: MouseEvent) {
         xFn.range(
-          [marginLeft + paddingLeft, width - marginRight - paddingRight].map(
+          [margin.left + padding.left, width - margin.right - padding.right].map(
             // @ts-ignore
             (d: any) => event.transform.applyX(d)
           )
