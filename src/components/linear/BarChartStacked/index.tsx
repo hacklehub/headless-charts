@@ -1,14 +1,15 @@
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { max, sum } from 'd3-array';
-import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
+import { select, selectAll } from 'd3-selection';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect } from 'react';
 
-import { deepValue } from '../../../utils/deepValue';
+// import { deepValue } from '../../../utils/deepValue';
 import { defaultChartClassNames } from '../../../utils';
 import { format } from 'd3-format';
 import { mergeTailwindClasses } from '../../../utils';
+import { stack } from 'd3';
 import { transition } from 'd3-transition';
 
 interface DataItem {
@@ -135,162 +136,180 @@ const BarChartStacked = ({
 
     x.reverse();
 
-    x.map((column, i) => {
-      const barsG = g.append('g');
+    const dataStacked = stack().keys(x.map((column) => column.key))(data);
 
-      // Cumulative columns
-      const afterColumns = x.filter((_, idx) => idx > i).map((c) => c.key);
+    transition();
 
-      const bars = barsG
-        .selectAll('g')
-        .data(data)
-        .enter()
-        .append('rect')
-        .attr('class', `${column.className} fill-current`)
-        .attr('z-index', 100 - i)
-        .attr('x', (d) =>
-          waterfall ? xFn(sum(afterColumns.map((c) => d[c]))) : xFn(0)
-        )
-        .attr(
-          'y',
-          (d) =>
-            // @ts-ignore
-            yFn(d[y.key]) +
-            (waterfall ? (yFn.bandwidth() / x.length) * (x.length - i) : 0)
-        )
-        .style('z-index', 10 + i)
-        .attr('width', (d) =>
-          // @ts-ignore
-          drawing?.duration ? 0 : xFn(deepValue(d, column.key) || 0) - xFn(0)
-        )
-        .attr(
-          'height',
-          waterfall
-            ? yFn.bandwidth() / x.length - (waterfall.padding || 0)
-            : yFn.bandwidth()
-        )
-        .on('mouseenter', function (event, d) {
-          if (tooltip) {
-            tooltipDiv.style('opacity', 1);
-            const [bX, bY] = pointer(event, select('body'));
-            tooltipDiv
-              .style('left', `${bX + 10}px`)
-              .style('top', `${bY + 10}px`);
-            tooltipDiv.html(
-              tooltip && tooltip.html
-                ? tooltip.html(d)
-                : tooltip.keys
-                ? tooltip.keys
-                    .map((key) => `${key}: ${d[key] || ''}`)
-                    .join('<br/>')
-                : `${d[y.key]} <br/> ${column.key} ${
-                    tickFormat
-                      ? // @ts-ignore
-                        formatMapping[tickFormat]
-                        ? // @ts-ignore
-                          format(formatMapping[tickFormat])(
-                            // @ts-ignore
-                            deepValue(d, column.key)
-                          )
-                        : format(tickFormat)
-                      : deepValue(d, column.key)
-                  }`
-            );
-          }
-        })
-        .on('mousemove', function (event) {
-          const [bX, bY] = pointer(event, select('body'));
-          tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-        })
-        .on('mouseleave', function () {
-          tooltip &&
-            tooltipDiv
-              .style('opacity', '0')
-              .style('left', `0px`)
-              .style('top', `0px`);
-        });
+    g.append('g')
+      .selectAll('g')
+      .data(dataStacked)
+      .enter()
+      .append('g')
+      .attr('class', (d: any) => x[d.index].className)
+      .selectAll('rect')
+      .data((d) => d)
+      .enter()
+      .append('rect')
+      .attr('x', (d) => xFn(0))
+      //@ts-ignore
+      .attr('y', (d: any) => yFn(d.data[y.key]))
+      .attr('width', (d) => (drawing?.duration ? 0 : xFn(d[1]) - xFn(d[0])))
+      .attr('height', yFn.bandwidth())
+      .transition()
+      .duration(drawing?.duration || 0)
+      .delay((d, i) => (drawing?.delay || 0) * i)
+      .attr('x', (d) => xFn(d[0]))
+      .attr('width', (d) => xFn(d[1]) - xFn(d[0]));
 
-      transition();
+    // x.map((column, i) => {
+    //   const barsG = g.append('g');
 
-      drawing?.duration &&
-        bars
-          .transition()
-          .duration(drawing.duration)
-          // @ts-ignore
-          .delay(
-            (_, idx) => i * (drawing.delay || 0) + (drawing.delay || 0) * idx
-          )
-          // @ts-ignore
-          .attr('width', (d, idx) => {
-            const columns = x.filter((_, idx) => idx >= i).map((c) => c.key);
-            return waterfall
-              ? xFn(d[column.key]) - xFn(0)
-              : xFn(sum(columns.map((c) => d[c]))) - xFn(0);
-          });
+    //   // Cumulative columns
+    //   const afterColumns = x.filter((_, idx) => idx > i).map((c) => c.key);
 
-      dataLabel &&
-        barsG
-          .selectAll('g')
-          .data(data)
-          .enter()
-          .append('text')
-          // @ts-ignore
-          .text((d) =>
-            dataLabel.text
-              ? dataLabel.text(d, column)
-              : deepValue(d, column.key)
-          )
-          .attr('class', 'fill-current')
-          .attr('text-anchor', direction === 'left' ? 'start' : 'end')
-          .attr(
-            'x',
-            (d) =>
-              // @ts-ignore
-              xFn(columns.reduce((sum, c) => sum + d[c], 0)) -
-              (direction === 'left' ? 5 : 2)
-          )
-          .attr('font-size', '0.6em')
-          // @ts-ignore
-          .attr('y', (d) => yFn(d[y.key]) + yFn.bandwidth() / 2 + 4);
-    });
-    // @ts-ignore
-    function drawVLine({ x, y, className, dashed }: ReferenceLine) {
-      const verticalLine = g
-        .append('line')
-        .attr('class', mergeTailwindClasses(className, 'line stroke-current'))
-        // @ts-ignore
-        .attr('x1', x)
-        // @ts-ignore
-        .attr('x2', x)
-        .attr('y1', y)
-        .attr('y2', height - margin.bottom - padding.bottom)
-        .attr('stroke', 'currentColor')
-        .attr('clip-path', 'url(#clip)')
-        .style('stroke-width', 1);
-      dashed && verticalLine.style('stroke-dasharray', '10,7');
-    }
+    //   const bars = barsG
+    //     .selectAll('g')
+    //     .data(data)
+    //     .enter()
+    //     .append('rect')
+    //     .attr('class', `${column.className} fill-current`)
+    //     .attr('z-index', 100 - i)
+    //     .attr('x', (d) =>
+    //       waterfall ? xFn(sum(afterColumns.map((c) => d[c]))) : xFn(0)
+    //     )
+    //     .attr(
+    //       'y',
+    //       (d) =>
+    //         // @ts-ignore
+    //         yFn(d[y.key]) +
+    //         (waterfall ? (yFn.bandwidth() / x.length) * (x.length - i) : 0)
+    //     )
+    //     .style('z-index', 10 + i)
+    //     .attr('width', (d) =>
+    //       drawing?.duration ? 0 : xFn(d[column.key] || 0) - xFn(0)
+    //     )
+    //     .attr(
+    //       'height',
+    //       waterfall
+    //         ? yFn.bandwidth() / x.length - (waterfall.padding || 0)
+    //         : yFn.bandwidth()
+    //     )
+    //     .on('mouseenter', function (event, d) {
+    //       if (tooltip) {
+    //         tooltipDiv.style('opacity', 1);
+    //         const [bX, bY] = pointer(event, select('body'));
+    //         tooltipDiv
+    //           .style('left', `${bX + 10}px`)
+    //           .style('top', `${bY + 10}px`);
+    //         tooltipDiv.html(
+    //           tooltip && tooltip.html
+    //             ? tooltip.html(d)
+    //             : tooltip.keys
+    //             ? tooltip.keys
+    //                 .map((key) => `${key}: ${d[key] || ''}`)
+    //                 .join('<br/>')
+    //             : `${d[y.key]} <br/> ${column.key} ${
+    //                 tickFormat
+    //                   ? // @ts-ignore
+    //                     formatMapping[tickFormat]
+    //                     ? // @ts-ignore
+    //                       format(formatMapping[tickFormat])(d[column.key])
+    //                     : format(tickFormat)
+    //                   : d[column.key]
+    //               }`
+    //         );
+    //       }
+    //     })
+    //     .on('mousemove', function (event) {
+    //       const [bX, bY] = pointer(event, select('body'));
+    //       tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
+    //     })
+    //     .on('mouseleave', function () {
+    //       tooltip &&
+    //         tooltipDiv
+    //           .style('opacity', '0')
+    //           .style('left', `0px`)
+    //           .style('top', `0px`);
+    //     });
 
-    referenceLines.map((object) => {
-      object.x &&
-        drawVLine({
-          x:
-            // @ts-ignore
-            x.scalingFunction === 'time'
-              ? // @ts-ignore
-                xFn(toDateTime({ [x.key]: object.x }))
-              : xFn(object.x),
-          // @ts-ignore
-          y: marginTop,
-          className: `${object.className || ''} reference-line`,
-        });
-    });
+    //   transition();
 
-    const tooltipDiv = select('body')
-      .append('div')
-      .attr('id', 'tooltip')
-      .style('position', 'absolute')
-      .style('opacity', '0')
-      .attr('class', `tooltip ${(tooltip && tooltip.className) || ''}`);
+    //   drawing?.duration &&
+    //     bars
+    //       .transition()
+    //       .duration(drawing.duration)
+    //       // @ts-ignore
+    //       .delay(
+    //         (_, idx) => i * (drawing.delay || 0) + (drawing.delay || 0) * idx
+    //       )
+    //       // @ts-ignore
+    //       .attr('width', (d, idx) => {
+    //         const columns = x.filter((_, idx) => idx >= i).map((c) => c.key);
+    //         return waterfall
+    //           ? xFn(d[column.key]) - xFn(0)
+    //           : xFn(sum(columns.map((c) => d[c]))) - xFn(0);
+    //       });
+
+    //   dataLabel &&
+    //     barsG
+    //       .selectAll('g')
+    //       .data(data)
+    //       .enter()
+    //       .append('text')
+    //       .text((d) =>
+    //         dataLabel.text ? dataLabel.text(d, column) : d[column.key]
+    //       )
+    //       .attr('class', 'fill-current')
+    //       .attr('text-anchor', direction === 'left' ? 'start' : 'end')
+    //       .attr(
+    //         'x',
+    //         (d) =>
+    //           // @ts-ignore
+    //           xFn(columns.reduce((sum, c) => sum + d[c], 0)) -
+    //           (direction === 'left' ? 5 : 2)
+    //       )
+    //       .attr('font-size', '0.6em')
+    //       // @ts-ignore
+    //       .attr('y', (d) => yFn(d[y.key]) + yFn.bandwidth() / 2 + 4);
+    // });
+    // // @ts-ignore
+    // function drawVLine({ x, y, className, dashed }: ReferenceLine) {
+    //   const verticalLine = g
+    //     .append('line')
+    //     .attr('class', mergeTailwindClasses(className, 'line stroke-current'))
+    //     // @ts-ignore
+    //     .attr('x1', x)
+    //     // @ts-ignore
+    //     .attr('x2', x)
+    //     .attr('y1', y)
+    //     .attr('y2', height - margin.bottom - padding.bottom)
+    //     .attr('stroke', 'currentColor')
+    //     .attr('clip-path', 'url(#clip)')
+    //     .style('stroke-width', 1);
+    //   dashed && verticalLine.style('stroke-dasharray', '10,7');
+    // }
+
+    // referenceLines.map((object) => {
+    //   object.x &&
+    //     drawVLine({
+    //       x:
+    //         // @ts-ignore
+    //         x.scalingFunction === 'time'
+    //           ? // @ts-ignore
+    //             xFn(toDateTime({ [x.key]: object.x }))
+    //           : xFn(object.x),
+    //       // @ts-ignore
+    //       y: marginTop,
+    //       className: `${object.className || ''} reference-line`,
+    //     });
+    // });
+
+    // const tooltipDiv = select('body')
+    //   .append('div')
+    //   .attr('id', 'tooltip')
+    //   .style('position', 'absolute')
+    //   .style('opacity', '0')
+    //   .attr('class', `tooltip ${(tooltip && tooltip.className) || ''}`);
 
     const xAxis = x.some((column) => column.axis === 'top')
       ? // @ts-ignore
