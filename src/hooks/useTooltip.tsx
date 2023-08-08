@@ -23,7 +23,7 @@ const useTooltip = (tooltip: TooltipProps | undefined) => {
           );
 
   const onMouseOver =
-    (defaultHtml: (d: any) => string | undefined) => (event: any, d: any) => {
+    (defaultHtml?: (d: any) => string | undefined) => (event: any, d: any) => {
       tooltip &&
         tooltipDiv.attr(
           'class',

@@ -280,7 +280,7 @@ const ScatterPlot = ({
         'transform',
         (d: any) => `translate(${xFn(d[x.key])},${yFn(d[y.key])})`
       )
-      .on('mouseenter', onMouseOver)
+      .on('mouseenter', onMouseOver())
       .on('mousemove', onMouseMove)
       .on('mouseleave', onMouseLeave)
       .on('click', (event, d) => {
