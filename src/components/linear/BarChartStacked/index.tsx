@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { max, sum } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
@@ -68,6 +69,7 @@ interface BarChartStackedProps {
   tooltip?: ToolTip;
   drawing?: Drawing;
   dataLabel?: DataLabel;
+  column?: AxisItems;
 }
 
 const BarChartStacked = ({
@@ -96,8 +98,21 @@ const BarChartStacked = ({
   tooltip,
   drawing,
   dataLabel,
+  column,
 }: BarChartStackedProps) => {
-  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip(tooltip);
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
+    tooltip,
+    defaultHtml: (d: any) =>
+      `${d[y.key]} <br/> ${column && column.key} ${
+        tickFormat
+          ? // @ts-ignore
+            formatMapping[tickFormat]
+            ? // @ts-ignore
+              format(formatMapping[tickFormat])(d[column.key])
+            : format(tickFormat)
+          : column && d[column.key]
+      }`,
+  });
 
   /* eslint-disable */
   const formatMapping = {
@@ -170,12 +185,7 @@ const BarChartStacked = ({
             ? yFn.bandwidth() / x.length - (waterfall.padding || 0)
             : yFn.bandwidth()
         )
-        .on(
-          'mouseenter',
-          onMouseOver(
-            (d: any) => `${d[y.key]} <br/> ${column.key} ${d[column.key]}`
-          )
-        )
+        .on('mouseenter', onMouseOver)
         .on('mousemove', onMouseMove)
         .on('mouseleave', onMouseLeave);
 
