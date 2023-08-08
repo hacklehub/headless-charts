@@ -54,7 +54,10 @@ const LinearGauge = ({
   classNameGauge = '',
   classNameGaugeBg = '',
 }: LinearGaugeProps) => {
-  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip(tooltip);
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
+    tooltip,
+    defaultHtml: () => `Data: ${data} <br/> Error: ${error?.data || 0}`,
+  });
   const setup = React.useCallback(() => {
     const svg = select(`#${id}`);
 
@@ -97,10 +100,7 @@ const LinearGauge = ({
       .attr('width', width - (margin.left || 0) - (margin.right || 0))
       .attr('height', gaugeHeight)
       .attr('ry', gaugeHeight / 2)
-      .on(
-        'mouseenter',
-        onMouseOver(() => `Data: ${data} <br/> Error: ${error?.data || 0}`)
-      )
+      .on('mouseenter', onMouseOver)
       .on('mousemove', onMouseMove)
       .on('mouseleave', onMouseLeave);
 

@@ -3,7 +3,7 @@ import { PieArcDatum, arc } from 'd3-shape';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect } from 'react';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
-import { pointer, select, selectAll } from 'd3-selection';
+import { select, selectAll } from 'd3-selection';
 
 // import { axisBottom } from 'd3-axis';
 import { interpolateNumber } from 'd3-interpolate';
@@ -74,7 +74,11 @@ const RingGauge = ({
   classNameGaugeBg = '',
   labels = { position: 'top' },
 }: RingGaugeProps) => {
-  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip(tooltip);
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
+    tooltip,
+    defaultHtml: (d: any) =>
+      `${d[labelKey]} <br/>${d[dataKey]}/${d[targetKey]}`,
+  });
   const PI = Math.PI,
     numArcs = data.length;
 
@@ -83,15 +87,15 @@ const RingGauge = ({
 
     svg.selectAll('*').remove();
 
-    const tooltipDiv =
-      tooltip && select('#tooltip').node()
-        ? select('#tooltip')
-        : select('body')
-            .append('div')
-            .attr('id', 'tooltip')
-            .style('position', 'absolute')
-            .style('opacity', '0')
-            .attr('class', mergeTailwindClasses(tooltip?.className));
+    // const tooltipDiv =
+    //   tooltip && select('#tooltip').node()
+    //     ? select('#tooltip')
+    //     : select('body')
+    //         .append('div')
+    //         .attr('id', 'tooltip')
+    //         .style('position', 'absolute')
+    //         .style('opacity', '0')
+    //         .attr('class', mergeTailwindClasses(tooltip?.className));
 
     const g = svg.append('g');
 
@@ -151,12 +155,7 @@ const RingGauge = ({
         mergeTailwindClasses('data-arc fill-current ', d.className)
       )
       .attr('d', '')
-      .on(
-        'mouseenter',
-        onMouseOver(
-          (d: any) => `${d[labelKey]} <br/>${d[dataKey]}/${d[targetKey]}`
-        )
-      )
+      .on('mouseenter', onMouseOver)
       .on('mousemove', onMouseMove)
       .on('mouseleave', onMouseLeave)
       .transition()
@@ -212,7 +211,6 @@ const RingGauge = ({
     startAngle,
     cornerRadius,
     targetKey,
-    tooltip,
     onMouseLeave,
     onMouseMove,
     onMouseOver,
