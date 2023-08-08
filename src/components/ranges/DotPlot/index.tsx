@@ -66,7 +66,9 @@ const DotPlot = ({
   tooltip = {},
   zooming,
 }: DotPlotProps) => {
-  const { onMouseOver, onMouseLeave } = useTooltip(tooltip);
+  const { onMouseOver, onMouseLeave } = useTooltip({tooltip,
+  defaultHtml: (d: any) => `${d[y.key]}: ${d[x.minKey]} to ${d[x.maxKey]}`
+  });
   const refreshChart = useCallback(() => {
     const shapeMapping = {
       circle: symbolCircle,
@@ -146,7 +148,7 @@ const DotPlot = ({
         //         `${d[y.key]}: ${d[x.minKey]} to ${d[x.maxKey]}`
         //   );
         // }
-        onMouseOver((d: any) => `${d[y.key]}: ${d[x.minKey]} to ${d[x.maxKey]}`)
+        onMouseOver
       )
       .on(
         'mouseleave',

@@ -79,7 +79,10 @@ const DotPlot = ({
     enabled: false,
   },
 }: DotPlotProps) => {
-  const { onMouseLeave, onMouseMove, onMouseOver } = useTooltip(tooltip);
+  const { onMouseLeave, onMouseMove, onMouseOver } = useTooltip({
+    tooltip,
+    defaultHtml: (d: any) => `${d[y.key]}: ${d[x.fromKey]} to ${d[x.toKey]}`,
+  });
   const refreshChart = React.useCallback(() => {
     const shapeMapping = {
       circle: symbolCircle,
@@ -151,16 +154,6 @@ const DotPlot = ({
       )
       .call(xAxis);
 
-    // const tooltipDiv =
-    //   tooltip && select('#tooltip').node()
-    //     ? select('#tooltip')
-    //     : select('body')
-    //         .append('div')
-    //         .attr('id', 'tooltip')
-    //         .style('position', 'absolute')
-    //         .style('opacity', '0')
-    //         .attr('class', mergeTailwindClasses(tooltip.className));
-
     svg
       .append('clipPath')
       .attr('id', 'clip')
@@ -187,27 +180,7 @@ const DotPlot = ({
       .data(data)
       .enter()
       .append('g')
-      .on(
-        'mouseenter',
-        // function (event: MouseEvent, d: any) {
-        //   if (tooltip) {
-        //     tooltipDiv.style('opacity', 1);
-        //     const [bX, bY] = pointer(event, select('body'));
-        //     tooltipDiv.style('left', `${bX + 10}px`);
-        //     tooltipDiv.style('top', `${bY + 10}px`);
-        //     tooltipDiv.html(
-        //       tooltip && tooltip.html
-        //         ? tooltip.html(d)
-        //         : tooltip.keys
-        //         ? tooltip.keys
-        //             .map((key) => `${key}: ${d[key] || ''}`)
-        //             .join('<br/>')
-        //         : `${d[y.key]}: ${d[x.fromKey]} to ${d[x.toKey]}`
-        //     );
-        //   }
-        // }
-        onMouseOver((d: any) => `${d[y.key]}: ${d[x.fromKey]} to ${d[x.toKey]}`)
-      )
+      .on('mouseenter', onMouseOver)
       .on('mousemove', onMouseMove)
       .on('mouseleave', onMouseLeave);
 
