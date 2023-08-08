@@ -15,13 +15,11 @@ import {
 } from 'd3-shape';
 import { max, min } from 'd3-array';
 import { select, selectAll } from 'd3-selection';
-import useTooltip, { TooltipProps } from '../../../hooks/useTooltip';
 
 import { ChartProps } from '../../../types';
 import { scaleLinear } from 'd3-scale';
+import useTooltip from '../../../hooks/useTooltip';
 import { zoom } from 'd3-zoom';
-
-// import { brush } from 'd3-brush';
 
 export interface ScatterPlotProps extends ChartProps {
   x: {
@@ -58,7 +56,11 @@ export interface ScatterPlotProps extends ChartProps {
       [key: string]: any;
     };
   };
-  tooltip?: TooltipProps;
+  tooltip?: {
+    className?: string;
+    html?: (d: any) => string;
+    keys?: string[];
+  };
   onClick?: (event: any, d: any) => void;
   connect?: {
     enabled?: boolean;
@@ -108,8 +110,8 @@ const ScatterPlot = ({
     ${shape?.key ? `${shape.key} ${d[shape.key]}<br/>` : ''}`;
 
   const { onMouseOver, onMouseLeave, onMouseMove } = useTooltip({
-    ...tooltip,
-    html: tooltip?.html || defaultHtml,
+    tooltip,
+    defaultHtml,
   });
   const refreshChart = React.useCallback(() => {
     const svg = select(`#${id}`);
@@ -239,17 +241,6 @@ const ScatterPlot = ({
       wye: symbolWye,
     };
 
-    // Tooltips
-    // const tooltipDiv =
-    //   tooltip && select('#tooltip').node()
-    //     ? select('#tooltip')
-    //     : select('body')
-    //         .append('div')
-    //         .attr('id', 'tooltip')
-    //         .style('position', 'absolute')
-    //         .style('opacity', '0')
-    //         .attr('class', mergeTailwindClasses(tooltip?.className));
-
     svg
       .append('clipPath')
       .attr('id', 'clip')
@@ -289,7 +280,7 @@ const ScatterPlot = ({
         'transform',
         (d: any) => `translate(${xFn(d[x.key])},${yFn(d[y.key])})`
       )
-      .on('mouseenter', onMouseOver())
+      .on('mouseenter', onMouseOver)
       .on('mousemove', onMouseMove)
       .on('mouseleave', onMouseLeave)
       .on('click', (event, d) => {
@@ -334,36 +325,6 @@ const ScatterPlot = ({
       }
     }
 
-    // function onMouseMove(event: MouseEvent) {
-    //   const [bX, bY] = pointer(event, select('body'));
-    //   tooltipDiv.style('left', `${bX + 10}px`);
-    //   tooltipDiv.style('top', `${bY + 10}px`);
-    // }
-
-    // function onMouseOverG(event: MouseEvent, row: any) {
-    //   tooltip && tooltipDiv.style('opacity', 1);
-
-    //   const [bX, bY] = pointer(event, select('body'));
-    //   tooltipDiv.style('left', `${bX + 10}px`);
-    //   tooltipDiv.style('top', `${bY + 10}px`);
-    //   tooltipDiv.html(
-    //     tooltip?.html
-    //       ? tooltip.html(row)
-    //       : tooltip?.keys
-    //       ? tooltip.keys.map((key) => `${key}: ${row[key] || ''}`).join('<br/>')
-    //       : Object.entries(row)
-    //           .map(([key, value]) => `${key}: ${value}`)
-    //           .join('<br/>')
-    //   );
-    // }
-
-    // function onMouseLeave() {
-    //   tooltipDiv.style('opacity', '0');
-    //   tooltipDiv.style('left', `-1000px`);
-    // }
-
-    //Add styles from style prop
-
     if (zooming?.enabled) {
       const zoomed = ({ transform }: any) => {
         pointsGroup.attr('transform', transform);
@@ -387,7 +348,6 @@ const ScatterPlot = ({
     y,
     color,
     size,
-    tooltip,
     shape,
     margin,
     padding,
@@ -396,6 +356,9 @@ const ScatterPlot = ({
     drawing,
     connect,
     data,
+    onMouseLeave,
+    onMouseMove,
+    onMouseOver,
   ]);
 
   useEffect(() => {
