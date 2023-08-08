@@ -63,7 +63,15 @@ const BoxPlotH = ({
     enabled: false,
   },
 }: BoxPlotHProps) => {
-  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip(tooltip);
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
+    tooltip,
+    defaultHtml: (d: any) =>
+      `min: ${d[x.minKey].toFixed(0)} <br/> range: ${d[x.boxStart].toFixed(
+        0
+      )} to ${d[x.boxEnd].toFixed(0)} <br/> mid: ${d[x.midKey].toFixed(
+        0
+      )} <br/> max: ${d[x.maxKey].toFixed(0)} `,
+  });
   const refreshChart = React.useCallback(() => {
     const svg = select<SVGSVGElement, unknown>(`#${id}`);
     svg.selectAll('*').remove();
@@ -110,52 +118,9 @@ const BoxPlotH = ({
       .data(data)
       .enter()
       .append('g')
-      .on(
-        'mouseenter',
-        // function (event: MouseEvent, d: any) {
-        //   if (tooltip) {
-        //     tooltipDiv.style('opacity', 1);
-        //     const [bX, bY] = pointer(event, select('body'));
-        //     tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-        //     tooltipDiv.html(
-        //       tooltip?.html
-        //         ? tooltip.html(d)
-        //         : `min: ${d[x.minKey].toFixed(0)} <br/> range: ${d[
-        //             x.boxStart
-        //           ].toFixed(0)} to ${d[x.boxEnd].toFixed(0)} <br/> mid: ${d[
-        //             x.midKey
-        //           ].toFixed(0)} <br/> max: ${d[x.maxKey].toFixed(0)} `
-        //     );
-        //   }
-        // }
-        onMouseOver(
-          (d: any) =>
-            `min: ${d[x.minKey].toFixed(0)} <br/> range: ${d[
-              x.boxStart
-            ].toFixed(0)} to ${d[x.boxEnd].toFixed(0)} <br/> mid: ${d[
-              x.midKey
-            ].toFixed(0)} <br/> max: ${d[x.maxKey].toFixed(0)} `
-        )
-      )
-      .on(
-        'mousemove',
-        // function (event: MouseEvent) {
-        //   const [bX, bY] = pointer(event, select('body'));
-        //   tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-        // }
-        onMouseMove
-      )
-      .on(
-        'mouseleave',
-        // function () {
-        //   tooltip &&
-        //     tooltipDiv
-        //       .style('opacity', '0')
-        //       .style('left', `0px`)
-        //       .style('top', `0px`);
-        // }
-        onMouseLeave
-      );
+      .on('mouseenter', onMouseOver)
+      .on('mousemove', onMouseMove)
+      .on('mouseleave', onMouseLeave);
 
     transition();
 
