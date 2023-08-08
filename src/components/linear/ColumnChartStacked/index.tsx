@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, sum } from 'd3-array';
-import { select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
+import { select, selectAll } from 'd3-selection';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect } from 'react';
 
@@ -14,6 +15,12 @@ interface DataItem {
   [key: string]: number | string;
 }
 
+interface Y {
+  key: string;
+  axis?: 'left' | 'right';
+  className: string;
+}
+
 interface ColumnChartStackedProps {
   data: DataItem[];
   id: string;
@@ -22,11 +29,7 @@ interface ColumnChartStackedProps {
     key: string;
     axis?: 'top' | 'bottom';
   };
-  y: {
-    key: string;
-    axis?: 'left' | 'right';
-    className: string;
-  }[];
+  y: Y[];
   margin?: {
     left: number;
     right: number;
@@ -54,6 +57,7 @@ interface ColumnChartStackedProps {
   drawing?: {
     duration?: number;
   };
+  column?: Y;
 }
 
 interface drawHLineProps {
@@ -88,8 +92,21 @@ const ColumnChartStacked = ({
   referenceLines = [],
   tickFormat,
   drawing = undefined,
+  column,
 }: ColumnChartStackedProps) => {
-  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip(tooltip);
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
+    tooltip,
+    defaultHtml: (d: any) =>
+      `${d[x.key]} <br/> ${column && column.key} ${
+        tickFormat
+          ? // @ts-ignore
+            formatMapping[tickFormat]
+            ? // @ts-ignore
+              format(formatMapping[tickFormat])(d[column.key])
+            : format(tickFormat)
+          : column && d[column.key]
+      }`,
+  });
 
   const formatMapping = {
     '%': '.0%',
@@ -152,13 +169,7 @@ const ColumnChartStacked = ({
         .attr('height', (d: any) =>
           drawing?.duration ? 0 : yFn(0) - yFn(d[column.key])
         )
-        .on(
-          'mouseenter',
-          onMouseOver(
-            // @ts-ignore
-            (d: any) => `${d[y.key]} <br/> ${column.key} ${d[column.key]}`
-          )
-        )
+        .on('mouseenter', onMouseOver)
         .on('mousemove', onMouseMove)
         .on('mouseleave', onMouseLeave);
 
