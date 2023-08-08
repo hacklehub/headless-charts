@@ -20,7 +20,7 @@ const data = [
   { id: 6, value: 1451, reading: 1200 },
 ];
 
-const randBetween = ({ x, y }: any) => x + Math.random() * (y - x);
+const randBetween = (x: number, y: number) => x + Math.random() * (y - x);
 
 const arrayLength = 200;
 /* eslint-disable */
@@ -33,9 +33,9 @@ const dataForTimeSeriesChart = new Array(arrayLength)
       .minus({ days: arrayLength - index })
       .toFormat('yyyy-MM-dd hh:mm:ss'),
     // @ts-ignore
-    value: randBetween(1000, 1004) + randBetween(index - 10, index),
+    value: randBetween(1000, 1004),
     // @ts-ignore
-    reading: randBetween(1000, 996) - randBetween(index - 10, index),
+    reading: randBetween(1000, 996),
   }));
 
 export const Default = {
@@ -385,10 +385,10 @@ export const LineChartHorizontal = {
 
 export const WithTimeSeriesForLineChart = {
   args: {
-    dataForTimeSeriesChart,
+    data: dataForTimeSeriesChart,
     id: 'time-series',
     x: {
-      key: 'data',
+      key: 'date',
       scalingFunction: 'time',
       format: 'yyyy-MM-dd hh:mm:ss',
       axisLabel: 'Date',
@@ -397,7 +397,6 @@ export const WithTimeSeriesForLineChart = {
       {
         key: 'value',
         axis: 'left',
-        start: 0,
         className: 'text-red-200 dark:text-red-700 stroke-current',
         curve: 'rounded',
         circleFill: true,

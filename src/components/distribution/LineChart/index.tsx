@@ -395,7 +395,6 @@ const LineChart = ({
 
         const newLine = line()
           .x((d) => {
-            // console.log(xFn(d[x.key]));
             return x.scalingFunction === 'time'
               ? xFn(toDateTime(d))
               : // @ts-ignore
