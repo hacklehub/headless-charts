@@ -164,6 +164,14 @@ export const LeftDirection = {
   },
 };
 
+export const LeftDrawing = {
+  args: {
+    ...LeftDirection.args,
+    ...Drawing.args,
+    id: 'bar-chart-left-drawing',
+  },
+};
+
 export const DifferentAxis = {
   args: {
     ...Default.args,

@@ -73,7 +73,7 @@ const PieChart = ({
     left: 0,
     top: 0,
   },
-  paddingAngle = 0,
+  paddingAngle = 2,
   startAngle = 0,
   endAngle = 360 + startAngle,
   cornerRadius = 0,
