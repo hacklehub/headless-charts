@@ -66,8 +66,9 @@ const DotPlot = ({
   tooltip = {},
   zooming,
 }: DotPlotProps) => {
-  const { onMouseOver, onMouseLeave } = useTooltip({tooltip,
-  defaultHtml: (d: any) => `${d[y.key]}: ${d[x.minKey]} to ${d[x.maxKey]}`
+  const { onMouseOver, onMouseLeave } = useTooltip({
+    tooltip,
+    defaultHtml: (d: any) => `${d[y.key]}: ${d[x.minKey]} to ${d[x.maxKey]}`,
   });
   const refreshChart = useCallback(() => {
     const shapeMapping = {
@@ -133,32 +134,12 @@ const DotPlot = ({
       .append('g')
       .on(
         'mouseenter',
-        // function (event, d) {
-        //   tooltip && tooltipDiv.style('opacity', 1);
-        //   const [bX, bY] = pointer(event, select('body'));
-        //   tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-        //   tooltipDiv.html(
-        //     tooltip && tooltip.html
-        //       ? tooltip.html(d)
-        //       : // @ts-ignore
-        //       tooltip.keys
-        //       ? // @ts-ignore
-        //         tooltip.keys.map((key) => `${key}: ${d[key] || ''}`).join('<br/>')
-        //       : // @ts-ignore
-        //         `${d[y.key]}: ${d[x.minKey]} to ${d[x.maxKey]}`
-        //   );
-        // }
+
         onMouseOver
       )
       .on(
         'mouseleave',
-        // function () {
-        //   tooltip &&
-        //     tooltipDiv
-        //       .style('opacity', '0')
-        //       .style('left', `0px`)
-        //       .style('top', `0px`);
-        // }
+
         onMouseLeave
       );
 
@@ -283,13 +264,6 @@ const DotPlot = ({
         })`
       )
       .call(xAxis);
-
-    // const tooltipDiv = select('body')
-    //   .append('div')
-    //   .attr('id', 'tooltip')
-    //   .style('position', 'absolute')
-    //   .style('opacity', '0')
-    //   .attr('class', `tooltip ${(tooltip && tooltip.className) || ''}`);
 
     if (zooming) {
       const extent = [
