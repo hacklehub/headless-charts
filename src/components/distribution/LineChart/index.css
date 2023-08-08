@@ -1,0 +1,29 @@
+.custom-series-1 {
+  stroke: coral;
+}
+.custom-series-1:hover {
+  stroke-width: 2;
+}
+
+.dashed {
+  stroke-dasharray: 5;
+}
+
+.custom-series-2 {
+  stroke: blueviolet;
+}
+
+@keyframes through {
+  from {
+    stroke-dashoffset: 100%;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.running {
+  animation: through 10s linear infinite;
+  stroke-dasharray: 10 5 3 10;
+  fill-opacity: 0;
+}
