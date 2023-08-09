@@ -75,7 +75,10 @@ const LollipopHChart = ({
   x = { key: 'x', axis: 'bottom', axisTicks: 2 },
   y = { key: 'y', axis: 'left' },
 }: LollipopHChartProps) => {
-  const { onMouseOver, onMouseLeave } = useTooltip(tooltip);
+  const { onMouseOver, onMouseLeave } = useTooltip({
+    tooltip,
+    defaultHtml: (d: any) => `${d[y.key]}: ${d[x.key]}`,
+  });
 
   const refreshChart = React.useCallback(() => {
     const svg = select(`#${id}`);
@@ -175,10 +178,7 @@ const LollipopHChart = ({
         .data(data)
         .enter()
         .append('g')
-        .on(
-          'mouseover',
-          onMouseOver((d: any) => `${d[y.key]}: ${d[x.key]}`)
-        )
+        .on('mouseover', onMouseOver)
         .on('mouseleave', onMouseLeave);
 
       transition();
