@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { arc, pie } from 'd3';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { deepValue } from '../../../utils/deepValue';
 import { defaultChartClassNames } from '../../../utils';
@@ -95,6 +95,9 @@ const PieChart = ({
     tooltip,
     defaultHtml: (d: any) => `${d.data[nameKey]} = ${d.value}`,
   });
+
+  const previousArcs = useRef<any[]>([]);
+
   const refreshChart = useCallback(() => {
     const svg = select(`#${id}`);
     svg.selectAll('*').remove();
@@ -169,10 +172,15 @@ const PieChart = ({
         .transition()
         .duration(drawing?.duration || 1000)
         .attrTween('d', function (d) {
+          const previousArc = previousArcs.current.find(
+            (a) => a.data[nameKey] === d.data[nameKey]
+          );
+
           const i = interpolate(
             {
-              startAngle: (startAngle / 180) * Math.PI,
-              endAngle: (startAngle / 180) * Math.PI,
+              startAngle:
+                previousArc?.startAngle || (startAngle / 180) * Math.PI,
+              endAngle: previousArc?.endAngle || (startAngle / 180) * Math.PI,
             },
             d
           );
@@ -180,6 +188,10 @@ const PieChart = ({
           // @ts-ignore
           return (t) => arcFn(i(t));
         });
+
+    const timeOut = setTimeout(() => {
+      previousArcs.current = arcs;
+    }, drawing?.duration);
 
     const labelsG = labelArc && pathsG.append('g').attr('class', 'labels');
 
@@ -207,6 +219,10 @@ const PieChart = ({
         .text((d: { data: DataItem }) =>
           labels.text ? labels.text(d.data) : deepValue(d.data, nameKey)
         );
+
+    return () => {
+      clearTimeout(timeOut);
+    };
   }, [
     id,
     startAngle,
