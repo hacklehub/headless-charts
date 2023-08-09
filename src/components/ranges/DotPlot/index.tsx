@@ -22,18 +22,26 @@ import { zoom } from 'd3-zoom';
 
 interface DotPlotProps extends ChartProps {
   classNameData?: string;
-  shape: 'circle';
+  shape:
+    | 'none'
+    | 'circle'
+    | 'square'
+    | 'star'
+    | 'triangle'
+    | 'wye'
+    | 'cross'
+    | 'diamond';
   y: {
     [key: string]: string;
     axis: 'left' | 'right';
   };
   x: {
-    start: number;
-    end: number;
+    start?: number;
+    end?: number;
     minKey: string;
     maxKey: string;
-    axis: 'bottom' | 'top';
-    axisTicks: number;
+    axis?: 'bottom' | 'top';
+    axisTicks?: number;
   };
   tooltip?: {
     className?: string;
@@ -172,6 +180,7 @@ const DotPlot = ({
     dotRowsG
       .append('path')
       .attr('class', `start-dots fill-current ${classNameData || ''} `)
+      //@ts-ignore
       .attr('d', () => symbol(shapeMapping[shape], 100)())
       .attr(
         'transform',
@@ -186,6 +195,7 @@ const DotPlot = ({
     dotRowsG
       .append('path')
       .attr('class', `end-dots fill-current ${classNameData || ''} `)
+      //@ts-ignore
       .attr('d', () => symbol(shapeMapping[shape], 100)())
       .attr(
         'transform',

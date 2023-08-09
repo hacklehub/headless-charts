@@ -1,15 +1,18 @@
+import { Meta, StoryObj } from '@storybook/react';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import DotPlot from '.';
-import { Meta } from '@storybook/react';
 import data from './sample.json';
 
 export default {
-  title: 'Ranges/Dotplot',
+  title: 'Ranges/Dotplot/Intro',
   component: DotPlot,
   tags: ['autodocs'],
 } as Meta;
 
-export const Default = {
+type Story = StoryObj<typeof DotPlot>;
+
+export const Default: Story = {
   args: {
     id: 'dot-plot-default',
     data,
@@ -25,38 +28,10 @@ export const Default = {
   },
 };
 
-export const CustomShape = {
+export const CustomShape: Story = {
   args: {
     ...Default.args,
     id: 'dot-plot-custom-shape',
     shape: 'star',
-  },
-};
-
-export const CustomTooltip = {
-  args: {
-    ...Default.args,
-    id: 'dot-plot-custom-tooltip',
-    tooltip: {
-      keys: ['minTemp', 'maxTemp'],
-    },
-  },
-};
-
-export const CustomTooltipHtml = {
-  args: {
-    ...Default.args,
-    id: 'dot-plot-custom-tooltip-html',
-    tooltip: {
-      html: (d: any) => {
-        return `
-          <div>
-            <div>${d.label}</div>
-            <div>Min: ${d.minTemp}</div>
-            <div>Max: ${d.maxTemp}</div>
-          </div>
-        `;
-      },
-    },
   },
 };
