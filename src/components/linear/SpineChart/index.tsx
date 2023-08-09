@@ -7,6 +7,7 @@ import { scaleBand, scaleLinear } from 'd3-scale';
 import { useCallback, useEffect } from 'react';
 
 import { transition } from 'd3-transition';
+import useTooltip from '../../../hooks/useTooltip';
 
 interface Y {
   key: string;
@@ -46,6 +47,7 @@ interface SpineChartProps {
     html?: (d: any) => string;
     keys?: string[];
   };
+  column?: any;
 }
 
 const SpineChart = ({
@@ -75,7 +77,13 @@ const SpineChart = ({
   axisTicks = 5,
   xAxis = 'bottom',
   tooltip = undefined,
+  column,
 }: SpineChartProps) => {
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
+    tooltip,
+    defaultHtml: (d: any) => `${d[y.key]} <br/> ${column.key} ${d[column.key]}`,
+  });
+
   const refreshChart = useCallback(() => {
     const svg = select(`#${id}`);
     svg.selectAll('*').remove();
@@ -179,35 +187,9 @@ const SpineChart = ({
         .attr('x', xLeftFn(0))
         .attr('width', 0)
         .attr('height', yFn.bandwidth())
-        .on('mouseenter', function (event: MouseEvent, d: any) {
-          if (tooltip) {
-            tooltipDiv.style('opacity', 1);
-            const [bX, bY] = pointer(event, select('body'));
-            tooltipDiv
-              .style('left', `${bX + 10}px`)
-              .style('top', `${bY + 10}px`);
-            tooltipDiv.html(
-              tooltip && tooltip.html
-                ? tooltip.html(d)
-                : tooltip.keys
-                ? tooltip.keys
-                    .map((key) => `${key}: ${d[key] || ''}`)
-                    .join('<br/>')
-                : `${d[y.key]} <br/> ${column.key} ${d[column.key]}`
-            );
-          }
-        })
-        .on('mousemove', function (event: MouseEvent) {
-          const [bX, bY] = pointer(event, select('body'));
-          tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-        })
-        .on('mouseleave', function () {
-          tooltip &&
-            tooltipDiv
-              .style('opacity', '0')
-              .style('left', `0px`)
-              .style('top', `0px`);
-        })
+        .on('mouseenter', onMouseOver)
+        .on('mousemove', onMouseMove)
+        .on('mouseleave', onMouseLeave)
         .transition()
         .duration(1000)
         // @ts-ignore
