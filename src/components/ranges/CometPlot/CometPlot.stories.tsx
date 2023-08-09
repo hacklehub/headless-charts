@@ -1,6 +1,7 @@
+import { Meta, StoryObj } from '@storybook/react';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CometPlot from '.';
-import { Meta } from '@storybook/react';
 import data from '../sample.json';
 
 /**
@@ -14,15 +15,17 @@ import data from '../sample.json';
  * - Showing the influence of a yes/no state on a metric (eg:- How well does a team perform with and without a manager/member)
  */
 export default {
-  title: 'Ranges/CometPlot',
+  title: 'Ranges/CometPlot/Intro',
   component: CometPlot,
   tags: ['autodocs'],
 } as Meta;
 
+type Story = StoryObj<typeof CometPlot>
+
 /**
  * Default CometPlot with no styling.
  */
-export const Default = {
+export const Default: Story = {
   args: {
     data,
     id: 'comet-plot-h-default',
@@ -37,7 +40,7 @@ export const Default = {
 /**
  * CometPlot with custom styling. className styles the entire chart, x.className styles the comets. tooltip.className styles the tooltip.
  * */
-export const Styled = {
+export const Styled: Story = {
   args: {
     ...Default.args,
     className: 'bg-red-50 rounded h-56',
@@ -60,83 +63,9 @@ export const Styled = {
 };
 
 /**
- * The size of the comet head can be varied (default 100)
- */
-export const CustomSize = {
-  args: {
-    ...Default.args,
-    id: 'comet-plot-h-custom-size',
-    size: 40,
-  },
-};
-
-/**
- * The shape of the comet head can be varied (default circle)
- */
-export const CustomShape = {
-  args: {
-    ...Default.args,
-    id: 'comet-plot-h-custom-shape',
-    shape: 'triangle',
-  },
-};
-
-/**
- * The tooltip keys can be customized
- */
-export const CustomTooltip = {
-  args: {
-    ...Default.args,
-    id: 'comet-plot-h-custom-tooltip',
-    tooltip: {
-      keys: ['name', 'min', 'max'],
-    },
-  },
-};
-
-/**
- * The tooltip can be customized with html
- */
-export const CustomTooltipHtml = {
-  args: {
-    ...Default.args,
-    id: 'comet-plot-h-custom-tooltip-html',
-    tooltip: {
-      html: (d: any) => {
-        return `
-          <div class="text-center rounded border-2 p-2 bg-white">
-            <div class="text-lg font-bold">${d.name}</div>
-            <div class="text-sm">ranges from ${d.min} to ${d.max}</div>
-          </div>
-        `;
-      },
-    },
-  },
-};
-/**
- * Each comet can be styled individually, by adding a className to each item in the data object
- */
-
-export const CustomColorMap = {
-  args: {
-    ...Default.args,
-    id: 'comet-plot-h-custom-color-map',
-    data: data.map((d: any, idx: number) => ({
-      ...d,
-      className: [
-        'text-red-900',
-        'text-green-900',
-        'text-yellow-500',
-        'text-orange-500',
-      ][idx],
-    })),
-  },
-};
-
-/**
  * The chart can be zoomed in and out by scrolling (single axis). Default min zoom level is 1,  Max zoom level is 2 
  */
-export const Zooming = {
+export const Zooming: Story = {
   args: {
     ...Default.args,
     id: 'comet-plot-h-zooming',
@@ -150,7 +79,7 @@ export const Zooming = {
  * Zooming can be done with custom min and max extents.
  */
 
-export const ZoomingCustom = {
+export const ZoomingCustom: Story = {
   args: {
     ...Zooming.args,
     id: 'comet-plot-h-zooming-custom',
@@ -165,7 +94,7 @@ export const ZoomingCustom = {
 /**
  * There maybe times when the tail is ahead of the head, so we need to reverse
  */
-export const Reverse = {
+export const Reverse: Story = {
   args: {
     ...Default.args,
     id: 'box-plot-h-reverse',
