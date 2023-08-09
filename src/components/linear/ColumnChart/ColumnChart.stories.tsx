@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ColumnChartGrouped from '.';
+import ColumnChart from '.';
 import { Meta } from '@storybook/react';
 import data from './sample.json';
 
 export default {
-  title: 'Linear/ColumnChartGrouped',
-  component: ColumnChartGrouped,
+  title: 'Linear/ColumnChart',
+  component: ColumnChart,
   tags: ['autodocs'],
 } as Meta;
 
 export const Default = {
   args: {
     data,
-    id: 'column-chart-group-default',
+    id: 'column-chart-default',
     x: { key: 'name' },
     y: [
       {
@@ -30,7 +30,7 @@ export const Default = {
 export const Styled = {
   args: {
     data,
-    id: 'column-chart-group-styled',
+    id: 'column-chart-styled',
     className: 'bg-gray-100 rounded',
     padding: {
       top: 20,

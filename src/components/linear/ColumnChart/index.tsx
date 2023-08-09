@@ -12,20 +12,21 @@ interface DataItem {
   [key: string]: number | string;
 }
 
-interface ColumnChartGroupedProps {
+interface Y {
+  key: string;
+  start?: number;
+  end?: number;
+  className?: string;
+  classNameNegative?: string;
+  axis?: 'left' | 'right';
+}
+
+interface ColumnChartProps {
   data: DataItem[];
   id: string;
   className?: string;
   x: { key: string; axis?: 'top' | 'bottom' };
-  y: {
-    key: string;
-    start?: number;
-    end?: number;
-    className?: string;
-    classNameNegative?: string;
-    axis?: 'left' | 'right';
-  }[];
-
+  y: Y[];
   margin?: {
     left: number;
     right: number;
@@ -39,7 +40,6 @@ interface ColumnChartGroupedProps {
     top: number;
   };
   paddingBar?: number;
-  nameKey: string;
   drawing?: { duration?: number };
   tooltip?: {
     html?: (data: any) => string;
@@ -50,6 +50,7 @@ interface ColumnChartGroupedProps {
     y?: number;
     className?: string;
   }[];
+  column?: Y;
 }
 
 interface drawHLineProps {
@@ -60,7 +61,7 @@ interface drawHLineProps {
   dashed?: boolean;
 }
 
-const ColumnChartGrouped = ({
+const ColumnChart = ({
   data = [],
   id,
   className,
@@ -79,14 +80,14 @@ const ColumnChartGrouped = ({
     bottom: 0,
   },
   paddingBar = 0.2,
-  nameKey = 'name',
+  column,
   drawing,
   tooltip,
   referenceLines = [],
-}: ColumnChartGroupedProps) => {
+}: ColumnChartProps) => {
   const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
     tooltip,
-    defaultHtml: (d: any) => `${d.data[nameKey]} = ${d.value}`,
+    defaultHtml: (d: any) => `${d[x.key]} <br/> ${column && column.key} ${column && d[column.key]}`,
   });
 
   const refreshChart = useCallback(() => {
@@ -246,4 +247,4 @@ const ColumnChartGrouped = ({
   );
 };
 
-export default ColumnChartGrouped;
+export default ColumnChart;
