@@ -1,24 +1,27 @@
+import { Meta, StoryObj } from '@storybook/react';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import BulletChart from '.';
-import { Meta } from '@storybook/react';
 
 const data = 85;
 
-/** Bullet chart is a single metric linear gauge. It shows achievement against 4 different metrics (base, target, threshold, max) 
+/** Bullet chart is a single metric linear gauge. It shows achievement against 4 different metrics (base, target, threshold, max)
  * We can use it to show progress towards a goal.
- * 
+ *
  * Built in a headless fashion, you can apply individual styles to all elements
-*/
+ */
 export default {
-  title: 'Gauge/BulletChart',
+  title: 'Gauge/BulletChart/Intro',
   component: BulletChart,
   tags: ['autodocs'],
 } as Meta;
 
+type Story = StoryObj<typeof BulletChart>;
+
 /**
- * Default BulletChart (Headless and unstyled). 
+ * Default BulletChart (Headless and unstyled).
  */
-export const Default = {
+export const Default: Story = {
   args: {
     data,
     label: 'Sales',
@@ -31,7 +34,7 @@ export const Default = {
   },
 };
 
-export const Styled = {
+export const Styled: Story = {
   args: {
     ...Default.args,
     id: 'bullet-chart-styled',
