@@ -150,7 +150,7 @@ const PieChart = ({
         })`
       );
 
-    const paths = pathsG
+    pathsG
       .selectAll('path')
       .data(arcs)
       .join('path')
@@ -165,29 +165,25 @@ const PieChart = ({
       .attr('d', arcFn)
       .on('mouseenter', onMouseOver)
       .on('mousemove', onMouseMove)
-      .on('mouseleave', onMouseLeave);
+      .on('mouseleave', onMouseLeave)
+      .transition()
+      .duration(drawing?.duration || 0)
+      .attrTween('d', function (d) {
+        const previousArc = previousArcs.current.find(
+          (a) => a.data[nameKey] === d.data[nameKey]
+        );
 
-    drawing?.duration &&
-      paths
-        .transition()
-        .duration(drawing?.duration || 1000)
-        .attrTween('d', function (d) {
-          const previousArc = previousArcs.current.find(
-            (a) => a.data[nameKey] === d.data[nameKey]
-          );
+        const i = interpolate(
+          {
+            startAngle: previousArc?.startAngle || (startAngle / 180) * Math.PI,
+            endAngle: previousArc?.endAngle || (startAngle / 180) * Math.PI,
+          },
+          d
+        );
 
-          const i = interpolate(
-            {
-              startAngle:
-                previousArc?.startAngle || (startAngle / 180) * Math.PI,
-              endAngle: previousArc?.endAngle || (startAngle / 180) * Math.PI,
-            },
-            d
-          );
-
-          // @ts-ignore
-          return (t) => arcFn(i(t));
-        });
+        // @ts-ignore
+        return (t) => arcFn(i(t));
+      });
 
     const timeOut = setTimeout(() => {
       previousArcs.current = arcs;
