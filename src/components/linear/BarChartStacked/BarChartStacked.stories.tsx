@@ -102,3 +102,19 @@ export const WithDrawingDelay = {
     },
   },
 };
+
+export const HorizontalWaterfall = {
+  args: {
+    ...Styled.args,
+    id: 'bar-chart-stacked-waterfall',
+    waterfall: true,
+  },
+};
+
+export const HorizontalWaterfallWithDrawing = {
+  args: {
+    ...HorizontalWaterfall.args,
+    ...WithDrawing.args,
+    id: 'bar-chart-stacked-waterfall-drawing',
+  },
+};
