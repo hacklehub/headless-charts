@@ -219,13 +219,6 @@ const BoxPlotH = ({
       .attr('y1', (d: any) => yFn(d[y.key]) || 0)
       .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth());
 
-    // const tooltipDiv = select('body')
-    //   .append('div')
-    //   .attr('id', 'tooltip')
-    //   .style('position', 'absolute')
-    //   .style('opacity', '0')
-    //   .attr('class', `tooltip ${(tooltip && tooltip.className) || ''}`);
-
     const yAxis = y.axis === 'right' ? axisRight(yFn) : axisLeft(yFn);
 
     const yAxisG = g
