@@ -66,10 +66,9 @@ const BarChart = ({
   dataLabel,
   tooltip,
 }: BarChartProps) => {
-  //(d: any) => `${d[y.key]} <br/> ${column.key} ${d[column.key]}`
   const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
     tooltip,
-    defaultHtml: ({ d, column }: any) =>
+    defaultHtml: ({ d, column }: { d: any; column: ColumnType }) =>
       `${d[y.key]} <br/> ${column.key} ${d[column.key]}`,
   });
 
