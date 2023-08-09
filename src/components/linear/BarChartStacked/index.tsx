@@ -5,7 +5,7 @@ import { select, selectAll } from 'd3-selection';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect } from 'react';
 
-// import { deepValue } from '../../../utils/deepValue';
+import { Series } from 'd3';
 import { defaultChartClassNames } from '../../../utils';
 import { format } from 'd3-format';
 import { mergeTailwindClasses } from '../../../utils';
@@ -20,7 +20,7 @@ interface AxisItems {
   key: string;
   className: string;
   axis?: string;
-  axisTicks?: any;
+  axisTicks?: number;
 }
 
 interface ToolTip {
@@ -43,6 +43,19 @@ interface ReferenceLines {
   className?: string;
 }
 
+interface StackedArrayItem {
+  0: number;
+  1: number;
+  data: DataItem;
+}
+
+interface StackedDataItem {
+  start: number;
+  end: number;
+  data: DataItem;
+  index: number;
+}
+
 interface BarChartStackedProps {
   data: DataItem[];
   id: string;
@@ -62,7 +75,7 @@ interface BarChartStackedProps {
     bottom: number;
   };
   referenceLines?: ReferenceLines[];
-  waterfall?: any;
+  waterfall?: boolean;
   x: AxisItems[];
   tickFormat?: string;
   y: AxisItems;
@@ -95,7 +108,7 @@ const BarChartStacked = ({
   tickFormat,
   y,
   tooltip,
-  drawing,
+  drawing = undefined,
   dataLabel,
 }: BarChartStackedProps) => {
   /* eslint-disable */
@@ -145,21 +158,46 @@ const BarChartStacked = ({
       .data(dataStacked)
       .enter()
       .append('g')
-      .attr('class', (d: any) => x[d.index].className)
+      .attr(
+        'class',
+        (
+          d: Series<
+            {
+              [key: string]: number;
+            },
+            string
+          >
+        ) => x[d.index].className
+      )
       .selectAll('rect')
-      .data((d) => d)
+      .data((d: StackedArrayItem[], index: number) => {
+        return d.map((v: StackedArrayItem) => {
+          return {
+            start: v[0],
+            end: v[1],
+            data: v.data,
+            index,
+          };
+        });
+      })
       .enter()
       .append('rect')
-      .attr('x', (d) => xFn(0))
-      //@ts-ignore
-      .attr('y', (d: any) => yFn(d.data[y.key]))
-      .attr('width', (d) => (drawing?.duration ? 0 : xFn(d[1]) - xFn(d[0])))
-      .attr('height', yFn.bandwidth())
+      .attr('x', () => xFn(0))
+      .attr('y', (d: StackedDataItem) => {
+        return (
+          (yFn(d.data[y.key]) || 0) +
+          (waterfall ? (yFn.bandwidth() / x.length) * d.index : 0)
+        );
+      })
+      .attr('width', (d: StackedDataItem) =>
+        drawing?.duration ? 0 : xFn(d.end) - xFn(d.start)
+      )
+      .attr('height', waterfall ? yFn.bandwidth() / x.length : yFn.bandwidth())
       .transition()
       .duration(drawing?.duration || 0)
-      .delay((d, i) => (drawing?.delay || 0) * i)
-      .attr('x', (d) => xFn(d[0]))
-      .attr('width', (d) => xFn(d[1]) - xFn(d[0]));
+      .delay((_, i) => (drawing?.delay || 0) * i)
+      .attr('x', (d: StackedDataItem) => xFn(d.start))
+      .attr('width', (d: StackedDataItem) => xFn(d.end) - xFn(d.start));
 
     // x.map((column, i) => {
     //   const barsG = g.append('g');
