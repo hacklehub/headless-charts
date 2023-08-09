@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import SpeedometerChart from '.';
 
 export default {
-  title: 'Gauge/Speedometer',
+  title: 'Gauge/Speedometer/Intro',
   component: SpeedometerChart,
   tags: ['autodocs'],
 } as Meta;
