@@ -66,7 +66,7 @@ const DotPlot = ({
   tooltip = {},
   zooming,
 }: DotPlotProps) => {
-  const { onMouseOver, onMouseLeave } = useTooltip({
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
     tooltip,
     defaultHtml: (d: any) => `${d[y.key]}: ${d[x.minKey]} to ${d[x.maxKey]}`,
   });
@@ -132,16 +132,9 @@ const DotPlot = ({
       .data(data)
       .enter()
       .append('g')
-      .on(
-        'mouseenter',
-
-        onMouseOver
-      )
-      .on(
-        'mouseleave',
-
-        onMouseLeave
-      );
+      .on('mouseenter', onMouseOver)
+      .on('mousemove', onMouseMove)
+      .on('mouseleave', onMouseLeave);
 
     transition();
 
@@ -304,6 +297,7 @@ const DotPlot = ({
     y,
     zooming,
     onMouseLeave,
+    onMouseMove,
     onMouseOver,
   ]);
 

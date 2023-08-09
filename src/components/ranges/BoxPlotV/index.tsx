@@ -62,7 +62,7 @@ const BoxPlotV = ({
     enabled: false,
   },
 }: BoxPlotVProps) => {
-  const { onMouseOver, onMouseLeave } = useTooltip({
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
     tooltip,
     defaultHtml: (d: any) =>
       `min: ${d[y.minKey].toFixed(0)} <br/> range: ${+d[y.boxStart].toFixed(
@@ -118,6 +118,7 @@ const BoxPlotV = ({
       .enter()
       .append('g')
       .on('mouseenter', onMouseOver)
+      .on('mousemove', onMouseMove)
       .on('mouseleave', onMouseLeave);
 
     transition();
@@ -251,6 +252,7 @@ const BoxPlotV = ({
     y,
     zooming,
     onMouseLeave,
+    onMouseMove,
     onMouseOver,
   ]);
 
