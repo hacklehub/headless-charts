@@ -1,24 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import './index.css';
 
+import { Meta, StoryObj } from '@storybook/react';
+
 import { DateTime } from 'luxon';
 import LineChart from '.';
-import { Meta } from '@storybook/react';
+import data from './sample.json';
 
 export default {
-  title: 'Linear/LineChart',
+  title: 'Linear/LineChart/Intro',
   component: LineChart,
   tags: ['autodocs'],
 } as Meta;
 
-const data = [
-  { id: 1, value: 1311, reading: 1500 },
-  { id: 2, reading: 1912 },
-  { id: 3, value: 1000 },
-  { id: 4, value: 1513 },
-  { id: 5, value: 1351, reading: 1000 },
-  { id: 6, value: 1451, reading: 1200 },
-];
+type Story = StoryObj<typeof LineChart>;
 
 const randBetween = (x: number, y: number) => x + Math.random() * (y - x);
 
@@ -38,7 +33,7 @@ const dataForTimeSeriesChart = new Array(arrayLength)
     reading: randBetween(1000, 996),
   }));
 
-export const Default = {
+export const Default: Story = {
   args: {
     data,
     x: { key: 'id' },
@@ -47,7 +42,7 @@ export const Default = {
   },
 };
 
-export const WithStyleChart = {
+export const WithStyleChart: Story = {
   args: {
     ...Default.args,
     id: 'with-style-chart',
@@ -60,7 +55,7 @@ export const WithStyleChart = {
   },
 };
 
-export const WithPaddedChart = {
+export const WithPaddedChart: Story = {
   args: {
     ...Default.args,
     id: 'padding-for-line-chart',
@@ -73,7 +68,7 @@ export const WithPaddedChart = {
   },
 };
 
-export const TwoAxes = {
+export const TwoAxes: Story = {
   args: {
     data,
     id: 'two-axes-for-line-chart',
@@ -86,7 +81,7 @@ export const TwoAxes = {
   },
 };
 
-export const Drawing = {
+export const Drawing: Story = {
   args: {
     data,
     id: 'drawing-line-chart',
@@ -100,7 +95,7 @@ export const Drawing = {
   },
 };
 
-export const Zooming = {
+export const Zooming: Story = {
   args: {
     data,
     id: 'line-chart-with-zooming',
@@ -114,209 +109,14 @@ export const Zooming = {
       },
     ],
     className: '',
-    zooming: true,
-  },
-};
-
-export const WithTooltip = {
-  args: {
-    data,
-    id: 'line-chart-with-tooltip',
-    x: { key: 'id' },
-    y: [
-      { key: 'value', className: 'text-green-500' },
-      { key: 'reading', className: 'text-blue-500' },
-    ],
-    tooltip: {
-      keys: ['value', 'reading', 'id'],
-      className: 'text-green-500',
-      html: (row: any) => `${row.id} - ${row.value || ''}/${row.reading || ''}`,
+    zooming: {
+      min: 0,
+      max: 100,
     },
-    showGuideLines: true,
-  },
-};
-/* eslint-enable */
-
-export const XAxisLabel = {
-  args: {
-    data,
-    id: 'line-chart-with-x-axis-label',
-    x: { key: 'id', axisLabel: 'Some Index' },
-    y: [
-      { key: 'value', className: 'text-green-500' },
-      { key: 'reading', className: 'text-blue-500' },
-    ],
-    className: '',
   },
 };
 
-export const WithXAxisCustomStart = {
-  args: {
-    data,
-    id: 'line-chart-with-x-axis-custom-start',
-    x: { key: 'id', axisLabel: 'Some Index', start: 0, end: 7 },
-    y: [
-      { key: 'value', className: 'text-green-500' },
-      { key: 'reading', axis: 'right', className: 'text-blue-500' },
-    ],
-    className: '',
-  },
-};
-export const WithXAxisAtTop = {
-  args: {
-    data,
-    id: 'x-axis-at-top',
-    x: { key: 'id', axisLabel: 'Some Index', axis: 'top' },
-    y: [
-      { key: 'value', className: 'text-green-500' },
-      {
-        key: 'reading',
-        axis: 'right',
-        className: 'text-blue-500',
-      },
-    ],
-    className: '',
-  },
-};
-
-export const WithXAxisTicks = {
-  args: {
-    data,
-    id: 'x-axis-ticks',
-    x: { key: 'id', axisLabel: 'Some Index', axisTicks: 15 },
-    y: [
-      { key: 'value', className: 'text-green-500' },
-      { key: 'reading', className: 'text-blue-500' },
-    ],
-    className: '',
-  },
-};
-
-export const YAxisCustomStart = {
-  args: {
-    data,
-    id: 'y-axis-custom-start',
-    x: { key: 'id', axisLabel: 'Some Index' },
-    y: [
-      { key: 'value', className: 'text-green-500', start: 0 },
-      {
-        key: 'reading',
-        className: 'text-blue-500',
-        axis: 'right',
-        start: 0,
-        ticks: 3,
-      },
-    ],
-    className: '',
-  },
-};
-
-export const YAxisCustomSymbolChart = {
-  args: {
-    data,
-    id: 'y-axis-custom-label-chart',
-    x: { key: 'id', axisLabel: 'Some Index' },
-    y: [
-      {
-        key: 'value',
-        className: 'text-green-500',
-        start: 0,
-        symbol: 'diamond',
-      },
-      {
-        key: 'reading',
-        symbol: 'circle',
-        className: 'text-blue-500',
-        axis: 'right',
-        start: 0,
-        ticks: 3,
-      },
-    ],
-    className: '',
-  },
-};
-
-export const YAxisUnknown = {
-  args: {
-    data,
-    id: 'y-axis-unknown-chart',
-    x: { key: 'id', axisLabel: 'Some Index' },
-    y: [
-      {
-        key: 'value',
-        className: 'text-green-500',
-        start: 0,
-        symbol: 'diamond',
-        unknown: 'zero',
-      },
-      {
-        key: 'reading',
-        symbol: 'circle',
-        className: 'text-blue-500',
-        axis: 'right',
-        unknown: 'zero',
-        start: 0,
-        ticks: 3,
-      },
-    ],
-    className: '',
-  },
-};
-
-export const YAxisLabel = {
-  args: {
-    data,
-    id: 'y-axis-custom-label-chart',
-    x: { key: 'id', axisLabel: 'Some Index' },
-    y: [
-      {
-        key: 'value',
-        className: 'text-green-500',
-        start: 0,
-        symbol: 'diamond',
-        axisLabel: 'Volume',
-      },
-      {
-        key: 'value',
-        symbol: 'circle',
-        axisLabel: 'Pressure',
-        className: 'text-blue-500',
-        axis: 'right',
-        start: 0,
-        ticks: 3,
-      },
-    ],
-    className: '',
-  },
-};
-
-export const YAxisCurve = {
-  args: {
-    data,
-    id: 'y-axis-custom-curve-chart',
-    x: { key: 'id', axisLabel: 'Some Index' },
-    y: [
-      {
-        key: 'value',
-        className: 'text-green-500',
-        start: 0,
-        symbol: 'diamond',
-        curve: 'step',
-      },
-      {
-        key: 'reading',
-        symbol: 'circle',
-        className: 'text-blue-500',
-        axis: 'right',
-        start: 0,
-        ticks: 3,
-      },
-    ],
-    className: '',
-  },
-};
-
-export const LineChartVertical = {
+export const LineChartVertical: Story = {
   args: {
     data,
     id: 'horizontal-line-chart',
@@ -332,7 +132,7 @@ export const LineChartVertical = {
   },
 };
 
-export const LineChartHorizontal = {
+export const LineChartHorizontal: Story = {
   args: {
     data,
     id: 'vertical-line-chart',
@@ -351,14 +151,13 @@ export const LineChartHorizontal = {
   },
 };
 
-export const WithTimeSeriesForLineChart = {
+export const WithTimeSeriesForLineChart: Story = {
   args: {
     data: dataForTimeSeriesChart,
     id: 'time-series',
     x: {
       key: 'date',
       scalingFunction: 'time',
-      format: 'yyyy-MM-dd hh:mm:ss',
       axisLabel: 'Date',
     },
     y: [
@@ -367,7 +166,6 @@ export const WithTimeSeriesForLineChart = {
         axis: 'left',
         className: 'text-red-200 dark:text-red-700 stroke-current',
         curve: 'rounded',
-        circleFill: true,
       },
       {
         key: 'reading',
