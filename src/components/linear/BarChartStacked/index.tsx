@@ -16,7 +16,7 @@ interface DataItem {
 
 interface AxisItems {
   key: string;
-  className: string;
+  className?: string;
   axis?: string;
   axisTicks?: any;
 }

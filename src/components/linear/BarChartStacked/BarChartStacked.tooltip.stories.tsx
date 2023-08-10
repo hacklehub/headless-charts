@@ -4,32 +4,20 @@ import { Meta, StoryObj } from '@storybook/react';
 import BarChartStacked from '.';
 import data from './sample.json';
 
-export default {
-  title: 'Linear/BarChartStacked/Intro',
+const meta: Meta<typeof BarChartStacked> = {
+  title: 'Linear/BarChartStacked/Tooltips',
   component: BarChartStacked,
   tags: ['autodocs'],
-} as Meta;
+};
+
+export default meta;
 
 type Story = StoryObj<typeof BarChartStacked>;
 
-export const Default: Story = {
+export const Tooltip: Story = {
   args: {
     data,
-    id: 'bar-chart-stacked-default',
-    x: [
-      {
-        key: 'reading',
-      },
-      { key: 'value' },
-    ],
-    y: { key: 'name' },
-  },
-};
-
-export const Styled: Story = {
-  args: {
-    ...Default.args,
-    id: 'bar-chart-stacked-styled',
+    id: 'tooltip',
     className: 'bg-gray-100 rounded',
     padding: {
       top: 20,
@@ -52,26 +40,28 @@ export const Styled: Story = {
       { key: 'value', className: 'fill-purple-400' },
     ],
     y: { key: 'name', className: 'text-red-500' },
-  },
-};
-
-export const WithDrawing: Story = {
-  args: {
-    ...Styled.args,
-    id: 'bar-chart-stacked-drawing',
-    drawing: {
-      duration: 1000,
+    tooltip: {
+      className: 'bg-gray-800 text-white p-2 rounded',
+      keys: ['name', 'reading', 'value'],
     },
   },
 };
 
-export const WithDrawingDelay: Story = {
+export const TooltipCustomHtml: Story = {
   args: {
-    ...Styled.args,
-    id: 'bar-chart-stacked-drawing-delay',
-    drawing: {
-      duration: 1000,
-      delay: 100,
+    ...Tooltip.args,
+    id: 'bar-chart-custom-tooltip',
+    tooltip: {
+      className: 'bg-gray-800 text-white p-2 rounded',
+      html: (d: any) => {
+        return `
+            <div class="flex flex-col">
+              <div class="text-lg text-center">${d.name}</div>
+              <div class="text-sm text-center">${d.reading}</div>
+              <div class="text-sm text-center">${d.value}</div>
+            </div>
+          `;
+      },
     },
   },
 };
