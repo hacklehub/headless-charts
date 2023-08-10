@@ -40,6 +40,7 @@ interface LineChartProps {
     axisLabelPosition?: 'right' | 'bottom';
     start?: object | number;
     end?: object | number;
+    format?: string;
   };
   y: Array<{
     key: string;
@@ -60,6 +61,7 @@ interface LineChartProps {
       | 'diamond';
     size?: number;
     unknown?: any;
+    circleFill?: boolean;
   }>;
   tooltip?: {
     keys?: Array<string>;

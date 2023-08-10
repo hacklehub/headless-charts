@@ -158,6 +158,7 @@ export const WithTimeSeriesForLineChart: Story = {
     x: {
       key: 'date',
       scalingFunction: 'time',
+      format: 'yyyy-MM-dd hh:mm:ss',
       axisLabel: 'Date',
     },
     y: [
@@ -166,6 +167,7 @@ export const WithTimeSeriesForLineChart: Story = {
         axis: 'left',
         className: 'text-red-200 dark:text-red-700 stroke-current',
         curve: 'rounded',
+        circleFill: true,
       },
       {
         key: 'reading',
