@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Product A",
+    "value2": 6,
+    "value3": 7,
+    "value4": 8
+  },
+  {
+    "name": "Product B",
+    "value2": 4,
+    "value3": 6,
+    "value4": 8
+  },
+  {
+    "name": "Product C",
+    "value2": 1,
+    "value3": 2,
+    "value4": 3
+  }
+]
