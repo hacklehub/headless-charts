@@ -2,6 +2,7 @@
 import { arc, pie } from 'd3';
 import { useCallback, useEffect } from 'react';
 
+import { deepValue } from '../../../utils/deepValue';
 import { defaultChartClassNames } from '../../../utils';
 import { interpolate } from 'd3-interpolate';
 import { mergeTailwindClasses } from '../../../utils';
@@ -150,7 +151,9 @@ const PieChart = ({
       .selectAll('path')
       .data(arcs)
       .join('path')
-      .attr('id', (d) => d.data[nameKey])
+      // d.data[nameKey]
+      //@ts-ignore
+      .attr('id', (d) => deepValue(d.data, nameKey))
       .attr('data-testid', (d) => d.data[nameKey])
       .attr('class', (d: any) =>
         mergeTailwindClasses('fill-black', classNameMap[d.data[nameKey]])
