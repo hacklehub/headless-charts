@@ -151,10 +151,10 @@ const PieChart = ({
       .selectAll('path')
       .data(arcs)
       .join('path')
-      // d.data[nameKey]
-      //@ts-ignore
+      // @ts-ignore
       .attr('id', (d) => deepValue(d.data, nameKey))
-      .attr('data-testid', (d) => d.data[nameKey])
+      // @ts-ignore
+      .attr('data-testid', (d) => deepValue(d.data, nameKey))
       .attr('class', (d: any) =>
         mergeTailwindClasses('fill-black', classNameMap[d.data[nameKey]])
       )
@@ -203,8 +203,9 @@ const PieChart = ({
             `fill-current`
           )
         )
+        // @ts-ignore
         .text((d: { data: DataItem }) =>
-          labels.text ? labels.text(d.data) : d.data[nameKey]
+          labels.text ? labels.text(d.data) : deepValue(d.data, nameKey)
         );
   }, [
     id,
