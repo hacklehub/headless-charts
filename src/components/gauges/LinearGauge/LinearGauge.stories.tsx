@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { useCallback, useEffect, useState } from 'react';
+
 import LinearGauge from '.';
 import { Meta } from '@storybook/react';
 
@@ -9,6 +12,8 @@ export default {
   component: LinearGauge,
   tags: ['autodocs'],
 } as Meta;
+
+const data = 0.47;
 
 /**
  * Linear gauges are quite easy to implement. By default, data is a fraction.
@@ -26,7 +31,6 @@ export const Default = {
  * Linear gauges can be styled with different className props
  */
 
-
 export const Styled = {
   args: {
     ...Default.args,
@@ -35,7 +39,7 @@ export const Styled = {
     classNameGauge: 'fill-green-800 stroke-green-800',
     classNameGaugeBg: 'fill-green-200 stroke-green-200',
   },
-}
+};
 /**
  * You can customize how slowly you can draw the gauge.
  */
@@ -92,3 +96,34 @@ export const ToolTipWithCustomHtml = {
   },
 };
 
+export const LinearGaugeChartRace = () => {
+  const [linearGaugeData, setLinearGaugeData] = useState(data);
+
+  const refreshData = useCallback(() => {
+    setLinearGaugeData((prevData) =>
+      // @ts-ignore
+      prevData.map((d) => d + Math.random() * 1000)
+    );
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(refreshData, 1000);
+    return () => clearInterval(interval);
+  }, [refreshData]);
+
+  return (
+    <div>
+      <LinearGauge
+        id='linear-gauge-chart-detailed'
+        data={linearGaugeData}
+        // valueKey='USA'
+        nameKey='name'
+        tooltip={{}}
+        drawing={{
+          duration: 800,
+        }}
+        label={''}
+      />
+    </div>
+  );
+};

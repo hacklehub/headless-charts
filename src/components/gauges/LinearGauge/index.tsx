@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ValueFn, pointer, select, selectAll } from 'd3';
 
+import { interpolate } from 'd3-interpolate';
 import { mergeTailwindClasses } from '../../../utils';
 import { scaleLinear } from 'd3';
 
@@ -31,6 +32,9 @@ interface LinearGaugeProps {
   };
   classNameGauge?: string;
   classNameGaugeBg?: string;
+  startAngle?: number;
+  nameKey: string;
+  // endAngle?: number;
 }
 
 const LinearGauge = ({
@@ -51,7 +55,10 @@ const LinearGauge = ({
   tooltip = undefined,
   classNameGauge = '',
   classNameGaugeBg = '',
-}: LinearGaugeProps) => {
+  startAngle = 0,
+  nameKey = 'name',
+}: // endAngle = 360 + startAngle,
+LinearGaugeProps) => {
   const setup = React.useCallback(() => {
     const svg = select(`#${id}`);
 
@@ -178,20 +185,49 @@ const LinearGauge = ({
     tooltip,
   ]);
 
+  const previousArcs = useRef<any[]>([]);
+
   const refreshChart = React.useCallback(() => {
     const svg = select(`#${id}`);
     const width = +svg.style('width').split('px')[0];
     /* eslint-disable */
 
-    /* eslint-enable */
     const xFn = scaleLinear()
       .domain([0, max])
       .range([margin.left || 0, width - (margin.right || 0)]);
 
     select('.data-rect')
       .transition()
-      .duration(drawing.duration)
-      .attr('width', xFn(data) - xFn(0));
+      .duration(drawing?.duration || 0)
+      .attr('width', xFn(data) - xFn(0))
+      .attrTween('d', function (d) {
+        const previousArc = previousArcs.current.find(
+          // @ts-ignore
+          (a) => a.data[nameKey] === d.data[nameKey]
+        );
+
+        const i = interpolate(
+          {
+            startAngle: previousArc?.startAngle || (startAngle / 180) * Math.PI,
+            endAngle: previousArc?.endAngle || (startAngle / 180) * Math.PI,
+          },
+          // @ts-ignore
+          d
+        );
+
+        // @ts-ignore
+        return (t) => arcFn(i(t));
+      });
+
+    const timeOut = setTimeout(() => {
+      // @ts-ignore
+      previousArcs.current = arcs;
+    }, drawing?.duration);
+
+    /* eslint-enable */
+    return () => {
+      clearTimeout(timeOut);
+    };
   }, [data, drawing, id, margin, max]);
 
   useEffect(() => {
