@@ -100,9 +100,10 @@ export const LinearGaugeChartRace = () => {
   const [linearGaugeData, setLinearGaugeData] = useState(data);
 
   const refreshData = useCallback(() => {
-    setLinearGaugeData((prevData) =>
-      // @ts-ignore
-      prevData.map((d) => d + Math.random() * 1000)
+    setLinearGaugeData(
+      (prevData) =>
+        // @ts-ignore
+        prevData + Math.random() * 1000
     );
   }, []);
 
@@ -116,7 +117,6 @@ export const LinearGaugeChartRace = () => {
       <LinearGauge
         id='linear-gauge-chart-detailed'
         data={linearGaugeData}
-        // valueKey='USA'
         nameKey='name'
         tooltip={{}}
         drawing={{
