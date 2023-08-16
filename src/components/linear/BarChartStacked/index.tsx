@@ -5,6 +5,7 @@ import { scaleBand, scaleLinear } from 'd3-scale';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect } from 'react';
 
+import { deepValue } from '../../../utils/deepValue';
 import { defaultChartClassNames } from '../../../utils';
 import { format } from 'd3-format';
 import { mergeTailwindClasses } from '../../../utils';
@@ -159,7 +160,8 @@ const BarChartStacked = ({
         )
         .style('z-index', 10 + i)
         .attr('width', (d) =>
-          drawing?.duration ? 0 : xFn(d[column.key] || 0) - xFn(0)
+          // @ts-ignore
+          drawing?.duration ? 0 : xFn(deepValue(d, column.key) || 0) - xFn(0)
         )
         .attr(
           'height',
@@ -186,9 +188,12 @@ const BarChartStacked = ({
                       ? // @ts-ignore
                         formatMapping[tickFormat]
                         ? // @ts-ignore
-                          format(formatMapping[tickFormat])(d[column.key])
+                          format(formatMapping[tickFormat])(
+                            // @ts-ignore
+                            deepValue(d, column.key)
+                          )
                         : format(tickFormat)
-                      : d[column.key]
+                      : deepValue(d, column.key)
                   }`
             );
           }
@@ -229,8 +234,11 @@ const BarChartStacked = ({
           .data(data)
           .enter()
           .append('text')
+          // @ts-ignore
           .text((d) =>
-            dataLabel.text ? dataLabel.text(d, column) : d[column.key]
+            dataLabel.text
+              ? dataLabel.text(d, column)
+              : deepValue(d, column.key)
           )
           .attr('class', 'fill-current')
           .attr('text-anchor', direction === 'left' ? 'start' : 'end')
