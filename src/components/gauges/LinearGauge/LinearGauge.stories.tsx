@@ -1,6 +1,6 @@
 import LinearGauge from '.';
 import { Meta } from '@storybook/react';
-
+import React from 'react';
 /**
  * Linear Gauges are simple UI elements that display a single value on a linear scale.
  */
@@ -26,7 +26,6 @@ export const Default = {
  * Linear gauges can be styled with different className props
  */
 
-
 export const Styled = {
   args: {
     ...Default.args,
@@ -35,7 +34,7 @@ export const Styled = {
     classNameGauge: 'fill-green-800 stroke-green-800',
     classNameGaugeBg: 'fill-green-200 stroke-green-200',
   },
-}
+};
 /**
  * You can customize how slowly you can draw the gauge.
  */
@@ -92,3 +91,21 @@ export const ToolTipWithCustomHtml = {
   },
 };
 
+export const UpdatingData = () => {
+  const [data, setData] = React.useState(0);
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setData(Math.random());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+  return (
+    <>
+      <LinearGauge
+        id='linear-gauge-updating-data'
+        label='Linear Gauge Graph With Updating Data'
+        data={data}
+      />
+    </>
+  );
+};
