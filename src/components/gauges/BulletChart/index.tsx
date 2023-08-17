@@ -1,6 +1,6 @@
+import React, { useRef } from 'react';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 
-import React from 'react';
 import { axisBottom } from 'd3-axis';
 import { scaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
@@ -56,6 +56,7 @@ const BulletChart = ({
   axisHeight = 20,
   height = 50,
 }: BulletChartProps) => {
+  const previousData = useRef(0);
   const refreshData = React.useCallback(() => {
     const svg = select(`#${id}`);
 
@@ -142,7 +143,7 @@ const BulletChart = ({
       .attr('height', height - axisHeight - margin.top * 2)
       .transition()
       .duration(1000)
-      .attr('width', xFn(data));
+      .attr('width', xFn(data) - xFn(previousData.current));
 
     const xAxisG = g.append('g').attr('class', 'axis--x axis ');
 
@@ -151,6 +152,8 @@ const BulletChart = ({
     xAxisG
       .attr('transform', `translate(${margin.left}, ${height - axisHeight})`)
       .call(xAxis);
+
+    previousData.current = data;
   }, [
     axisHeight,
     base,
