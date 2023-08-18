@@ -184,12 +184,16 @@ const SpeedometerChart = ({
 
   const refreshChart = useCallback(() => {
     select<SVGElement, number>('.data-group')
-      .data([data-previousAngle.current])
+      .data([data - previousAngle.current])
       .transition()
       .duration(1000)
       .attr('transform', (d) => {
         return `rotate(${
-          ((d / maxValue) * (MAX_ANGLE - MIN_ANGLE) * 180) / PI
+          ((d / maxValue) * (MAX_ANGLE - MIN_ANGLE) * 180) / PI -
+            ((previousAngle.current / maxValue) *
+              (MAX_ANGLE - MIN_ANGLE) *
+              180) /
+              PI || 0
         })`;
       });
   }, [data, max]);
