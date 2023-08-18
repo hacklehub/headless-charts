@@ -139,11 +139,11 @@ const BulletChart = ({
       )
       .attr('x', xFn(min))
       .attr('y', margin.top)
-      .attr('width', 0)
+      .attr('width',  xFn(previousData.current) - xFn(min))
       .attr('height', height - axisHeight - margin.top * 2)
       .transition()
       .duration(1000)
-      .attr('width', xFn(data) - xFn(previousData.current));
+      .attr('width', xFn(data) - xFn(min));
 
     const xAxisG = g.append('g').attr('class', 'axis--x axis ');
 
