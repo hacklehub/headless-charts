@@ -2,7 +2,7 @@
 import { Arc, SymbolType, arc, symbol, symbolTriangle } from 'd3';
 import { ScaleLinear, scaleLinear } from 'd3-scale';
 import { select, selectAll } from 'd3-selection';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { Axis } from 'd3-axis';
 import { defaultChartClassNames } from '../../../utils';
@@ -53,6 +53,7 @@ const SpeedometerChart = ({
   const PI = Math.PI;
   const MIN_ANGLE = -PI / 2;
   const MAX_ANGLE = PI / 2;
+  const previousAngle = useRef(0.25);
   const maxValue = max(regions.map((region) => region.limit)) || 1;
 
   regions.sort((a, b) => b.limit - a.limit);
@@ -183,7 +184,7 @@ const SpeedometerChart = ({
 
   const refreshChart = useCallback(() => {
     select<SVGElement, number>('.data-group')
-      .data([data])
+      .data([data-previousAngle.current])
       .transition()
       .duration(1000)
       .attr('transform', (d) => {
