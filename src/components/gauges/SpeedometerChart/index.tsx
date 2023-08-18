@@ -189,11 +189,8 @@ const SpeedometerChart = ({
       .duration(1000)
       .attr('transform', (d) => {
         return `rotate(${
-          ((d / maxValue) * (MAX_ANGLE - MIN_ANGLE) * 180) / PI -
-            ((previousAngle.current / maxValue) *
-              (MAX_ANGLE - MIN_ANGLE) *
-              180) /
-              PI || 0
+          ((previousAngle.current / maxValue) * (MAX_ANGLE - MIN_ANGLE) * 180) /
+            PI || 0 - ((d / maxValue) * (MAX_ANGLE - MIN_ANGLE) * 180) / PI
         })`;
       });
   }, [data, max]);
