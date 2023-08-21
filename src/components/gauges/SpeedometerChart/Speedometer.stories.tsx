@@ -1,4 +1,5 @@
 import { Meta } from '@storybook/react';
+import React from 'react';
 import SpeedometerChart from '.';
 
 export default {
@@ -58,4 +59,21 @@ export const WithRegions = {
   },
 };
 
-
+export const UpdatingData = () => {
+  const [data, setData] = React.useState(0);
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setData(Math.random() * 50);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+  return (
+    <>
+      <SpeedometerChart
+        id='speedometer-chart-updating-data'
+        label={{ text: 'Coverage' }}
+        data={data}
+      />
+    </>
+  );
+};
