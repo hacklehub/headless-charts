@@ -63,7 +63,7 @@ export const UpdatingData = () => {
   const [data, setData] = React.useState(0);
   React.useEffect(() => {
     const interval = setInterval(() => {
-      setData(Math.random() * 50);
+      setData(Math.random());
     }, 1000);
     return () => clearInterval(interval);
   }, []);
