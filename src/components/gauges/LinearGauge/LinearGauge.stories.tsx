@@ -2,6 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import LinearGauge from '.';
 
+
 /**
  * Linear Gauges are simple UI elements that display a single value on a linear scale.
  */
@@ -29,6 +30,7 @@ export const Default: Story = {
 /**
  * Linear gauges can be styled with different className props
  */
+
 
 export const Styled: Story = {
   args: {
@@ -71,3 +73,33 @@ export const Error: Story = {
 /**
  * You can also customize the tooltip with the html parameter
  */
+
+export const ToolTipWithCustomHtml = {
+  args: {
+    ...ToolTip.args,
+    id: 'linear-gauge-with-tooltip-custom-html',
+    error: { data: 2 },
+    tooltip: {
+      html: `<div class='bg-gray-800 text-white p-2 rounded'>67% with 2% error</div>`,
+    },
+  },
+};
+
+export const UpdatingData = () => {
+  const [data, setData] = React.useState(0);
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setData(Math.random());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+  return (
+    <>
+      <LinearGauge
+        id='linear-gauge-updating-data'
+        label='Linear Gauge Graph With Updating Data'
+        data={data}
+      />
+    </>
+  );
+};

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ValueFn, pointer, select, selectAll } from 'd3';
 
@@ -52,6 +52,8 @@ const LinearGauge = ({
   classNameGauge = '',
   classNameGaugeBg = '',
 }: LinearGaugeProps) => {
+  const previousData = useRef(0);
+
   const setup = React.useCallback(() => {
     const svg = select(`#${id}`);
 
@@ -125,7 +127,7 @@ const LinearGauge = ({
       )
       .attr('x', margin.left || 0)
       .attr('y', height - (margin.bottom || 0) - gaugeHeight)
-      .attr('width', 0)
+      .attr('width', xFn(previousData.current) - xFn(0))
       .attr('height', gaugeHeight)
       .attr('ry', gaugeHeight / 2)
       .transition()
@@ -164,6 +166,8 @@ const LinearGauge = ({
         'class',
         mergeTailwindClasses('tooltip ', tooltip && tooltip.className)
       );
+
+    previousData.current = data;
   }, [
     classNameGauge,
     classNameGaugeBg,

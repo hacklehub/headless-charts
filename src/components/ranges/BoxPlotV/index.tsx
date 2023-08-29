@@ -2,13 +2,14 @@ import { ZoomTransform, zoom } from 'd3-zoom';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, min } from 'd3-array';
-import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
+import { select, selectAll } from 'd3-selection';
 
 import { ChartProps } from '../../../types';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { transition } from 'd3-transition';
+import useTooltip from '../../../hooks/useTooltip';
 
 export interface BoxPlotVProps extends ChartProps {
   classNameData?: string;
@@ -61,6 +62,15 @@ const BoxPlotV = ({
     enabled: false,
   },
 }: BoxPlotVProps) => {
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
+    tooltip,
+    defaultHtml: (d: any) =>
+      `min: ${d[y.minKey].toFixed(0)} <br/> range: ${+d[y.boxStart].toFixed(
+        0
+      )} to ${+d[y.boxEnd].toFixed(0)} <br/> mid: ${d[y.midKey].toFixed(
+        0
+      )} <br/> max: ${d[y.maxKey].toFixed(0)} `,
+  });
   const refreshChart = React.useCallback(() => {
     const svg = select(`#${id}`);
     svg.selectAll('*').remove();
@@ -107,29 +117,9 @@ const BoxPlotV = ({
       .data(data)
       .enter()
       .append('g')
-      .on('mouseenter', function (event, d: any) {
-        if (tooltip) {
-          tooltipDiv.style('opacity', 1);
-          const [bX, bY] = pointer(event, select('body'));
-          tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-          tooltipDiv.html(
-            tooltip?.html
-              ? tooltip.html(d)
-              : `min: ${d[y.minKey].toFixed(0)} <br/> range: ${+d[
-                  y.boxStart
-                ].toFixed(0)} to ${+d[y.boxEnd].toFixed(0)} <br/> mid: ${d[
-                  y.midKey
-                ].toFixed(0)} <br/> max: ${d[y.maxKey].toFixed(0)} `
-          );
-        }
-      })
-      .on('mouseleave', function () {
-        tooltip &&
-          tooltipDiv
-            .style('opacity', '0')
-            .style('left', `0px`)
-            .style('top', `0px`);
-      });
+      .on('mouseenter', onMouseOver)
+      .on('mousemove', onMouseMove)
+      .on('mouseleave', onMouseLeave);
 
     transition();
 
@@ -208,13 +198,6 @@ const BoxPlotV = ({
       .attr('y', (d: any) => yFn(d[y.boxEnd]))
       .attr('height', (d: any) => yFn(d[y.boxStart]) - yFn(d[y.boxEnd]));
 
-    const tooltipDiv = select('body')
-      .append('div')
-      .attr('id', 'tooltip')
-      .style('position', 'absolute')
-      .style('opacity', '0')
-      .attr('class', `tooltip ${(tooltip && tooltip.className) || ''}`);
-
     const yAxis = y.axis === 'right' ? axisRight(yFn) : axisLeft(yFn);
 
     const yAxisG = g
@@ -259,7 +242,19 @@ const BoxPlotV = ({
 
       svg.call(zoomFn);
     }
-  }, [classNameData, data, id, margin, padding, tooltip, x, y, zooming]);
+  }, [
+    classNameData,
+    data,
+    id,
+    margin,
+    padding,
+    x,
+    y,
+    zooming,
+    onMouseLeave,
+    onMouseMove,
+    onMouseOver,
+  ]);
 
   React.useEffect(() => {
     refreshChart();
