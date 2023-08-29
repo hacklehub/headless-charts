@@ -1,13 +1,16 @@
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
+
 import SpeedometerChart from '.';
 
 export default {
-  title: 'Gauge/Speedometer',
+  title: 'Gauge/Speedometer/Intro',
   component: SpeedometerChart,
   tags: ['autodocs'],
 } as Meta;
 
-export const Default = {
+type Story = StoryObj<typeof SpeedometerChart>;
+
+export const Default: Story = {
   args: {
     data: 0.7,
     label: {
@@ -17,7 +20,7 @@ export const Default = {
   },
 };
 
-export const WithRadius = {
+export const WithRadius: Story = {
   args: {
     ...Default.args,
     id: 'speedometer-with-radius',
@@ -25,37 +28,11 @@ export const WithRadius = {
   },
 };
 
-export const WithAxisTicks = {
+export const WithAxisTicks: Story = {
   args: {
     ...Default.args,
     id: 'speedometer-with-axis-ticks',
     axisTicks: 10,
   },
 };
-
-export const WithRegions = {
-  args: {
-    ...Default.args,
-    id: 'speedometer-with-regions',
-    regions: [
-      {
-        limit: 0.5,
-        className: 'fill-red-500',
-      },
-      {
-        limit: 0.8,
-        className: 'fill-yellow-500',
-      },
-      {
-        limit: 0.9,
-        className: 'fill-green-500',
-      },
-      {
-        limit: 1,
-        className: 'fill-blue-500',
-      },
-    ],
-  },
-};
-
 

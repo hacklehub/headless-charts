@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Target 1",
+    "score": 75,
+    "target": 90,
+    "className": "fill-purple-700"
+  },
+  {
+    "name": "Target 2",
+    "score": 75,
+    "target": 80,
+    "className": "fill-purple-400"
+  },
+  {
+    "name": "Target 3",
+    "score": 70,
+    "target": 55,
+    "className": "fill-green-500"
+  }
+]

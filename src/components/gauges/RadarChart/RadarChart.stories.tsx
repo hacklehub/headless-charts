@@ -1,4 +1,5 @@
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
+
 import RadarChart from '.';
 import data from './sample.json';
 
@@ -8,12 +9,14 @@ import data from './sample.json';
  * Radar charts are also useful for seeing which variables are scoring high or low within a dataset, making them ideal for displaying performance.
  */
 export default {
-  title: 'Gauge/RadarChart',
+  title: 'Gauge/RadarChart/Intro',
   component: RadarChart,
   tags: ['autodocs'],
 } as Meta;
 
-export const Default = {
+type Story = StoryObj<typeof RadarChart>;
+
+export const Default: Story = {
   args: {
     id: 'radar-chart',
     data,
@@ -32,7 +35,7 @@ export const Default = {
   },
 };
 
-export const Styled = {
+export const Styled: Story = {
   args: {
     ...Default.args,
     id: 'radar-chart-styled',
@@ -43,7 +46,7 @@ export const Styled = {
   },
 };
 
-export const Drawing = {
+export const Drawing: Story = {
   args: {
     ...Styled.args,
     id: 'radar-chart-drawing',

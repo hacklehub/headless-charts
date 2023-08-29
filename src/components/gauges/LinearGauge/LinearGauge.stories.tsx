@@ -1,11 +1,13 @@
+import { Meta, StoryObj } from '@storybook/react';
+
 import LinearGauge from '.';
-import { Meta } from '@storybook/react';
-import React from 'react';
+
+
 /**
  * Linear Gauges are simple UI elements that display a single value on a linear scale.
  */
 export default {
-  title: 'Gauge/LinearGauge',
+  title: 'Gauge/LinearGauge/Intro',
   component: LinearGauge,
   tags: ['autodocs'],
 } as Meta;
@@ -13,7 +15,10 @@ export default {
 /**
  * Linear gauges are quite easy to implement. By default, data is a fraction.
  */
-export const Default = {
+
+type Story = StoryObj<typeof LinearGauge>;
+
+export const Default: Story = {
   args: {
     id: 'linear-gauge-default',
     className: 'h-12',
@@ -26,7 +31,8 @@ export const Default = {
  * Linear gauges can be styled with different className props
  */
 
-export const Styled = {
+
+export const Styled: Story = {
   args: {
     ...Default.args,
     id: 'linear-gauge-styled',
@@ -38,7 +44,7 @@ export const Styled = {
 /**
  * You can customize how slowly you can draw the gauge.
  */
-export const Drawing = {
+export const Drawing: Story = {
   args: {
     ...Default.args,
     id: 'linear-gauge-drawing',
@@ -50,7 +56,7 @@ export const Drawing = {
 /**
  * You can also setup a LinearGauge with an error value. This is useful if we need to show an error value as well as the data.
  */
-export const Error = {
+export const Error: Story = {
   args: {
     id: 'linear-gauge-with-error',
     label: 'Linear Gauge With Error',
@@ -63,23 +69,11 @@ export const Error = {
 /**
  * You can also customize the tooltip html
  */
-export const ToolTip = {
-  args: {
-    id: 'linear-gauge-with-tooltip',
-    className: '',
-    label: 'Linear Gauge Graph With Tooltip',
-    data: 67,
-    max: 100,
-    drawing: { duration: 2000 },
-    tooltip: {
-      className: 'bg-gray-800 text-white p-2 rounded',
-    },
-  },
-};
 
 /**
  * You can also customize the tooltip with the html parameter
  */
+
 export const ToolTipWithCustomHtml = {
   args: {
     ...ToolTip.args,
