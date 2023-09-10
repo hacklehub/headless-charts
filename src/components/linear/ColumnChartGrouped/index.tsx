@@ -4,7 +4,7 @@ import { max, min } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 
 interface DataItem {
   [key: string]: number | string;
@@ -80,8 +80,6 @@ const ColumnChartGrouped = ({
   tooltip,
   referenceLines = [],
 }: ColumnChartGroupedProps) => {
-  const previousData = useRef<any[]>([]);
-
   const refreshChart = useCallback(() => {
     /* eslint-disable */
     const svg = select(`#${id}`);
@@ -122,8 +120,6 @@ const ColumnChartGrouped = ({
     y.map((column, i) => {
       const barsG = g.append('g');
 
-      console.log(previousData.current, 'current data');
-
       const bars = barsG
         .selectAll('g')
         .data(data)
@@ -146,8 +142,6 @@ const ColumnChartGrouped = ({
           (d) =>
             // @ts-ignore
             drawing && drawing.duration ? yFn(0) : yFn(d[column.key])
-          // @ts-ignore
-          // previousData.current.find((a) => yFn(a.data[column.key]) === yFn(d[column.key]) )
         )
         .attr('width', xFn.bandwidth() / y.length)
         .attr('height', (d) =>
@@ -155,11 +149,6 @@ const ColumnChartGrouped = ({
             ? 0
             : d[column.key]
             ? // @ts-ignore
-              // previousData.current.find(
-              //   (a) =>
-              //     // @ts-ignore
-              //     yFn(a.data[column.key]) ===  height - margin.bottom - padding.bottom - yFn(d[column.key])
-              // )
               height - margin.bottom - padding.bottom - yFn(d[column.key])
             : 0
         )
@@ -202,11 +191,6 @@ const ColumnChartGrouped = ({
           .attr('height', (d) =>
             Number.isFinite(d[column.key])
               ? // @ts-ignore
-                // previousData.current.find(
-                //   (a) =>
-                //   // @ts-ignore
-                //     a.d[column.key] === height - margin.bottom - padding.bottom - yFn(d[column.key])
-                // )
                 height - margin.bottom - padding.bottom - yFn(d[column.key])
               : 0
           );

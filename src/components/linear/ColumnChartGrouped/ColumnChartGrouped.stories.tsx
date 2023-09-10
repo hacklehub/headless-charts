@@ -94,23 +94,6 @@ export const WithCustomTooltip = {
   },
 };
 
-// export const DataRefreshWithDrawing = () => {
-//   const [pieData, setPieData] = useState(data);
-//   const refreshData = () => {
-//     setPieData(
-//       pieData.map((d) => ({ ...d, USA: d['USA'] + Math.random() * 1000 }))
-//     );
-//   };
-//   return (
-//     <div>
-//       <button onClick={refreshData}>Refresh</button>
-//       <ColumnChartGrouped id='column-chart-grouped' data={pieData} />
-//     </div>
-//   );
-// };
-
-// The above should be remove
-
 export const UpdatingData = () => {
   const [columnChartData, setColumnChartData] = React.useState(data);
   const updateData = () => {
@@ -127,9 +110,6 @@ export const UpdatingData = () => {
   console.log(columnChartData)
   return (
     <>
-      <a onClick={()=>{
-        updateData()
-      }}> {"Update Data"} </a>
       <ColumnChartGrouped
         id='column-chart-grouped-updating-data'
         data={columnChartData}
@@ -149,6 +129,9 @@ export const UpdatingData = () => {
         ]}
         transition={t}
       />
+      <button onClick={()=>{
+        updateData()
+      }}> Update Data </button>
     </>
   );
 };
