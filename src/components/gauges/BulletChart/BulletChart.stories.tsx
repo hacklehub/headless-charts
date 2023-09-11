@@ -2,6 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import BulletChart from '.';
+import React from 'react';
 
 const data = 85;
 
@@ -45,4 +46,27 @@ export const Styled: Story = {
     classNameThreshold: 'fill-yellow-500',
     classNameBase: 'fill-green-500',
   },
+};
+
+export const UpdatingData = () => {
+  const [data, setData] = React.useState(0);
+  console.log(data, 'initial data');
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setData(Math.random() * 50);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+  return (
+    <>
+      <BulletChart
+        id='bullet-chart-updating-data'
+        data={data}
+        base={50}
+        target={80}
+        threshold={90}
+        max={100}
+      />
+    </>
+  );
 };
