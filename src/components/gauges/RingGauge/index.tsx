@@ -1,7 +1,7 @@
 import { PieArcDatum, arc } from 'd3-shape';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { pointer, select, selectAll } from 'd3-selection';
 
@@ -75,6 +75,8 @@ const RingGauge = ({
 }: RingGaugeProps) => {
   const PI = Math.PI,
     numArcs = data.length;
+
+  const previousData = useRef<any[]>([]);
 
   const refreshChart = React.useCallback(() => {
     const svg = select(`#${id}`);
@@ -180,14 +182,24 @@ const RingGauge = ({
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       .attrTween('d', (d: any, i: number) => {
+        const previousArc = previousData?.current?.find(
+          (a) => a[dataKey] === d[dataKey]
+        );
+
         const interpolate = interpolateNumber(
-          0,
+         previousArc || 0,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           min([d[dataKey] / d[targetKey], 1])
         );
         return (t: any) => arcFn(interpolate(t), i);
       });
+
+    console.log(previousData?.current, 'current');
+
+    const timeOut = setTimeout(() => {
+      previousData.current = data;
+    }, drawing?.duration);
 
     labels &&
       g
@@ -206,6 +218,10 @@ const RingGauge = ({
             : -getInnerRadius(i) - 2
         )
         .text((d: any) => d[labelKey]);
+
+    return () => {
+      clearTimeout(timeOut);
+    };
   }, [
     PI,
     classNameGaugeBg,
