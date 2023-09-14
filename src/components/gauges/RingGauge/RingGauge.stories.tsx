@@ -45,39 +45,8 @@ export const Styled: Story = {
 
 /** With custom start and end angle */
 
-// export const UpdatingData = () => {
-//   const [ringGaugeData, setRingGaugeData] = React.useState(metrics);
-//   const updateData = () => {
-//     setRingGaugeData(
-//       ringGaugeData.map((d) => ({
-//         ...d,
-//         score: Math.random() * 1000,
-//         target: Math.random() * 1000,
-//       }))
-//     );
-//   };
 
-//   return (
-//     <>
-//       <RingGauge
-//         data={ringGaugeData}
-//         id='ring-gauge-updating-data'
-//         labelKey={'name'}
-//         targetKey={'target'}
-//         dataKey={'score'}
-//       />
-//       <button
-//         onClick={() => {
-//           updateData();
-//         }}>
-//         {' '}
-//         Update Data{' '}
-//       </button>
-//     </>
-//   );
-// };
 
-//
 export const UpdatingData = () => {
   const [ringGaugeData, setRingGaugeData] = useState(metrics);
 
@@ -85,8 +54,8 @@ export const UpdatingData = () => {
     setRingGaugeData((prevData) =>
       prevData.map((d) => ({
         ...d,
-        score: Math.random() * 1000,
-        target: Math.random() * 1000,
+        score: Math.random(),
+        target: Math.random(),
       }))
     );
   }, []);

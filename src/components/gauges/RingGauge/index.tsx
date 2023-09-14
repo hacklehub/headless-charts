@@ -183,19 +183,19 @@ const RingGauge = ({
       // @ts-ignore
       .attrTween('d', (d: any, i: number) => {
         const previousArc = previousData?.current?.find(
-          (a) => a[dataKey] === d[dataKey]
+          (a) => a['name'] === d['name']
         );
 
+        // console.log(previousArc?.[dataKey] || 0,min([d[dataKey] / d[targetKey], 1]) )
+
         const interpolate = interpolateNumber(
-         previousArc || 0,
+          previousArc?.[dataKey] || 0,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           min([d[dataKey] / d[targetKey], 1])
         );
         return (t: any) => arcFn(interpolate(t), i);
       });
-
-    console.log(previousData?.current, 'current');
 
     const timeOut = setTimeout(() => {
       previousData.current = data;
