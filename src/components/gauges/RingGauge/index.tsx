@@ -155,7 +155,12 @@ const RingGauge = ({
         const previousArc = previousData.current.find(
           (a) => a['name'] === d['name']
         );
-        return arcFn(previousArc?.[dataKey] / previousArc?.[targetKey], i);
+        return arcFn(
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          min([previousArc?.[dataKey] / previousArc?.[targetKey], 1]),
+          i
+        );
       })
       .on('mouseenter', function (_event, d) {
         tooltipDiv.attr(
@@ -195,7 +200,7 @@ const RingGauge = ({
         // Animate from previous arc to current arc
 
         const interpolate = interpolateNumber(
-          previousArc?.[dataKey] / previousArc?.[targetKey] || 0,
+          min([previousArc?.[dataKey] / previousArc?.[targetKey], 1]) || 0,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           min([d[dataKey] / d[targetKey], 1])
