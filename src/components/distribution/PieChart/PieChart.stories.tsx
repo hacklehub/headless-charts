@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Meta, StoryObj } from '@storybook/react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import PieChart from '.';
 import data from './sample.json';
 
 /**
  * Pie charts can be used to show how much each category represents as part of a whole. They are useful for showing the distribution of a dataset.
- * 
+ *
  * By default PieCharts are not styled. The following styles are passed by default
- * 
+ *
  * - all paddings = 0
  * - all margins = 40px
- * - no classNameMap or className 
+ * - no classNameMap or className
  * - padding given to each slice = 2 degrees (paddingAngle)
  * - innerRadius set to 0 (Pie and not a donut chart)
  * - cornerRadius set to 0 (no rounded corners)
@@ -34,9 +35,9 @@ const classNameMap = {
 
 /**
  * The default chart will iterate through the `data` prop and takes the `valueKey` prop as the value to be represented, and `nameKey` as the name of the category.
- * 
+ *
  * `data`, `valueKey` and `nameKey` are required props. If you do not provide them, the chart will not be drawn.
- * 
+ *
  * Note: the following chart will not be drawn in the docs because it shares the same id as the chart displayed with the Controls at the top
  * */
 export const Default: Story = {
@@ -50,7 +51,7 @@ export const Default: Story = {
 
 /**
  * However, the default chart will not be styled. You can provide a `classNameMap` prop, with a list of possible values for the `nameKey` prop.
- * 
+ *
  * In the example, nameKey = 'USA' has 3 possible values: 'Product A', 'Product B' and 'Product C'. The `classNameMap` prop takes a map of the possible values and the tailwind classes to be applied to each value.
  */
 export const Styled: Story = {
@@ -115,4 +116,35 @@ export const CornerRadius: Story = {
     id: 'pie-chart-corner-radius',
     cornerRadius: 5,
   },
+};
+
+export const PieChartRace = () => {
+  const [pieData, setPieData] = useState(data);
+
+  const refreshData = useCallback(() => {
+    setPieData((prevData) =>
+      prevData.map((d) => ({ ...d, USA: d['USA'] + Math.random() * 1000 }))
+    );
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(refreshData, 1000);
+    return () => clearInterval(interval);
+  }, [refreshData]);
+
+  return (
+    <div>
+      <PieChart
+        id='pie-chart-detailed'
+        data={pieData}
+        valueKey='USA'
+        nameKey='name'
+        classNameMap={classNameMap}
+        tooltip={{}}
+        drawing={{
+          duration: 800,
+        }}
+      />
+    </div>
+  );
 };
