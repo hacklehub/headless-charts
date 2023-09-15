@@ -51,8 +51,8 @@ export const UpdatingData = () => {
   const [ringGaugeData, setRingGaugeData] = useState(metrics);
 
   const refreshData = useCallback(() => {
-    setRingGaugeData((prevData) =>
-      prevData.map((d) => ({
+    setRingGaugeData((data) =>
+      data.map((d) => ({
         ...d,
         score: Math.random(),
         target: Math.random(),
@@ -61,7 +61,7 @@ export const UpdatingData = () => {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(refreshData, 1000);
+    const interval = setInterval(refreshData, 5000);
     return () => clearInterval(interval);
   }, [refreshData]);
 
