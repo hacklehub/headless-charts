@@ -54,8 +54,7 @@ export const UpdatingData = () => {
     setRingGaugeData((prevData) =>
       prevData.map((d) => ({
         ...d,
-        score: Math.random(),
-        target: Math.random(),
+        score: Math.random() * 100,
       }))
     );
   }, []);

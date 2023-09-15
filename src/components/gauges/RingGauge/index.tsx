@@ -3,11 +3,11 @@ import { PieArcDatum, arc } from 'd3-shape';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef } from 'react';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { max, min } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 
 // import { axisBottom } from 'd3-axis';
 import { interpolateNumber } from 'd3-interpolate';
-import { min } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
 import { transition } from 'd3-transition';
 
@@ -150,7 +150,13 @@ const RingGauge = ({
       .attr('class', (d: any) =>
         mergeTailwindClasses('data-arc fill-current ', d.className)
       )
-      .attr('d', '')
+      .attr('d', (d: any, i: number) => {
+        // Draw previous arc first
+        const previousArc = previousData.current.find(
+          (a) => a['name'] === d['name']
+        );
+        return arcFn(previousArc?.[dataKey] / previousArc?.[targetKey], i);
+      })
       .on('mouseenter', function (_event, d) {
         tooltipDiv.attr(
           'class',
@@ -186,10 +192,10 @@ const RingGauge = ({
           (a) => a['name'] === d['name']
         );
 
-        // console.log(previousArc?.[dataKey] || 0,min([d[dataKey] / d[targetKey], 1]) )
+        // Animate from previous arc to current arc
 
         const interpolate = interpolateNumber(
-          previousArc?.[dataKey] || 0,
+          previousArc?.[dataKey] / previousArc?.[targetKey] || 0,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           min([d[dataKey] / d[targetKey], 1])
