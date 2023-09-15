@@ -1,15 +1,35 @@
+import { BaseType, Selection } from 'd3';
 import { PieArcDatum, arc } from 'd3-shape';
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
-import { pointer, select, selectAll } from 'd3-selection';
+import { select, selectAll } from 'd3-selection';
 
-// import { axisBottom } from 'd3-axis';
 import { interpolateNumber } from 'd3-interpolate';
 import { min } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
 import { transition } from 'd3-transition';
+
+type ToolTipType = {
+  className?: string;
+  html?: (d: unknown) => string;
+};
+
+type MarginProps = {
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+type LabelProps = {
+  position?: 'top' | 'bottom';
+  className?: string;
+};
+
+type DrawingProps = {
+  duration?: number;
+  delay?: number;
+};
 
 export interface RingGaugeProps {
   id: string;
@@ -18,17 +38,9 @@ export interface RingGaugeProps {
   targetKey: string;
   dataKey: string;
   errorKey?: string;
-  labels?: {
-    position?: 'top' | 'bottom';
-    className?: string;
-  };
-  data?: any[];
-  margin?: {
-    top?: number;
-    bottom?: number;
-    left?: number;
-    right?: number;
-  };
+  labels?: LabelProps;
+  data?: Array<Record<string, number | string>>;
+  margin?: MarginProps;
   padding?: {
     arc?: number;
   };
@@ -36,22 +48,15 @@ export interface RingGaugeProps {
   startAngle?: number;
   endAngle?: number;
   cornerRadius?: number;
-  drawing?: {
-    duration?: number;
-    delay?: number;
-  };
-  tooltip?: {
-    className?: string;
-    html?: (d: any) => string;
-  };
+  drawing?: DrawingProps;
+  tooltip?: ToolTipType;
   classNameGauge?: string;
   classNameGaugeBg?: string;
 }
 
-const RingGauge = ({
+const RingGauge: React.FC<RingGaugeProps> = ({
   className,
   id,
-  labelKey,
   targetKey,
   dataKey,
   data = [],
@@ -69,42 +74,29 @@ const RingGauge = ({
   drawing = { duration: 1000, delay: 0 },
   startAngle = 0,
   endAngle = 270,
-  tooltip,
   classNameGaugeBg = '',
-  labels = { position: 'top' },
 }: RingGaugeProps) => {
-  const PI = Math.PI,
-    numArcs = data.length;
+  const PI = Math.PI;
+  const numArcs = data.length;
+  const previousData = useRef<Array<Record<string, string | number>>>([]);
 
-  const refreshChart = React.useCallback(() => {
-    const svg = select(`#${id}`);
+  const refreshChart = useCallback(() => {
+    transition();
 
+    const getInnerRadius = (index: number, arcWidth: number) =>
+      minRadius + (numArcs - (index + 1)) * (arcWidth + (padding.arc || 0));
+
+    const getOuterRadius = (index: number, arcWidth: number) =>
+      getInnerRadius(index, arcWidth) + arcWidth;
+
+    const svg = select<SVGElement, unknown>(`#${id}`);
     svg.selectAll('*').remove();
 
-    const tooltipDiv =
-      tooltip && select('#tooltip').node()
-        ? select('#tooltip')
-        : select('body')
-            .append('div')
-            .attr('id', 'tooltip')
-            .style('position', 'absolute')
-            .style('opacity', '0')
-            .attr('class', mergeTailwindClasses(tooltip?.className));
-
+    const { width, height } = getSVGDimensions(svg);
     const g = svg.append('g');
-
-    const width = +svg.style('width').split('px')[0],
-      height = +svg.style('height').split('px')[0];
-
-    const getInnerRadius = (index: number) =>
-        minRadius + (numArcs - (index + 1)) * (arcWidth + (padding.arc || 0)),
-      getOuterRadius = (index: number) => getInnerRadius(index) + arcWidth;
-
     g.attr('transform', `translate(${width / 2},${height / 2})`);
 
-    const innerWidth = width - (margin.left || 0) - (margin.right || 0),
-      innerHeight = height - (margin.top || 0) - (margin.bottom || 0),
-      chartRadius = Math.min(innerHeight, innerWidth) / 2;
+    const { chartRadius } = getRadialDimensions(width, margin, height);
 
     const scale = scaleLinear()
       .domain([0, 1])
@@ -113,11 +105,11 @@ const RingGauge = ({
     const arcWidth =
       (chartRadius - minRadius - numArcs * (padding.arc || 5)) / numArcs;
 
-    const arcFn = arc<PieArcDatum<any> | number>()
-      .innerRadius((_d: any, i: number) => getInnerRadius(i))
-      .outerRadius((_d: any, i: number) => getOuterRadius(i))
+    const arcFn = arc<PieArcDatum<unknown> | number>()
+      .innerRadius((_d, i) => getInnerRadius(i, arcWidth))
+      .outerRadius((_d, i) => getOuterRadius(i, arcWidth))
       .startAngle(((startAngle / 90) * PI) / 2)
-      .endAngle((d: any) => scale(d))
+      .endAngle((d) => scale(d))
       .cornerRadius(cornerRadius);
 
     g.append('g')
@@ -133,11 +125,9 @@ const RingGauge = ({
           classNameGaugeBg
         )
       )
-      .attr('d', function (_d, i: number) {
-        return arcFn(1, i);
+      .attr('d', function (_d, i) {
+        return arcFn(1, i) as string;
       });
-
-    transition();
 
     g.append('g')
       .attr('class', 'data')
@@ -145,97 +135,59 @@ const RingGauge = ({
       .data(data)
       .enter()
       .append('path')
-      .attr('class', (d: any) =>
-        mergeTailwindClasses('data-arc fill-current ', d.className)
+      .attr('class', (d) =>
+        mergeTailwindClasses('data-arc fill-current ', d.className?.toString())
       )
       .attr('d', '')
-      .on('mouseenter', function (_event, d) {
-        tooltipDiv.attr(
-          'class',
-          mergeTailwindClasses(tooltip?.className, 'tooltip')
-        );
-        tooltipDiv
-          .style('opacity', 1)
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          .html(
-            tooltip?.html
-              ? tooltip.html(d)
-              : `${d[labelKey]} <br/>${d[dataKey]}/${d[targetKey]}`
-          );
-      })
-      .on('mousemove', function (event) {
-        const [bX, bY] = pointer(event, select('body'));
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        tooltipDiv.style('left', `${bX + 10}px`).style('top', `${bY + 10}px`);
-      })
-      .on('mouseleave', function () {
-        tooltipDiv.style('opacity', 0);
-        tooltipDiv.html('');
-      })
       .transition()
       .duration(drawing?.duration || 1000)
       .delay(drawing?.delay || 0)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      .attrTween('d', (d: any, i: number) => {
-        const interpolate = interpolateNumber(
-          0,
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          min([d[dataKey] / d[targetKey], 1])
+      .attrTween('d', (d, i) => {
+        const previousArc = previousData?.current?.find(
+          (a) => a['name'] === d['name']
         );
-        return (t: any) => arcFn(interpolate(t), i);
+
+        const interpolateArg1: number = previousArc ? +previousArc[dataKey] : 0;
+        const factor = +d[dataKey] / +d[targetKey] || 0;
+        const interpolateArg2: number | undefined = min([factor, 1]) || 0;
+        const interpolate = interpolateNumber(
+          interpolateArg1,
+          interpolateArg2
+        );
+        return (t: number) => arcFn(interpolate(t), i) as string;
       });
 
-    labels &&
-      g
-        .append('g')
-        .attr('class', 'labels')
-        .selectAll('.labels')
-        .data(data)
-        .enter()
-        .append('text')
-        .attr('text-anchor', 'end')
-        .attr('class', `fill-current text-xs ${labels.className || ''}`)
-        .attr('x', -5)
-        .attr('y', (_d, i) =>
-          labels?.position === 'bottom'
-            ? getInnerRadius(i) + arcWidth - 1
-            : -getInnerRadius(i) - 2
-        )
-        .text((d: any) => d[labelKey]);
+    const timeOut = setTimeout(() => {
+      previousData.current = data;
+    }, drawing?.duration || 0);
+
+    return () => {
+      clearTimeout(timeOut);
+    };
   }, [
-    PI,
-    classNameGaugeBg,
-    data,
-    dataKey,
-    drawing?.delay,
-    drawing?.duration,
-    endAngle,
     id,
-    labelKey,
-    labels,
-    margin.bottom,
-    margin.left,
-    margin.right,
-    margin.top,
+    margin,
+    endAngle,
+    PI,
     minRadius,
     numArcs,
     padding.arc,
     startAngle,
     cornerRadius,
+    data,
+    classNameGaugeBg,
+    drawing,
+    dataKey,
     targetKey,
-    tooltip,
   ]);
 
   useEffect(() => {
     refreshChart();
     return () => {
-      selectAll('#tooltip').remove();
+      selectAll<SVGElement, unknown>('#tooltip').remove();
     };
   }, [data, refreshChart]);
+
   return (
     <svg
       id={id}
@@ -245,3 +197,29 @@ const RingGauge = ({
 };
 
 export default RingGauge;
+
+function getRadialDimensions(
+  width: number,
+  margin: MarginProps,
+  height: number
+) {
+  const innerWidth = width - (margin.left || 0) - (margin.right || 0);
+  const innerHeight = height - (margin.top || 0) - (margin.bottom || 0);
+  const chartRadius = Math.min(innerHeight, innerWidth) / 2;
+  return { innerWidth, innerHeight, chartRadius };
+}
+
+function getSVGDimensions(
+  svg: Selection<BaseType, unknown, HTMLElement, unknown>
+) {
+  if (svg.empty()) {
+    return { width: 0, height: 0 };
+  }
+
+  const svgElement = svg.node() as SVGElement;
+  const svgStyle = getComputedStyle(svgElement);
+  const width = parseInt(svgStyle.width, 10) || 0;
+  const height = parseInt(svgStyle.height, 10) || 0;
+
+  return { width, height };
+}

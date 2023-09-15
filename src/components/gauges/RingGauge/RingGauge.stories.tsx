@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Meta, StoryObj } from '@storybook/react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useCallback, useEffect, useState } from 'react';
 
 import RingGauge from '.';
-import metrics from "./sample.json";
+import metrics from './sample.json';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -44,3 +45,38 @@ export const Styled: Story = {
 
 /** With custom start and end angle */
 
+
+
+export const UpdatingData = () => {
+  const [ringGaugeData, setRingGaugeData] = useState(metrics);
+
+  const refreshData = useCallback(() => {
+    setRingGaugeData((data) =>
+      data.map((d) => ({
+        ...d,
+        score: Math.random(),
+        target: Math.random(),
+      }))
+    );
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(refreshData, 5000);
+    return () => clearInterval(interval);
+  }, [refreshData]);
+
+  return (
+    <div>
+      <RingGauge
+        data={ringGaugeData}
+        id='ring-gauge-updating-data'
+        labelKey={'name'}
+        targetKey={'target'}
+        dataKey={'score'}
+        drawing={{
+          duration:800
+        }}
+      />
+    </div>
+  );
+};
