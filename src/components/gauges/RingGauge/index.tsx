@@ -1,13 +1,13 @@
 import { PieArcDatum, arc } from 'd3-shape';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { max, min } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 
 // import { axisBottom } from 'd3-axis';
 import { interpolateNumber } from 'd3-interpolate';
-import { min } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
 import { transition } from 'd3-transition';
 
@@ -75,6 +75,8 @@ const RingGauge = ({
 }: RingGaugeProps) => {
   const PI = Math.PI,
     numArcs = data.length;
+
+  const previousData = useRef<any[]>([]);
 
   const refreshChart = React.useCallback(() => {
     const svg = select(`#${id}`);
@@ -148,7 +150,18 @@ const RingGauge = ({
       .attr('class', (d: any) =>
         mergeTailwindClasses('data-arc fill-current ', d.className)
       )
-      .attr('d', '')
+      .attr('d', (d: any, i: number) => {
+        // Draw previous arc first
+        const previousArc = previousData.current.find(
+          (a) => a['name'] === d['name']
+        );
+        return arcFn(
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          min([previousArc?.[dataKey] / previousArc?.[targetKey], 1]),
+          i
+        );
+      })
       .on('mouseenter', function (_event, d) {
         tooltipDiv.attr(
           'class',
@@ -180,14 +193,24 @@ const RingGauge = ({
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       .attrTween('d', (d: any, i: number) => {
+        const previousArc = previousData?.current?.find(
+          (a) => a['name'] === d['name']
+        );
+
+        // Animate from previous arc to current arc
+
         const interpolate = interpolateNumber(
-          0,
+          min([previousArc?.[dataKey] / previousArc?.[targetKey], 1]) || 0,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           min([d[dataKey] / d[targetKey], 1])
         );
         return (t: any) => arcFn(interpolate(t), i);
       });
+
+    const timeOut = setTimeout(() => {
+      previousData.current = data;
+    }, drawing?.duration);
 
     labels &&
       g
@@ -206,6 +229,10 @@ const RingGauge = ({
             : -getInnerRadius(i) - 2
         )
         .text((d: any) => d[labelKey]);
+
+    return () => {
+      clearTimeout(timeOut);
+    };
   }, [
     PI,
     classNameGaugeBg,
