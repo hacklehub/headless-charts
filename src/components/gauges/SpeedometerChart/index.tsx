@@ -2,7 +2,7 @@
 import { Arc, SymbolType, arc, symbol, symbolTriangle } from 'd3';
 import { ScaleLinear, scaleLinear } from 'd3-scale';
 import { select, selectAll } from 'd3-selection';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { Axis } from 'd3-axis';
 import { defaultChartClassNames } from '../../../utils';
@@ -55,6 +55,7 @@ const SpeedometerChart = ({
   const MAX_ANGLE = PI / 2;
   const maxValue = max(regions.map((region) => region.limit)) || 1;
 
+  const previousData = useRef(0);
   regions.sort((a, b) => b.limit - a.limit);
 
   const setup = useCallback(() => {
@@ -181,16 +182,18 @@ const SpeedometerChart = ({
     g.call(xAxis);
   }, [id, margin, needleRadius]);
 
+  const currentAngle = ((data / maxValue) * (MAX_ANGLE - MIN_ANGLE) * 180) / PI;
+  const previousAngle =
+    ((previousData.current / maxValue) * (MAX_ANGLE - MIN_ANGLE) * 180) / PI;
+
   const refreshChart = useCallback(() => {
     select<SVGElement, number>('.data-group')
       .data([data])
+      .attr('transform', `rotate(${previousAngle})`) // Start from previousData.current
       .transition()
       .duration(1000)
-      .attr('transform', (d) => {
-        return `rotate(${
-          ((d / maxValue) * (MAX_ANGLE - MIN_ANGLE) * 180) / PI
-        })`;
-      });
+      .attr('transform', `rotate(${currentAngle})`); // Transition to the new value
+    previousData.current = data;
   }, [data, max]);
 
   useEffect(() => {
