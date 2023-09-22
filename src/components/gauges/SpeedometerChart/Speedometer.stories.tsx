@@ -38,15 +38,14 @@ export const WithAxisTicks: Story = {
 };
 
 export const UpdatingData = () => {
-  const [speedometerData, setSpeedometerData] = React.useState(0);
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setSpeedometerData(Math.random());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  const [speedometerData, setSpeedometerData] = React.useState(0.7);
+  const updatingData = () => {
+    setSpeedometerData(Math.random())
+  }
+
   return (
     <>
+      <button onClick={updatingData}>Update data</button>
       <SpeedometerChart
         id='speedometer-chart-updating-data'
         data={speedometerData}
