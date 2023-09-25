@@ -1,49 +1,48 @@
+import { Meta, StoryObj } from '@storybook/react';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import BoxPlotV from '.';
-import { Meta } from '@storybook/react';
 import data from '../sample.json';
+import yData from './yData.json';
 
 export default {
-  title: 'Ranges/BoxPlotV',
+  title: 'Ranges/BoxPlotV/Intro',
   component: BoxPlotV,
   tags: ['autodocs'],
 } as Meta;
 
+type Story = StoryObj<typeof BoxPlotV>;
+
 /** Default BoxPlot (Grouped). */
-export const Default = {
+export const Default: Story = {
   args: {
     data,
     id: 'box-plot-h-default',
     y: {
-      minKey: 'min',
-      maxKey: 'max',
-      midKey: 'mid',
-      boxStart: 'firstQuartile',
-      boxEnd: 'lastQuartile',
-      min: 0,
+      ...yData
     },
     x: { key: 'name' },
   },
 };
 
 /** BoxPlot (Grouped) with custom colors. */
-export const CustomColors = {
+export const CustomColors: Story = {
   args: {
     ...Default.args,
     id: 'box-plot-h-custom-colors',
     y: {
-      ...Default.args.y,
+      ...yData,
       classNameBoxes: 'text-blue-500 opacity-100',
     },
   },
 };
 
-export const CustomColorMap = {
+export const CustomColorMap: Story = {
   args: {
     ...Default.args,
     id: 'box-plot-h-custom-color-map',
     y: {
-      ...Default.args.y,
+      ...yData,
     },
     data: data.map((d: any, idx: number) => ({
       ...d,
@@ -57,7 +56,7 @@ export const CustomColorMap = {
   },
 };
 
-export const DefaultTooltip = {
+export const DefaultTooltip: Story = {
   args: {
     ...Default.args,
     id: 'box-plot-h-default-tooltip',
@@ -65,7 +64,7 @@ export const DefaultTooltip = {
   },
 };
 
-export const CustomStyleTooltip = {
+export const CustomStyleTooltip: Story = {
   args: {
     ...Default.args,
     id: 'box-plot-h-custom-tooltip',
@@ -75,7 +74,7 @@ export const CustomStyleTooltip = {
   },
 };
 
-export const CustomHtmlTooltip = {
+export const CustomHtmlTooltip: Story = {
   args: {
     ...Default.args,
     id: 'box-plot-h-custom-html-tooltip',
@@ -91,7 +90,7 @@ export const CustomHtmlTooltip = {
   },
 };
 
-export const Zooming = {
+export const Zooming: Story = {
   args: {
     ...Default.args,
     id: 'box-plot-h-zooming',

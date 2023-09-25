@@ -1,0 +1,8 @@
+{
+  "minKey": "min",
+  "maxKey": "max",
+  "midKey": "mid",
+  "boxStart": "firstQuartile",
+  "boxEnd": "lastQuartile",
+  "min": 0
+}
