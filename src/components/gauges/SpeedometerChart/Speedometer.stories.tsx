@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
+import React from 'react';
 import SpeedometerChart from '.';
 
 export default {
@@ -36,3 +37,20 @@ export const WithAxisTicks: Story = {
   },
 };
 
+export const UpdatingData = () => {
+  const [speedometerData, setSpeedometerData] = React.useState(0.7);
+  const updatingData = () => {
+    setSpeedometerData(Math.random())
+  }
+
+  return (
+    <>
+      <button onClick={updatingData}>Update data</button>
+      <SpeedometerChart
+        id='speedometer-chart-updating-data'
+        data={speedometerData}
+        label={{ text: 'Coverage' }}
+      />
+    </>
+  );
+};
