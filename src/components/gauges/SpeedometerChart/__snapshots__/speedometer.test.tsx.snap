@@ -1,0 +1,116 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SpeedometerChart > renders DataBox component 1`] = `
+<svg
+  class="chart dark:bg-gray-800 dark:text-gray-50 h-64 lg:w-4/12 md:w-6/12 text-gray-900 w-full"
+  data-testid="speedometer"
+  id="speedometer-chart"
+>
+  <g
+    text-anchor="middle"
+    transform="translate(0,0)"
+  >
+    <g
+      class="gauge-levels"
+    />
+    <g
+      class="data-group"
+      transform="rotate(0)"
+    >
+      <circle
+        class="fill-current stroke-current"
+        cx="0"
+        cy="0"
+        r="3"
+      />
+      <line
+        class="fill-current stroke-current stroke-2"
+        x1="0"
+        x2="32"
+        y1="0"
+        y2="0"
+      />
+      <path
+        class="fill-current stroke-current stroke-2"
+        d="M0,-6.204L5.373,3.102L-5.373,3.102Z"
+        transform="translate(32,0)rotate(-90)"
+      />
+    </g>
+    <g
+      transform="rotate(-144) translate(-28,0)"
+    >
+      <line
+        class="axis-line stroke-current"
+        x1="4"
+        x2="-4"
+      />
+      <text
+        class="text-xs fill-current"
+        transform="rotate(90)translate(0,16)"
+      >
+        0.2
+      </text>
+    </g>
+    <g
+      transform="rotate(-108) translate(-28,0)"
+    >
+      <line
+        class="axis-line stroke-current"
+        x1="4"
+        x2="-4"
+      />
+      <text
+        class="text-xs fill-current"
+        transform="rotate(90)translate(0,16)"
+      >
+        0.4
+      </text>
+    </g>
+    <g
+      transform="rotate(-72) translate(-28,0)"
+    >
+      <line
+        class="axis-line stroke-current"
+        x1="4"
+        x2="-4"
+      />
+      <text
+        class="text-xs fill-current"
+        transform="rotate(90)translate(0,16)"
+      >
+        0.6
+      </text>
+    </g>
+    <g
+      transform="rotate(-36) translate(-28,0)"
+    >
+      <line
+        class="axis-line stroke-current"
+        x1="4"
+        x2="-4"
+      />
+      <text
+        class="text-xs fill-current"
+        transform="rotate(90)translate(0,16)"
+      >
+        0.8
+      </text>
+    </g>
+    <g
+      transform="rotate(0) translate(-28,0)"
+    >
+      <line
+        class="axis-line stroke-current"
+        x1="4"
+        x2="-4"
+      />
+      <text
+        class="text-xs fill-current"
+        transform="rotate(90)translate(0,16)"
+      >
+        1
+      </text>
+    </g>
+  </g>
+</svg>
+`;

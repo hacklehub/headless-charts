@@ -209,6 +209,7 @@ const SpeedometerChart = ({
   /* eslint-enable */
   return (
     <svg
+    data-testid='speedometer'
       id={id}
       className={mergeTailwindClasses(defaultChartClassNames, className)}
     />
