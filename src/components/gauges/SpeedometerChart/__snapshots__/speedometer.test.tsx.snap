@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SpeedometerChart > renders speedometer component 1`] = `
+exports[`SpeedometerChart > renders speedometer component for snapshot test 1`] = `
 <svg
   class="chart dark:bg-gray-800 dark:text-gray-50 h-64 lg:w-4/12 md:w-6/12 text-gray-900 w-full"
   data-testid="speedometer"
