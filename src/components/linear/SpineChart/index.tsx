@@ -346,6 +346,7 @@ const SpineChart = ({
     <svg
       id={id}
       className={mergeTailwindClasses(defaultChartClassNames, className)}
+      data-testid="spineChart"
     />
   );
 };

@@ -410,6 +410,7 @@ const BarChartStacked = ({
   return (
     <>
       <svg
+        data-testid='barChartStacked'
         id={id}
         className={mergeTailwindClasses(defaultChartClassNames, className)}
       />
