@@ -1,0 +1,34 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PieChart > renders PieChart component for snapshot test 1`] = `
+<svg
+  class="chart dark:bg-gray-800 dark:text-gray-50 h-64 lg:w-4/12 md:w-6/12 text-gray-900 w-full"
+  data-testid="pie-chart"
+  id="pie-chart"
+>
+  <g>
+    <g
+      transform="translate(0,0)"
+    >
+      <path
+        class="fill-black"
+        d="M0,0Z"
+        data-testid="Product A"
+        id="Product A"
+      />
+      <path
+        class="fill-black"
+        d="M0,0Z"
+        data-testid="Product B"
+        id="Product B"
+      />
+      <path
+        class="fill-black"
+        d="M0,0Z"
+        data-testid="Product C"
+        id="Product C"
+      />
+    </g>
+  </g>
+</svg>
+`;
