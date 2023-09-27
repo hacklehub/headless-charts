@@ -55,8 +55,7 @@ const PizzaChart = ({
   const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
     tooltip,
     defaultHtml: (d: any) =>
-      `<div class="text-gray-800">${metrics[d.index].key} = ${
-        data[metrics[d.index].key]
+      `<div class="text-gray-800">${metrics[d.index].key} = ${data[metrics[d.index].key]
       }</div>`,
   });
   const refreshChart = useCallback(() => {
@@ -82,8 +81,7 @@ const PizzaChart = ({
       .append('g')
       .attr(
         'transform',
-        `translate(${margin.left + chartArea[0] / 2},${
-          margin.top + chartArea[1] / 2
+        `translate(${margin.left + chartArea[0] / 2},${margin.top + chartArea[1] / 2
         })`
       );
 
@@ -178,6 +176,7 @@ const PizzaChart = ({
 
   return (
     <svg
+      data-testid='pizza-chart'
       id={id}
       className={mergeTailwindClasses(className, defaultChartClassNames)}
     />

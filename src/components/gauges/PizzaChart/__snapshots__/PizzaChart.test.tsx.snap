@@ -1,0 +1,74 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PizzaChart > renders PizzaChart component for snapshot test 1`] = `
+<svg
+  class="chart dark:bg-gray-800 dark:text-gray-50 h-64 lg:w-4/12 md:w-6/12 text-gray-900 w-full"
+  data-testid="pizza-chart"
+  id="pizza-chart"
+>
+  <g
+    transform="translate(0,0)"
+  >
+    <g>
+      <path
+        class="fill-gray-200"
+        d="M0,0Z"
+      />
+      <path
+        class="fill-gray-200"
+        d="M0,0Z"
+      />
+      <path
+        class="fill-gray-200"
+        d="M0,0Z"
+      />
+      <path
+        class="fill-gray-200"
+        d="M0,0Z"
+      />
+      <path
+        class="fill-gray-200"
+        d="M0,0Z"
+      />
+      <path
+        class="fill-gray-200"
+        d="M0,0Z"
+      />
+      <path
+        class="fill-gray-200"
+        d="M0,0Z"
+      />
+    </g>
+    <g>
+      <path
+        class="fill-gray-800"
+        d="M0,0Z"
+      />
+      <path
+        class="fill-gray-800"
+        d="M0,0Z"
+      />
+      <path
+        class="fill-gray-800"
+        d="M0,0Z"
+      />
+      <path
+        class="fill-gray-800"
+        d="M0,0Z"
+      />
+      <path
+        class="fill-gray-800"
+        d="M0,0Z"
+      />
+      <path
+        class="fill-gray-800"
+        d="M0,0Z"
+      />
+      <path
+        class="fill-gray-800"
+        d="M0,0Z"
+      />
+    </g>
+  </g>
+</svg>
+`;
