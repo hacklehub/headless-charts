@@ -278,6 +278,7 @@ const ColumnChartStacked = ({
   return (
     <svg
       id={id}
+      data-testid='columnChartStacked'
       className={mergeTailwindClasses(defaultChartClassNames, className)}
     />
   );
