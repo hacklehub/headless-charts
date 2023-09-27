@@ -9,11 +9,11 @@ interface LinearGaugeProps {
   id: string;
   className?: string;
   label:
-    | string
-    | number
-    | boolean
-    | ValueFn<SVGTextElement, unknown, string | number | boolean | null>
-    | null;
+  | string
+  | number
+  | boolean
+  | ValueFn<SVGTextElement, unknown, string | number | boolean | null>
+  | null;
   data?: number;
   max?: number;
   error?: { data: number; className?: string };
@@ -78,7 +78,7 @@ const LinearGauge = ({
       .attr(
         'x',
         (margin.left || 0) +
-          (width - (margin.left || 0) - (margin.right || 0)) / 2
+        (width - (margin.left || 0) - (margin.right || 0)) / 2
       )
       .attr('y', height - (margin.top || 0));
 
@@ -211,6 +211,7 @@ const LinearGauge = ({
 
   return (
     <svg
+      data-testid='linear-gauge'
       id={id}
       className={mergeTailwindClasses(
         className,
