@@ -300,6 +300,7 @@ const BoxPlotH = ({
     <svg
       id={id}
       className={mergeTailwindClasses(defaultChartClassNames, className || '')}
+      data-testid="boxPlotH"
     />
   );
 };

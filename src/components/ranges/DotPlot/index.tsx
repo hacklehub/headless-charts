@@ -310,6 +310,7 @@ const DotPlot = ({
   return (
     <svg
       id={id}
+      data-testid='dotPlot-test'
       className={mergeTailwindClasses(defaultChartClassNames, className)}
     />
   );
