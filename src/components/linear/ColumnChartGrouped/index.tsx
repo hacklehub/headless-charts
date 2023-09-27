@@ -264,6 +264,7 @@ const ColumnChartGrouped = ({
   return (
     <svg
       id={id}
+      data-testid="columnChartGrouped"
       className={mergeTailwindClasses(defaultChartClassNames, className)}
     />
   );

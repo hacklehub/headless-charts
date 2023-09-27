@@ -23,4 +23,22 @@ describe('BarChartStacked', () => {
     const barChartStacked = screen.getByTestId('barChartStacked');
     expect(barChartStacked).toMatchSnapshot();
   });
+  it('renders barchartstacked component', () => {
+    render(
+      <BarChartStacked
+        data={data}
+        id='barChartStacked-test'
+        x={[
+          {
+            key: 'reading',
+            className: '',
+          },
+          { key: 'value', className: '' },
+        ]}
+        y={{ key: 'name', className: '' }}
+      />
+    );
+    const barChartStacked = screen.getByTestId('barChartStacked');
+    expect(barChartStacked).toBeInTheDocument();
+  });
 });
