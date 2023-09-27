@@ -264,7 +264,7 @@ const LollipopHChart = ({
     <svg
       id={id}
       className={mergeTailwindClasses(defaultChartClassNames, className)}
-      data-testid='bar-chart'
+      data-testid='lollipopHChart'
     />
   );
 };

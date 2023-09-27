@@ -1,0 +1,99 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LollipopHChart > renders lollipopHChart component for snapshot test 1`] = `
+<svg
+  class="chart dark:bg-gray-800 dark:text-gray-50 h-64 lg:w-4/12 md:w-6/12 text-gray-900 w-full"
+  data-testid="lollipop-h-chart"
+  id="lollipopHChart"
+>
+  <g>
+    <g
+      class="axis--x axis "
+      fill="none"
+      font-family="sans-serif"
+      font-size="10"
+      text-anchor="middle"
+      transform="translate(0, -40)"
+    >
+      <path
+        class="domain"
+        d="M90.5,6V0.5H-39.5V6"
+        stroke="currentColor"
+      />
+      <line
+        stroke="currentColor"
+        x1="80"
+        x2="90"
+        y1="0"
+        y2="0"
+      />
+    </g>
+    <g
+      class="yAxis axis"
+      fill="none"
+      font-family="sans-serif"
+      font-size="10"
+      text-anchor="end"
+      transform="translate(80,0)"
+    >
+      <line
+        stroke="currentColor"
+        x1="0"
+        x2="0"
+        y1="20"
+        y2="40"
+      />
+      <path
+        class="domain"
+        d="M-6,40.5H0.5V-59.5H-6"
+        stroke="currentColor"
+      />
+      <g
+        class="tick"
+        opacity="1"
+        transform="translate(0,-9.5)"
+      >
+        <line
+          stroke="currentColor"
+          x2="-6"
+        />
+        <text
+          dy="0.32em"
+          fill="currentColor"
+          x="-9"
+        />
+      </g>
+    </g>
+    <g>
+      <g>
+        <line
+          class="stroke-current"
+          x1="90"
+          x2="80"
+          y1="-10"
+          y2="-10"
+        />
+        <path
+          class=""
+          d="M5.642,0A5.642,5.642,0,1,1,-5.642,0A5.642,5.642,0,1,1,5.642,0"
+          transform="translate(90,-10)"
+        />
+      </g>
+      <g>
+        <line
+          class="stroke-current"
+          x1="90"
+          x2="80"
+          y1="-10"
+          y2="-10"
+        />
+        <path
+          class=""
+          d="M5.642,0A5.642,5.642,0,1,1,-5.642,0A5.642,5.642,0,1,1,5.642,0"
+          transform="translate(90,-10)"
+        />
+      </g>
+    </g>
+  </g>
+</svg>
+`;
