@@ -1,0 +1,74 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`RingGauge > renders RingGauge component for snapshot test 1`] = `
+<svg
+  class="chart dark:bg-gray-800 dark:text-gray-50 h-64 lg:w-4/12 md:w-6/12 text-gray-900 w-full"
+  data-testid="ring-gauge"
+  id="ring-chart"
+>
+  <g
+    transform="translate(0,0)"
+  >
+    <g
+      class="background-arcs"
+    >
+      <path
+        class=" dark:text-gray-700 fill-current text-gray-200"
+        d="M0,0Z"
+      />
+      <path
+        class=" dark:text-gray-700 fill-current text-gray-200"
+        d="M0,0Z"
+      />
+      <path
+        class=" dark:text-gray-700 fill-current text-gray-200"
+        d="M0,7.746A2,2,0,1,1,2.5,9.682A10,10,0,1,1,9.682,2.5A2,2,0,1,1,7.746,0L11.667,0Z"
+      />
+    </g>
+    <g
+      class="data"
+    >
+      <path
+        class=" data-arc fill-purple-700"
+        d="M0,0Z"
+      />
+      <path
+        class=" data-arc fill-purple-400"
+        d="M0,0Z"
+      />
+      <path
+        class=" data-arc fill-green-500"
+        d="M0,7.746A2,2,0,1,1,2.5,9.682A10,10,0,1,1,9.682,2.5A2,2,0,1,1,7.746,0L11.667,0Z"
+      />
+    </g>
+    <g
+      class="labels"
+    >
+      <text
+        class="fill-current text-xs "
+        text-anchor="end"
+        x="-5"
+        y="21.333333333333336"
+      >
+        Target 1
+      </text>
+      <text
+        class="fill-current text-xs "
+        text-anchor="end"
+        x="-5"
+        y="4.666666666666668"
+      >
+        Target 2
+      </text>
+      <text
+        class="fill-current text-xs "
+        text-anchor="end"
+        x="-5"
+        y="-12"
+      >
+        Target 3
+      </text>
+    </g>
+  </g>
+</svg>
+`;
