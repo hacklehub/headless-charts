@@ -155,8 +155,7 @@ const SpeedometerChart = ({
           .attr(
             'transform',
             (d: any) =>
-              `rotate(${(scale(d) * 180) / Math.PI - 90}) translate(${
-                chartRadius * 0.7
+              `rotate(${(scale(d) * 180) / Math.PI - 90}) translate(${chartRadius * 0.7
               },0)`
           )
           .call((g: any) =>
@@ -209,7 +208,7 @@ const SpeedometerChart = ({
   /* eslint-enable */
   return (
     <svg
-    data-testid='speedometer'
+      data-testid='speedometer'
       id={id}
       className={mergeTailwindClasses(defaultChartClassNames, className)}
     />
