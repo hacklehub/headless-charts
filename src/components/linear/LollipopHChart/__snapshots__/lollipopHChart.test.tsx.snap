@@ -3,8 +3,8 @@
 exports[`LollipopHChart > renders lollipopHChart component for snapshot test 1`] = `
 <svg
   class="chart dark:bg-gray-800 dark:text-gray-50 h-64 lg:w-4/12 md:w-6/12 text-gray-900 w-full"
-  data-testid="lollipop-h-chart"
-  id="lollipopHChart"
+  data-testid="lollipopHChart"
+  id="lollipop-h-chart"
 >
   <g>
     <g
@@ -20,6 +20,57 @@ exports[`LollipopHChart > renders lollipopHChart component for snapshot test 1`]
         d="M90.5,6V0.5H-39.5V6"
         stroke="currentColor"
       />
+      <g
+        class="tick"
+        opacity="1"
+        transform="translate(90.5,0)"
+      >
+        <line
+          stroke="currentColor"
+          y2="6"
+        />
+        <text
+          dy="0.71em"
+          fill="currentColor"
+          y="9"
+        >
+          0
+        </text>
+      </g>
+      <g
+        class="tick"
+        opacity="1"
+        transform="translate(25.5,0)"
+      >
+        <line
+          stroke="currentColor"
+          y2="6"
+        />
+        <text
+          dy="0.71em"
+          fill="currentColor"
+          y="9"
+        >
+          10
+        </text>
+      </g>
+      <g
+        class="tick"
+        opacity="1"
+        transform="translate(-39.5,0)"
+      >
+        <line
+          stroke="currentColor"
+          y2="6"
+        />
+        <text
+          dy="0.71em"
+          fill="currentColor"
+          y="9"
+        >
+          20
+        </text>
+      </g>
       <line
         stroke="currentColor"
         x1="80"
@@ -51,7 +102,7 @@ exports[`LollipopHChart > renders lollipopHChart component for snapshot test 1`]
       <g
         class="tick"
         opacity="1"
-        transform="translate(0,-9.5)"
+        transform="translate(0,40.5)"
       >
         <line
           stroke="currentColor"
@@ -61,7 +112,26 @@ exports[`LollipopHChart > renders lollipopHChart component for snapshot test 1`]
           dy="0.32em"
           fill="currentColor"
           x="-9"
+        >
+          Team B
+        </text>
+      </g>
+      <g
+        class="tick"
+        opacity="1"
+        transform="translate(0,-59.5)"
+      >
+        <line
+          stroke="currentColor"
+          x2="-6"
         />
+        <text
+          dy="0.32em"
+          fill="currentColor"
+          x="-9"
+        >
+          Team A
+        </text>
       </g>
     </g>
     <g>
@@ -70,13 +140,13 @@ exports[`LollipopHChart > renders lollipopHChart component for snapshot test 1`]
           class="stroke-current"
           x1="90"
           x2="80"
-          y1="-10"
-          y2="-10"
+          y1="40"
+          y2="40"
         />
         <path
           class=""
           d="M5.642,0A5.642,5.642,0,1,1,-5.642,0A5.642,5.642,0,1,1,5.642,0"
-          transform="translate(90,-10)"
+          transform="translate(90,40)"
         />
       </g>
       <g>
@@ -84,13 +154,13 @@ exports[`LollipopHChart > renders lollipopHChart component for snapshot test 1`]
           class="stroke-current"
           x1="90"
           x2="80"
-          y1="-10"
-          y2="-10"
+          y1="-60"
+          y2="-60"
         />
         <path
           class=""
           d="M5.642,0A5.642,5.642,0,1,1,-5.642,0A5.642,5.642,0,1,1,5.642,0"
-          transform="translate(90,-10)"
+          transform="translate(90,-60)"
         />
       </g>
     </g>
