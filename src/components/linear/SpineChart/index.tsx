@@ -11,7 +11,7 @@ import { transition } from 'd3-transition';
 interface Y {
   key: string;
   axis: 'left' | 'right' | 'middle';
-  className: string;
+  className?: string;
   label?: string;
 }
 

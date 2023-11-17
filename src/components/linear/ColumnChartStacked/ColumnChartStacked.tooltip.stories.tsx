@@ -1,32 +1,26 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Meta, StoryObj } from '@storybook/react';
 
 import ColumnChartStacked from '.';
 import data from './sample.json';
 
-export default {
-  title: 'Linear/ColumnChartStacked/Intro',
+const meta: Meta<typeof ColumnChartStacked> = {
+  title: 'Linear/ColumnChartStacked/Tooltips',
   component: ColumnChartStacked,
   tags: ['autodocs'],
-} as Meta;
+};
+
+export default meta;
 
 type Story = StoryObj<typeof ColumnChartStacked>;
 
-export const Default: Story = {
+export const Tooltip: Story = {
   args: {
+    id: 'tooltip',
     data,
-    id: 'column-chart-stack-default',
     x: { key: 'name' },
-    y: [{ key: 'value1' }, { key: 'value2' }, { key: 'value3' }],
-  },
-};
-
-export const Styled: Story = {
-  args: {
-    ...Default.args,
-    id: 'column-chart-stack-styled',
-    className: 'bg-gray-100 rounded',
     padding: {
       top: 20,
       right: 20,
@@ -45,30 +39,26 @@ export const Styled: Story = {
       { key: 'value2', className: 'text-purple-700' },
       { key: 'value3', className: 'text-purple-900' },
     ],
-  },
-};
-
-export const WithDrawing: Story = {
-  args: {
-    ...Styled.args,
-    drawing: {
-      duration: 1000,
+    className: 'bg-gray-100 rounded',
+    tooltip: {
+      className: 'bg-gray-100 rounded p-2',
     },
   },
 };
-export const Waterfall: Story = {
-  args: {
-    ...Styled.args,
-    id: 'column-chart-stack-waterfall',
-    waterfall: true,
-  },
-};
 
-export const WaterfallDrawing: Story = {
+export const TooltipCustomHtml: Story = {
   args: {
-    ...Waterfall.args,
-    drawing: {
-      duration: 1000,
+    ...Tooltip.args,
+    id: 'tooltip-custom-html',
+    tooltip: {
+      html: (data: any) => {
+        return `
+          <div class="bg-gray-100 rounded p-2">
+            <div class="text-sm font-semibold">${data.name}</div>
+            <div class="text-xs">${data['value1']}</div>
+          </div>
+        `;
+      },
     },
   },
 };

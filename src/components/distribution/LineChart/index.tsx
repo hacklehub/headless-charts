@@ -32,18 +32,19 @@ interface LineChartProps {
   className?: string;
   x: {
     key: string;
-    scalingFunction: 'linear' | 'time';
+    scalingFunction?: 'linear' | 'time';
     convert?: (d: any) => any;
-    axis: 'bottom' | 'top';
+    axis?: 'bottom' | 'top';
     axisTicks?: number;
     axisLabel?: string;
     axisLabelPosition?: 'right' | 'bottom';
     start?: object | number;
     end?: object | number;
+    format?: string;
   };
   y: Array<{
     key: string;
-    axis: 'left' | 'right';
+    axis?: 'left' | 'right';
     start?: number;
     end?: number;
     ticks?: number;
@@ -59,7 +60,8 @@ interface LineChartProps {
       | 'cross'
       | 'diamond';
     size?: number;
-    unknown: any;
+    unknown?: any;
+    circleFill?: boolean;
   }>;
   tooltip?: {
     keys?: Array<string>;

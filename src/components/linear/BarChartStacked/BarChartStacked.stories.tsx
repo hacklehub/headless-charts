@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Meta, StoryObj } from '@storybook/react';
+
 import BarChartStacked from '.';
-import { Meta } from '@storybook/react';
 import data from './sample.json';
 
 export default {
-  title: 'Linear/BarChartStacked',
+  title: 'Linear/BarChartStacked/Intro',
   component: BarChartStacked,
   tags: ['autodocs'],
 } as Meta;
 
-export const Default = {
+type Story = StoryObj<typeof BarChartStacked>;
+
+export const Default: Story = {
   args: {
     data,
     id: 'bar-chart-stacked-default',
@@ -23,7 +26,7 @@ export const Default = {
   },
 };
 
-export const Styled = {
+export const Styled: Story = {
   args: {
     ...Default.args,
     id: 'bar-chart-stacked-styled',
@@ -48,41 +51,11 @@ export const Styled = {
       },
       { key: 'value', className: 'fill-purple-400' },
     ],
-    y: { key: 'name', className: 'text-red-500', padding: 10 },
+    y: { key: 'name', className: 'text-red-500' },
   },
 };
 
-export const Tooltip = {
-  args: {
-    ...Styled.args,
-    id: 'bar-chart-stacked-tooltip',
-    tooltip: {
-      className: 'bg-gray-800 text-white p-2 rounded',
-      keys: ['name', 'reading', 'value'],
-    },
-  },
-};
-
-export const CustomTooltip = {
-  args: {
-    ...Styled.args,
-    id: 'bar-chart-custom-tooltip',
-    tooltip: {
-      className: 'bg-gray-800 text-white p-2 rounded',
-      html: (d: any) => {
-        return `
-            <div class="flex flex-col">
-              <div class="text-lg text-center">${d.name}</div>
-              <div class="text-sm text-center">${d.reading}</div>
-              <div class="text-sm text-center">${d.value}</div>
-            </div>
-          `;
-      },
-    },
-  },
-};
-
-export const WithDrawing = {
+export const WithDrawing: Story = {
   args: {
     ...Styled.args,
     id: 'bar-chart-stacked-drawing',
@@ -92,7 +65,7 @@ export const WithDrawing = {
   },
 };
 
-export const WithDrawingDelay = {
+export const WithDrawingDelay: Story = {
   args: {
     ...Styled.args,
     id: 'bar-chart-stacked-drawing-delay',

@@ -1,14 +1,17 @@
+import { Meta, StoryObj } from '@storybook/react';
+
 import LollipopVChart from '.';
-import { Meta } from '@storybook/react';
 import data from './sample.json';
 
 export default {
-  title: 'Linear/LollipopVChart',
+  title: 'Linear/LollipopVChart/Intro',
   component: LollipopVChart,
   tags: ['autodocs'],
 } as Meta;
 
-export const Default = {
+type Story = StoryObj<typeof LollipopVChart>;
+
+export const Default: Story = {
   args: {
     data,
     id: 'lollipop-v-chart-default',
@@ -26,14 +29,14 @@ export const Default = {
   },
 };
 
-export const WithCustomShape = {
+export const WithCustomShape: Story = {
   args: {
     ...Default.args,
     shape: 'star',
   },
 };
 
-export const WithCustomStyles = {
+export const WithCustomStyles: Story = {
   args: {
     ...WithCustomShape.args,
     classNameLines: 'fill-red-500 stroke-red-500',

@@ -1,19 +1,22 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ColumnChartGrouped from '.';
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
+
+import ColumnChart from '.';
 import data from './sample.json';
 
 export default {
-  title: 'Linear/ColumnChartGrouped',
-  component: ColumnChartGrouped,
+  title: 'Linear/ColumnChart/Intro',
+  component: ColumnChart,
   tags: ['autodocs'],
 } as Meta;
 
-export const Default = {
+type Story = StoryObj<typeof ColumnChart>;
+
+export const Default: Story = {
   args: {
     data,
-    id: 'column-chart-group-default',
+    id: 'column-chart-default',
     x: { key: 'name' },
     y: [
       {
@@ -27,25 +30,25 @@ export const Default = {
   },
 };
 
-export const Styled = {
+export const Styled: Story = {
   args: {
     data,
-    id: 'column-chart-group-styled',
+    id: 'column-chart-styled',
     className: 'bg-gray-100 rounded',
     padding: {
       top: 20,
       right: 20,
       bottom: 20,
       left: 5,
-      bar: 0.1,
     },
+    paddingBar: 0.1,
     margin: {
       top: 10,
       right: 40,
       bottom: 40,
       left: 60,
     },
-    x: { key: 'name', className: 'fill-blue-500' },
+    x: { key: 'name' },
     y: [
       {
         key: 'USA',
@@ -59,34 +62,9 @@ export const Styled = {
   },
 };
 
-export const Animated = {
+export const Animated: Story = {
   args: {
     ...Default.args,
     drawing: { duration: 1000 },
-  },
-};
-
-export const WithTooltip = {
-  args: {
-    ...Default.args,
-    tooltip: {
-      className: 'bg-gray-100 rounded p-2',
-    },
-  },
-};
-
-export const WithCustomTooltip = {
-  args: {
-    ...Default.args,
-    tooltip: {
-      html: (data: any) => {
-        return `
-          <div class="bg-gray-100 rounded p-2">
-            <div class="text-sm font-semibold">${data.name}</div>
-            <div class="text-xs">${data['USA']}</div>
-          </div>
-        `;
-      },
-    },
   },
 };

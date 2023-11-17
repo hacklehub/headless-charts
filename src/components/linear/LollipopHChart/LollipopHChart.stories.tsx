@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Meta, StoryObj } from '@storybook/react';
+
 import LollipopHChart from '.';
-import { Meta } from '@storybook/react';
 import data from './sample.json';
 
 export default {
-  title: 'Linear/LollipopHChart',
+  title: 'Linear/LollipopHChart/Intro',
   component: LollipopHChart,
   tags: ['autodocs'],
 } as Meta;
 
-export const Default = {
+type Story = StoryObj<typeof LollipopHChart>;
+
+export const Default: Story = {
   args: {
     data,
     id: 'lollipop-h-chart',
@@ -23,26 +26,7 @@ export const Default = {
   },
 };
 
-export const WithTooltip = {
-  args: {
-    ...Default.args,
-    tooltip: {
-      keys: ['name', 'value', 'reading'],
-    },
-  },
-};
-
-export const WithCustomTooltip = {
-  args: {
-    ...Default.args,
-    tooltip: {
-      html: (d: any) =>
-        `<div class='bg-gray-800 text-white p-2 rounded'>${d.name} - ${d.value}</div>`,
-    },
-  },
-};
-
-export const WithCustomShape = {
+export const WithCustomShape: Story = {
   args: {
     ...Default.args,
     shape: 'diamond',

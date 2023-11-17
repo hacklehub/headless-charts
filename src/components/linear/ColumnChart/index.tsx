@@ -10,7 +10,7 @@ interface DataItem {
   [key: string]: number | string;
 }
 
-interface ColumnChartGroupedProps {
+interface ColumnChartProps {
   data: DataItem[];
   id: string;
   className?: string;
@@ -57,7 +57,7 @@ interface drawHLineProps {
   dashed?: boolean;
 }
 
-const ColumnChartGrouped = ({
+const ColumnChart = ({
   data = [],
   id,
   className,
@@ -79,7 +79,7 @@ const ColumnChartGrouped = ({
   drawing,
   tooltip,
   referenceLines = [],
-}: ColumnChartGroupedProps) => {
+}: ColumnChartProps) => {
   const refreshChart = useCallback(() => {
     /* eslint-disable */
     const svg = select(`#${id}`);
@@ -269,4 +269,4 @@ const ColumnChartGrouped = ({
   );
 };
 
-export default ColumnChartGrouped;
+export default ColumnChart;

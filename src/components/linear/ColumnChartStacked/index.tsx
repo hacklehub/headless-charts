@@ -24,7 +24,7 @@ interface ColumnChartStackedProps {
   y: {
     key: string;
     axis?: 'left' | 'right';
-    className: string;
+    className?: string;
   }[];
   margin?: {
     left: number;

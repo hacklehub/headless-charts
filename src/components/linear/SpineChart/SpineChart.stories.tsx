@@ -1,38 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
+
 import SpineChart from '.';
+import data from './sample.json';
 
 export default {
-  title: 'Linear/SpineChart',
+  title: 'Linear/SpineChart/Intro',
   component: SpineChart,
   tags: ['autodocs'],
 } as Meta;
 
-export const Default = {
+type Story = StoryObj<typeof SpineChart>;
+
+export const Default: Story = {
   args: {
-    data: [
-      {
-        name: 'Product A',
-        value2: 6,
-        value3: 7,
-        value4: 8,
-      },
-      {
-        name: 'Product B',
-        value2: 4,
-        value3: 6,
-        value4: 8,
-      },
-      {
-        name: 'Product C',
-        value2: 1,
-        value3: 2,
-        value4: 3,
-      },
-    ],
+    data,
     id: 'spine-chart-default',
     y: {
       key: 'name',
+      axis: 'left',
     },
     x: [
       { key: 'value2', direction: 'left' },
@@ -42,7 +28,7 @@ export const Default = {
   },
 };
 
-export const WithStyle = {
+export const WithStyle: Story = {
   args: {
     ...Default.args,
     id: 'spine-chart-with-style',
@@ -54,7 +40,7 @@ export const WithStyle = {
   },
 };
 
-export const WithYAxisToLeft = {
+export const WithYAxisToLeft: Story = {
   args: {
     ...WithStyle.args,
     id: 'spine-chart-y-direction-left',
@@ -72,7 +58,7 @@ export const WithYAxisToLeft = {
   },
 };
 
-export const YAxisRight = {
+export const YAxisRight: Story = {
   args: {
     ...WithStyle.args,
     id: 'spine-chart-y-axis-middle',
@@ -90,7 +76,7 @@ export const YAxisRight = {
   },
 };
 
-export const WithCustomPaddingBar = {
+export const WithCustomPaddingBar: Story = {
   args: {
     ...Default.args,
     id: 'spine-chart-with-padding-bar',
@@ -98,7 +84,7 @@ export const WithCustomPaddingBar = {
   },
 };
 
-export const XAxisTop = {
+export const XAxisTop: Story = {
   args: {
     ...Default.args,
     id: 'spine-chart-x-axis-top',
@@ -112,33 +98,5 @@ export const XAxisTop = {
       { key: 'value4', direction: 'left', className: 'fill-orange-300' },
     ],
     xAxis: 'top',
-  },
-};
-
-export const WithTooltip = {
-  args: {
-    ...Default.args,
-    id: 'spine-chart-with-tooltip',
-    tooltip: {
-      keys: ['value2', 'value3', 'value4'],
-      className: 'bg-gray-800 text-white p-2 rounded-md shadow-md',
-    },
-  },
-};
-
-export const WithCustomTooltip = {
-  args: {
-    ...Default.args,
-    id: 'spine-chart-with-custom-tooltip',
-    tooltip: {
-      html: (d: any) => `
-        <div class="bg-gray-800 text-white p-2 rounded-md shadow-md">
-          <div class="font-bold">${d.name}</div>
-          <div>${d.value2}</div>
-          <div>${d.value3}</div>
-          <div>${d.value4}</div>
-        </div>
-      `,
-    },
   },
 };
