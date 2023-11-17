@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-
+import React from 'react';
 import LinearGauge from '.';
 
 
@@ -76,11 +76,13 @@ export const Error: Story = {
 
 export const ToolTipWithCustomHtml = {
   args: {
-    ...ToolTip.args,
+    ...Error.args,
     id: 'linear-gauge-with-tooltip-custom-html',
+    data: 67,
+    max: 100,
     error: { data: 2 },
     tooltip: {
-      html: `<div class='bg-gray-800 text-white p-2 rounded'>67% with 2% error</div>`,
+      html: `<div class='bg-gray-800 text-white p-2 rounded'>67 with 2% error</div>`,
     },
   },
 };
