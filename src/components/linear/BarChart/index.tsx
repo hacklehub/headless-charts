@@ -66,7 +66,7 @@ const BarChart = ({
   dataLabel,
   tooltip,
 }: BarChartProps) => {
-  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip(tooltip);
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({ tooltip });
 
   const refreshData = React.useCallback(() => {
     const svg = select(`#${id}`);
@@ -202,9 +202,7 @@ const BarChart = ({
         .attr('height', yFn.bandwidth() / x.length - (y.padding || 0))
         .on(
           'mouseenter',
-          onMouseOver(
-            (d: any) => `${d[y.key]} <br/> ${column.key} ${d[column.key]}`
-          )
+          onMouseOver
         )
         .on('mousemove', onMouseMove)
         .on('mouseleave', onMouseLeave);
@@ -226,6 +224,8 @@ const BarChart = ({
           .attr('width', (d: any) =>
             Math.abs(xFn(0) - xFn(Math.abs(d[column.key])))
           );
+
+      // data labels
 
       dataLabel &&
         barsG
