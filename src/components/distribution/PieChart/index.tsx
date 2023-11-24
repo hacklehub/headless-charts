@@ -137,10 +137,9 @@ const PieChart = ({
       .append('g')
       .attr(
         'transform',
-        `translate(${padding.left + margin.left + chartArea[0] / 2},${
-          endAngle - startAngle <= 180
-            ? height - margin.bottom - (padding.bottom || 0)
-            : margin.top + (padding.top || 0) + chartArea[1] / 2
+        `translate(${padding.left + margin.left + chartArea[0] / 2},${endAngle - startAngle <= 180
+          ? height - margin.bottom - (padding.bottom || 0)
+          : margin.top + (padding.top || 0) + chartArea[1] / 2
         })`
       );
 
@@ -239,7 +238,7 @@ const PieChart = ({
 
   return (
     <svg
-      data-testid={id}
+      data-testid='pie-chart'
       id={id}
       className={mergeTailwindClasses(defaultChartClassNames, className)}
     />

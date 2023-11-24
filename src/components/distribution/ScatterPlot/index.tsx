@@ -405,6 +405,7 @@ const ScatterPlot = ({
   }, [data, refreshChart]);
   return (
     <svg
+      data-testid='scatterplot'
       id={id}
       className={mergeTailwindClasses(defaultChartClassNames, className || '')}
     />
