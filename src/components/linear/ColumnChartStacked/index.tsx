@@ -3,7 +3,6 @@ import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, sum } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect } from 'react';
 
 import { format } from 'd3-format';

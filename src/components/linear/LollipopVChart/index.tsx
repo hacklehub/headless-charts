@@ -12,7 +12,6 @@ import {
   symbolTriangle,
   symbolWye,
 } from 'd3';
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect } from 'react';
 
 import { defaultChartClassNames } from '../../../utils';

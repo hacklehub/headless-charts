@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import ColumnChartStacked from '.';
 import { Meta } from '@storybook/react';
 import data from './sample.json';
 
-export default {
+const meta: Meta<typeof ColumnChartStacked> = {
   title: 'Linear/ColumnChartStacked',
   component: ColumnChartStacked,
   tags: ['autodocs'],
-} as Meta;
+};
+
+export default meta;
 
 export const Default = {
   args: {

@@ -3,11 +3,19 @@ import { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import SpeedometerChart from '.';
 
-export default {
+/**
+ * Speedometer charts are used to show the progress towards a goal.
+ *
+ *
+ */
+
+const meta: Meta<typeof SpeedometerChart> = {
   title: 'Gauge/Speedometer/Intro',
   component: SpeedometerChart,
   tags: ['autodocs'],
-} as Meta;
+};
+
+export default meta;
 
 type Story = StoryObj<typeof SpeedometerChart>;
 
@@ -40,8 +48,8 @@ export const WithAxisTicks: Story = {
 export const UpdatingData = () => {
   const [speedometerData, setSpeedometerData] = React.useState(0.7);
   const updatingData = () => {
-    setSpeedometerData(Math.random())
-  }
+    setSpeedometerData(Math.random());
+  };
 
   return (
     <>

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect } from 'react';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
@@ -15,7 +14,7 @@ import {
 } from 'd3-shape';
 import { max, min } from 'd3-array';
 import { select, selectAll } from 'd3-selection';
-import useTooltip, { TooltipProps } from '../../../hooks/useTooltip';
+import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
 import { ChartProps } from '../../../types';
 import { scaleLinear } from 'd3-scale';
@@ -58,7 +57,7 @@ export interface ScatterPlotProps extends ChartProps {
       [key: string]: any;
     };
   };
-  tooltip?: TooltipProps;
+  tooltip?: TooltipObjectType;
   onClick?: (event: any, d: any) => void;
   connect?: {
     enabled?: boolean;
@@ -108,8 +107,8 @@ const ScatterPlot = ({
     ${shape?.key ? `${shape.key} ${d[shape.key]}<br/>` : ''}`;
 
   const { onMouseOver, onMouseLeave, onMouseMove } = useTooltip({
-    ...tooltip,
-    html: tooltip?.html || defaultHtml,
+    tooltip,
+    defaultHtml,
   });
   const refreshChart = React.useCallback(() => {
     const svg = select(`#${id}`);
@@ -289,7 +288,7 @@ const ScatterPlot = ({
         'transform',
         (d: any) => `translate(${xFn(d[x.key])},${yFn(d[y.key])})`
       )
-      .on('mouseenter', onMouseOver())
+      .on('mouseenter', onMouseOver)
       .on('mousemove', onMouseMove)
       .on('mouseleave', onMouseLeave)
       .on('click', (event, d) => {

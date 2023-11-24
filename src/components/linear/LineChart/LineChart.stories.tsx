@@ -1,15 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import './index.css';
+
+import { Meta, StoryObj } from '@storybook/react';
 
 import { DateTime } from 'luxon';
 import LineChart from '.';
-import { Meta } from '@storybook/react';
 
-export default {
+const meta: Meta<typeof LineChart> = {
   title: 'Linear/LineChart',
   component: LineChart,
   tags: ['autodocs'],
-} as Meta;
+};
+
+export default meta;
 
 const data = [
   { id: 1, value: 1311, reading: 1500 },
@@ -23,8 +25,7 @@ const data = [
 const randBetween = (x: number, y: number) => x + Math.random() * (y - x);
 
 const arrayLength = 200;
-/* eslint-disable */
-// @ts-ignore
+
 const dataForTimeSeriesChart = new Array(arrayLength)
   .fill('')
   .map((_, index) => ({
@@ -32,13 +33,13 @@ const dataForTimeSeriesChart = new Array(arrayLength)
       .startOf('day')
       .minus({ days: arrayLength - index })
       .toFormat('yyyy-MM-dd hh:mm:ss'),
-    // @ts-ignore
     value: randBetween(1000, 1004),
-    // @ts-ignore
     reading: randBetween(1000, 996),
   }));
 
-export const Default = {
+type Story = StoryObj<typeof LineChart>;
+
+export const Default: Story = {
   args: {
     data,
     x: { key: 'id' },
@@ -60,7 +61,7 @@ export const WithStyleChart = {
   },
 };
 
-export const WithPaddedChart = {
+export const WithInsidePadding = {
   args: {
     ...Default.args,
     id: 'padding-for-line-chart',

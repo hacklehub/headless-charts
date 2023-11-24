@@ -1,12 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Meta } from '@storybook/react';
 import SpineChart from '.';
 
-export default {
+const meta: Meta<typeof SpineChart> = {
   title: 'Linear/SpineChart',
   component: SpineChart,
   tags: ['autodocs'],
-} as Meta;
+};
+
+export default meta;
 
 export const Default = {
   args: {

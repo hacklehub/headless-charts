@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { arc, pie } from 'd3';
 import { useCallback, useEffect, useRef } from 'react';
+import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
 import { deepValue } from '../../../utils/deepValue';
 import { defaultChartClassNames } from '../../../utils';
@@ -8,9 +9,6 @@ import { interpolate } from 'd3-interpolate';
 import { mergeTailwindClasses } from '../../../utils';
 import { min } from 'd3-array';
 import { select } from 'd3-selection';
-import useTooltip from '../../../hooks/useTooltip';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface DataItem {
   name: string;
@@ -57,11 +55,7 @@ interface PieChartProps {
   nameKey: string;
   valueKey: string;
   drawing?: DrawingOptions;
-  tooltip?: {
-    className?: string;
-    html?: (d: any) => string;
-    keys?: string[];
-  };
+  tooltip?: TooltipObjectType;
   labels?: LabelOptions;
 }
 

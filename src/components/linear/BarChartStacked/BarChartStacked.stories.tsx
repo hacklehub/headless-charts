@@ -1,13 +1,20 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import BarChartStacked from '.';
 import { Meta } from '@storybook/react';
 import data from './sample.json';
 
-export default {
+/**
+ * Stacked bar charts are used to compare values across categories by using horizontal bars, with some grouping. Stacked bar charts additionally show proportions within categories.
+ *
+ *
+ * */
+
+const meta: Meta<typeof BarChartStacked> = {
   title: 'Linear/BarChartStacked',
   component: BarChartStacked,
   tags: ['autodocs'],
-} as Meta;
+};
+
+export default meta;
 
 export const Default = {
   args: {

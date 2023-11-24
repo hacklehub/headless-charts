@@ -25,7 +25,7 @@ export default defineConfig({
     },
     minify: true,
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: ['react', 'react-dom', '**/*/*.stories.tsx', '**/*/*.test.tsx'],
       output: {
         globals: {
           react: 'React',

@@ -5,18 +5,18 @@ import { useCallback, useEffect, useState } from 'react';
 import RingGauge from '.';
 import metrics from './sample.json';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 /**
  * Ring gauges are used to show progress towards a goal.  Ring gauges are useful for comparing multiple metrics and achievement against a target.
  *
  * eg:- Apple Watch's activity app's Rings.
  */
-export default {
+const meta: Meta<typeof RingGauge> = {
   title: 'Gauge/RingGauge/Intro',
   component: RingGauge,
   tags: ['autodocs'],
-} as Meta;
+};
+
+export default meta;
 
 /** Default RingGauge Chart (Headless and unstyled). */
 
@@ -45,8 +45,6 @@ export const Styled: Story = {
 
 /** With custom start and end angle */
 
-
-
 export const UpdatingData = () => {
   const [ringGaugeData, setRingGaugeData] = useState(metrics);
 
@@ -73,7 +71,7 @@ export const UpdatingData = () => {
         targetKey={'target'}
         dataKey={'score'}
         drawing={{
-          duration:800
+          duration: 800,
         }}
       />
     </div>

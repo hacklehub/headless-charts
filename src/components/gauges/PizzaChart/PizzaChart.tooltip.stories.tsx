@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Meta, StoryObj } from '@storybook/react';
 
 import PizzaChart from '.';
@@ -29,10 +29,17 @@ const metrics = [
   },
 ];
 
-export default {
+/**
+ * Tooltips can be added to PizzaCharts to show additional information about each metric.
+ */
+
+const meta: Meta<typeof PizzaChart> = {
   title: 'Gauge/PizzaChart/Tooltip',
   component: PizzaChart,
-} as Meta;
+  tags: ['autodocs'],
+};
+
+export default meta;
 
 type Story = StoryObj<typeof PizzaChart>;
 
@@ -60,9 +67,12 @@ export const WithCustomHtml: Story = {
     ...WithTooltip.args,
     id: 'pizza-chart-tooltip-custom-html',
     tooltip: {
-      html: (d: { index: number; data: number }) =>
+      html: (d: { index: number }) =>
         `<div class="bg-white border-2 border-purple-700 p-2 rounded">
-        ${metrics[d.index].key} was scored at ${data[metrics[d.index].key]}.
+        ${metrics[d.index].key} was scored at ${`${
+          // @ts-ignore
+          data[metrics[d.index].key] || ''
+        }`}.
         </div>`,
     },
   },

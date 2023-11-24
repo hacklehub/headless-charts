@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { arc, interpolateNumber, pie, scaleLinear, transition } from 'd3';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { useCallback, useEffect } from 'react';
+import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
 import { select } from 'd3-selection';
-import useTooltip from '../../../hooks/useTooltip';
 
 export interface PizzaChartProps {
   data: { [key: string]: any };
@@ -23,11 +22,7 @@ export interface PizzaChartProps {
   min?: number;
   paddingAngle?: number;
   cornerRadius?: number;
-  tooltip?: {
-    className?: string;
-    keys?: string[];
-    html?: (d: any) => string;
-  };
+  tooltip?: TooltipObjectType;
   drawing?: {
     duration?: number;
     delay?: number;
@@ -133,7 +128,10 @@ const PizzaChart = ({
       )
       .attr('class', (metric: any) =>
         mergeTailwindClasses('fill-gray-800', metrics[metric.index].className)
-      );
+      )
+      .on('mouseenter', onMouseOver)
+      .on('mousemove', onMouseMove)
+      .on('mouseleave', onMouseLeave);
 
     transition();
 

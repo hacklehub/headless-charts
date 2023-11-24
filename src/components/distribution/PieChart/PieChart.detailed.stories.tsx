@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react';
-
 import { Meta } from '@storybook/react';
 import PieChart from '.';
 import data from './sample.json';
+import { useState } from 'react';
 
 /**
  * SemiCircle charts are specifically useful for certain representations like political polls or seat shares, since they look like the seating arrangement in a parliament.
@@ -60,7 +58,7 @@ export const DataRefreshWithDrawing = () => {
     <div>
       <button onClick={refreshData}>Refresh</button>
       <PieChart
-        id='pie-chart-detailed'
+        id='pie-refresh-with-drawing'
         data={pieData}
         valueKey='USA'
         nameKey='name'
@@ -96,7 +94,7 @@ export const AddNewDataPoint = () => {
     <div>
       <button onClick={addDataPoint}>Add Data Point</button>
       <PieChart
-        id='pie-chart-detailed'
+        id='pie-chart-add-new-data-point'
         data={pieData}
         valueKey='USA'
         nameKey='name'

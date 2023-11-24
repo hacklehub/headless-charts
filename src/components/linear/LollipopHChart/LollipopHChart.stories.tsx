@@ -1,13 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import LollipopHChart from '.';
 import { Meta } from '@storybook/react';
 import data from './sample.json';
 
-export default {
+const meta: Meta<typeof LollipopHChart> = {
   title: 'Linear/LollipopHChart',
   component: LollipopHChart,
   tags: ['autodocs'],
-} as Meta;
+};
+
+export default meta;
 
 export const Default = {
   args: {

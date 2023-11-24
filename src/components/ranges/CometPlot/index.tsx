@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { ZoomTransform, zoom } from 'd3-zoom';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
@@ -15,14 +13,14 @@ import {
   symbolTriangle,
   symbolWye,
 } from 'd3-shape';
+import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
 import { ChartProps } from '../../../types';
 import React from 'react';
 import { select } from 'd3-selection';
 import { transition } from 'd3-transition';
-import useTooltip from '../../../hooks/useTooltip';
 
-export interface DotPlotProps extends ChartProps {
+export interface RangePlotProps extends ChartProps {
   y: {
     key: string;
     axis?: 'left' | 'right';
@@ -37,6 +35,7 @@ export interface DotPlotProps extends ChartProps {
     className?: string;
     classNameTail?: string;
     classNameHead?: string;
+    classNameNegative?: string;
   };
   size?: number;
   shape?:
@@ -47,14 +46,10 @@ export interface DotPlotProps extends ChartProps {
     | 'cross'
     | 'star'
     | 'wye';
-  tooltip?: {
-    html?: (d: any) => string;
-    keys?: string[];
-    className?: string;
-  };
+  tooltip?: TooltipObjectType;
 }
 
-const DotPlot = ({
+const RangePlot = ({
   id,
   className,
   data = [],
@@ -78,7 +73,7 @@ const DotPlot = ({
   zooming = {
     enabled: false,
   },
-}: DotPlotProps) => {
+}: RangePlotProps) => {
   const { onMouseLeave, onMouseMove, onMouseOver } = useTooltip({
     tooltip,
     defaultHtml: (d: any) => `${d[y.key]}: ${d[x.fromKey]} to ${d[x.toKey]}`,
@@ -186,7 +181,7 @@ const DotPlot = ({
       .attr('class', (d: any) =>
         mergeTailwindClasses(
           `comet-tail fill-current stroke-0`,
-          x.className || '',
+          (d[x.fromKey] > d[x.toKey] ? x.classNameNegative : x.className) || '',
           d.className || '',
           x.classNameTail
         )
@@ -231,7 +226,7 @@ const DotPlot = ({
       .attr('class', (d: any) =>
         mergeTailwindClasses(
           `fill-current end-dots stroke-current stroke-0`,
-          x.className || '',
+          (d[x.fromKey] > d[x.toKey] ? x.classNameNegative : x.className) || '',
           d.className || '',
           x.classNameHead || ''
         )
@@ -305,4 +300,4 @@ const DotPlot = ({
   );
 };
 
-export default DotPlot;
+export default RangePlot;

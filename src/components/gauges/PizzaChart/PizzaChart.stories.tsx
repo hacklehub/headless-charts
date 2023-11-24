@@ -3,10 +3,17 @@ import { Meta, StoryObj } from '@storybook/react';
 import PizzaChart from '.';
 import data from './sample.json';
 
-export default {
+/**
+ * Pizza charts are used to show the distribution of a single metric across multiple categories.
+ *
+ *  */
+const meta: Meta<typeof PizzaChart> = {
   title: 'Gauge/PizzaChart',
   component: PizzaChart,
-} as Meta;
+  tags: ['autodocs'],
+};
+
+export default meta;
 
 type Story = StoryObj<typeof PizzaChart>;
 

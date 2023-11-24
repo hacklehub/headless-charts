@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ValueFn, pointer, select, selectAll } from 'd3';
 
+import { TooltipObjectType } from '../../../hooks/useTooltip';
 import { mergeTailwindClasses } from '../../../utils';
 import { scaleLinear } from 'd3';
 
@@ -25,10 +25,7 @@ interface LinearGaugeProps {
     bottom?: number;
   };
   drawing?: { duration: number };
-  tooltip?: {
-    html?: string;
-    className?: string;
-  };
+  tooltip?: TooltipObjectType;
   classNameGauge?: string;
   classNameGaugeBg?: string;
 }

@@ -13,15 +13,14 @@ import {
   symbolTriangle,
   symbolWye,
 } from 'd3-shape';
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect } from 'react';
+import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
 import { ChartProps } from '../../../types';
 import { transition } from 'd3-transition';
-import useTooltip from '../../../hooks/useTooltip';
 import { zoom } from 'd3-zoom';
 
-interface DotPlotProps extends ChartProps {
+interface RangePlotProps extends ChartProps {
   classNameData?: string;
   shape: 'circle';
   y: {
@@ -36,14 +35,10 @@ interface DotPlotProps extends ChartProps {
     axis: 'bottom' | 'top';
     axisTicks: number;
   };
-  tooltip?: {
-    className?: string;
-    keys?: string[];
-    html?: (d: any) => string;
-  };
+  tooltip?: TooltipObjectType;
 }
 
-const DotPlot = ({
+const RangePlot = ({
   id,
   className,
   data = [],
@@ -65,7 +60,7 @@ const DotPlot = ({
   shape = 'circle',
   tooltip = {},
   zooming,
-}: DotPlotProps) => {
+}: RangePlotProps) => {
   const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
     tooltip,
     defaultHtml: (d: any) => `${d[y.key]}: ${d[x.minKey]} to ${d[x.maxKey]}`,
@@ -315,4 +310,4 @@ const DotPlot = ({
   );
 };
 
-export default DotPlot;
+export default RangePlot;

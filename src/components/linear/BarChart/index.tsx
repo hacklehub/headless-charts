@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, min } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
+import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
 import { ChartProps } from '../../../types';
 import React from 'react';
 import { select } from 'd3-selection';
 import { transition } from 'd3-transition';
-import useTooltip from '../../../hooks/useTooltip';
 
 interface ColumnType {
   axis?: 'top' | 'bottom';
@@ -33,11 +32,7 @@ export interface BarChartProps extends ChartProps {
   dataLabel?: {
     className?: string;
   };
-  tooltip?: {
-    className?: string;
-    html?: (d: any) => string;
-    keys?: string[];
-  };
+  tooltip?: TooltipObjectType;
 }
 
 const BarChart = ({
@@ -66,7 +61,7 @@ const BarChart = ({
   dataLabel,
   tooltip,
 }: BarChartProps) => {
-  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip(tooltip);
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({ tooltip });
 
   const refreshData = React.useCallback(() => {
     const svg = select(`#${id}`);
@@ -200,12 +195,7 @@ const BarChart = ({
             : xFn(Math.abs(d[column.key])) - xFn(0)
         )
         .attr('height', yFn.bandwidth() / x.length - (y.padding || 0))
-        .on(
-          'mouseenter',
-          onMouseOver(
-            (d: any) => `${d[y.key]} <br/> ${column.key} ${d[column.key]}`
-          )
-        )
+        .on('mouseenter', onMouseOver)
         .on('mousemove', onMouseMove)
         .on('mouseleave', onMouseLeave);
 

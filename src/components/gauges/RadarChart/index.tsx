@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useCallback } from 'react';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { line, scaleLinear } from 'd3';

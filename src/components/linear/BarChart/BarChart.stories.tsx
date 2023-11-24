@@ -1,19 +1,20 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import BarChart from '.';
 import { Meta } from '@storybook/react';
 import data from './sample.json';
 
 /**
- * Bar charts are used to compare values across categories by using horizontal bars.  Bar charts are useful for showing data changes over a period of time or for comparing data among items. 
- * 
- * To create a bar chart, use the `<BarChart />` component. 
- * 
+ * Bar charts are used to compare values across categories by using horizontal bars.  Bar charts are useful for showing data changes over a period of time or for comparing data among items.
+ *
+ * To create a bar chart, use the `<BarChart />` component.
+ *
  * */
-export default {
+const meta: Meta<typeof BarChart> = {
   title: 'Linear/BarChart',
   component: BarChart,
   tags: ['autodocs'],
-} as Meta;
+};
+
+export default meta;
 
 /** Default Bar Chart (Grouped). */
 export const Default = {

@@ -3,9 +3,9 @@ import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, sum } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect } from 'react';
 
+import { TooltipObjectType } from '../../../hooks/useTooltip';
 import { transition } from 'd3-transition';
 
 interface Y {
@@ -41,11 +41,7 @@ interface SpineChartProps {
   x: Array<any>;
   axisTicks?: number;
   xAxis?: 'top' | 'bottom';
-  tooltip?: {
-    className?: string;
-    html?: (d: any) => string;
-    keys?: string[];
-  };
+  tooltip?: TooltipObjectType;
 }
 
 const SpineChart = ({

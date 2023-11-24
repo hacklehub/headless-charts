@@ -1,6 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import BulletChart from '.';
 import React from 'react';
 
@@ -11,11 +10,13 @@ const data = 85;
  *
  * Built in a headless fashion, you can apply individual styles to all elements
  */
-export default {
+const meta: Meta<typeof BulletChart> = {
   title: 'Gauge/BulletChart/Intro',
   component: BulletChart,
   tags: ['autodocs'],
 } as Meta;
+
+export default meta;
 
 type Story = StoryObj<typeof BulletChart>;
 

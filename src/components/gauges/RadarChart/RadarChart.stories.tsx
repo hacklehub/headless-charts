@@ -8,11 +8,13 @@ import data from './sample.json';
  *
  * Radar charts are also useful for seeing which variables are scoring high or low within a dataset, making them ideal for displaying performance.
  */
-export default {
+const meta: Meta<typeof RadarChart> = {
   title: 'Gauge/RadarChart/Intro',
   component: RadarChart,
   tags: ['autodocs'],
-} as Meta;
+};
+
+export default meta;
 
 type Story = StoryObj<typeof RadarChart>;
 

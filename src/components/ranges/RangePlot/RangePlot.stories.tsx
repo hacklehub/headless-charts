@@ -1,13 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import DotPlot from '.';
 import { Meta } from '@storybook/react';
+import RangePlot from '.';
 import data from './sample.json';
 
-export default {
-  title: 'Ranges/Dotplot',
-  component: DotPlot,
+const meta: Meta<typeof RangePlot> = {
+  title: 'Ranges/RangePlot',
+  component: RangePlot,
   tags: ['autodocs'],
-} as Meta;
+};
+
+export default meta;
 
 export const Default = {
   args: {

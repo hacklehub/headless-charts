@@ -4,12 +4,11 @@ import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, min } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { select, selectAll } from 'd3-selection';
+import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
 import { ChartProps } from '../../../types';
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { transition } from 'd3-transition';
-import useTooltip from '../../../hooks/useTooltip';
 
 export interface BoxPlotVProps extends ChartProps {
   classNameData?: string;
@@ -31,10 +30,7 @@ export interface BoxPlotVProps extends ChartProps {
     key: string;
     axis?: 'top' | 'bottom';
   };
-  tooltip?: {
-    className?: string;
-    html?: (d: any) => string;
-  };
+  tooltip?: TooltipObjectType;
 }
 
 const BoxPlotV = ({

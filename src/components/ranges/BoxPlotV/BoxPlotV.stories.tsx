@@ -1,13 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import BoxPlotV from '.';
 import { Meta } from '@storybook/react';
 import data from '../sample.json';
 
-export default {
+const meta: Meta<typeof BoxPlotV> = {
   title: 'Ranges/BoxPlotV',
   component: BoxPlotV,
   tags: ['autodocs'],
-} as Meta;
+};
+
+export default meta;
 
 /** Default BoxPlot (Grouped). */
 export const Default = {

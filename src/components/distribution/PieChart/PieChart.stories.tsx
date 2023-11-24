@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Meta, StoryObj } from '@storybook/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import PieChart from '.';
 import data from './sample.json';
@@ -19,12 +18,13 @@ import data from './sample.json';
  * - no animation, labels or tooltips
  * - startAngle = 0 and endAngle = 360 (Chart is drawn clockwise from top)
  */
-export default {
+const meta: Meta<typeof PieChart> = {
   title: 'Distribution/PieChart/Intro',
   component: PieChart,
   tags: ['autodocs'],
 } as Meta;
 
+export default meta;
 type Story = StoryObj<typeof PieChart>;
 
 const classNameMap = {

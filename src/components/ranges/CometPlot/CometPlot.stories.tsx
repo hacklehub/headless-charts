@@ -1,23 +1,25 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import CometPlot from '.';
 import { Meta } from '@storybook/react';
 import data from '../sample.json';
 
 /**
  * CometPlots are used to show ranges of values or the movement of a value between two states. This is an animated chart where the comet head moves from a value to another value (fromKey to toKey)
- * 
- * A few examples are: 
- * 
+ *
+ * A few examples are:
+ *
  * - Showing the range of a metric over time
  * - Showing the range of a metric across different groups
  * - Showing the range of a metric across different groups over time
  * - Showing the influence of a yes/no state on a metric (eg:- How well does a team perform with and without a manager/member)
  */
-export default {
+
+const meta: Meta<typeof CometPlot> = {
   title: 'Ranges/CometPlot',
   component: CometPlot,
   tags: ['autodocs'],
-} as Meta;
+};
+
+export default meta;
 
 /**
  * Default CometPlot with no styling.
@@ -46,9 +48,8 @@ export const Styled = {
     x: {
       fromKey: 'min',
       toKey: 'max',
-      className: 'fill-red-800 stoke-white',
-      classNameTail: 'fill-white stroke-red-800',
-      classNameHead: 'fill-red-800',
+      className: 'fill-green-800 stroke-green-800',
+      classNameTail: 'fill-white stroke-green-800',
     },
     y: {
       key: 'name',
@@ -134,7 +135,7 @@ export const CustomColorMap = {
 };
 
 /**
- * The chart can be zoomed in and out by scrolling (single axis). Default min zoom level is 1,  Max zoom level is 2 
+ * The chart can be zoomed in and out by scrolling (single axis). Default min zoom level is 1,  Max zoom level is 2
  */
 export const Zooming = {
   args: {
@@ -157,25 +158,28 @@ export const ZoomingCustom = {
     zooming: {
       enabled: true,
       min: 0.25,
-      max: 4
-    }
-  }
-}
+      max: 4,
+    },
+  },
+};
 
 /**
- * There maybe times when the tail is ahead of the head, so we need to reverse
+ * There are maybe times in which one value has decreased and others have increased and we need to highlight it.
  */
 export const Reverse = {
   args: {
     ...Default.args,
     id: 'box-plot-h-reverse',
+    x: {
+      ...Styled.args.x,
+      classNameNegative: 'fill-red-800 stroke-red-800',
+    },
     data: [
       ...data,
       {
         name: 'Custom',
         min: 85,
         max: 65,
-        className: 'text-red-800',
       },
     ],
   },

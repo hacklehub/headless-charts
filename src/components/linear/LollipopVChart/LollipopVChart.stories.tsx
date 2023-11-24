@@ -2,11 +2,13 @@ import LollipopVChart from '.';
 import { Meta } from '@storybook/react';
 import data from './sample.json';
 
-export default {
+const meta: Meta<typeof LollipopVChart> = {
   title: 'Linear/LollipopVChart',
   component: LollipopVChart,
   tags: ['autodocs'],
-} as Meta;
+};
+
+export default meta;
 
 export const Default = {
   args: {

@@ -32,7 +32,8 @@ export const ToolTipWithCustomHtml: Story = {
     id: 'linear-gauge-with-tooltip-custom-html',
     error: { data: 2 },
     tooltip: {
-      html: `<div class='bg-gray-800 text-white p-2 rounded'>67% with 2% error</div>`,
+      html: () =>
+        `<div class='bg-gray-800 text-white p-2 rounded'>67% with 2% error</div>`,
     },
   },
 };

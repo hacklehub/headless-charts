@@ -1,15 +1,16 @@
 import { pointer, select } from 'd3-selection';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // import React from 'react';
 import { mergeTailwindClasses } from '../utils';
 
+export interface TooltipObjectType {
+  className?: string;
+  html?: (d: any) => string;
+  keys?: string[];
+}
+
 export interface TooltipProps {
-  tooltip?: {
-    className?: string;
-    html?: (d: any) => string;
-    keys?: string[];
-  };
+  tooltip?: TooltipObjectType;
   defaultHtml?: (d: any) => string;
 }
 

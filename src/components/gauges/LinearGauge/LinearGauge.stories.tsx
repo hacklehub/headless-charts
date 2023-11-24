@@ -1,17 +1,18 @@
 import { Meta, StoryObj } from '@storybook/react';
+import { useEffect, useState } from 'react';
 
 import LinearGauge from '.';
-
 
 /**
  * Linear Gauges are simple UI elements that display a single value on a linear scale.
  */
-export default {
+const meta: Meta<typeof LinearGauge> = {
   title: 'Gauge/LinearGauge/Intro',
   component: LinearGauge,
   tags: ['autodocs'],
-} as Meta;
+};
 
+export default meta;
 /**
  * Linear gauges are quite easy to implement. By default, data is a fraction.
  */
@@ -30,7 +31,6 @@ export const Default: Story = {
 /**
  * Linear gauges can be styled with different className props
  */
-
 
 export const Styled: Story = {
   args: {
@@ -76,7 +76,7 @@ export const Error: Story = {
 
 export const ToolTipWithCustomHtml = {
   args: {
-    ...ToolTip.args,
+    ...Error.args,
     id: 'linear-gauge-with-tooltip-custom-html',
     error: { data: 2 },
     tooltip: {
@@ -86,8 +86,8 @@ export const ToolTipWithCustomHtml = {
 };
 
 export const UpdatingData = () => {
-  const [data, setData] = React.useState(0);
-  React.useEffect(() => {
+  const [data, setData] = useState(0);
+  useEffect(() => {
     const interval = setInterval(() => {
       setData(Math.random());
     }, 1000);

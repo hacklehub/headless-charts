@@ -5,12 +5,11 @@ import { max, min } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
 // pointer,
 import { select, selectAll } from 'd3-selection';
+import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
 import { ChartProps } from '../../../types';
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { transition } from 'd3-transition';
-import useTooltip from '../../../hooks/useTooltip';
 
 export interface BoxPlotHProps extends ChartProps {
   classNameData?: string;
@@ -32,10 +31,7 @@ export interface BoxPlotHProps extends ChartProps {
     key: string;
     axis?: 'left' | 'right';
   };
-  tooltip?: {
-    className?: string;
-    html?: (d: any) => string;
-  };
+  tooltip?: TooltipObjectType;
 }
 
 const BoxPlotH = ({

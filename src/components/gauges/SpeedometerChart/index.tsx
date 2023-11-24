@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Arc, SymbolType, arc, symbol, symbolTriangle } from 'd3';
 import { ScaleLinear, scaleLinear } from 'd3-scale';
 import { select, selectAll } from 'd3-selection';
@@ -209,7 +208,7 @@ const SpeedometerChart = ({
   /* eslint-enable */
   return (
     <svg
-    data-testid='speedometer'
+      data-testid='speedometer'
       id={id}
       className={mergeTailwindClasses(defaultChartClassNames, className)}
     />

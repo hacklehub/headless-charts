@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import {
   curveCatmullRom,
@@ -17,7 +16,6 @@ import {
 import { max, min, minIndex } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 import { scaleLinear, scaleTime } from 'd3';
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect } from 'react';
 
 import { DateTime } from 'luxon';
@@ -32,9 +30,9 @@ interface LineChartProps {
   className?: string;
   x: {
     key: string;
-    scalingFunction: 'linear' | 'time';
+    scalingFunction?: 'linear' | 'time';
     convert?: (d: any) => any;
-    axis: 'bottom' | 'top';
+    axis?: 'bottom' | 'top';
     axisTicks?: number;
     axisLabel?: string;
     axisLabelPosition?: 'right' | 'bottom';
@@ -43,7 +41,7 @@ interface LineChartProps {
   };
   y: Array<{
     key: string;
-    axis: 'left' | 'right';
+    axis?: 'left' | 'right';
     start?: number;
     end?: number;
     ticks?: number;
@@ -59,7 +57,7 @@ interface LineChartProps {
       | 'cross'
       | 'diamond';
     size?: number;
-    unknown: any;
+    unknown?: any;
   }>;
   tooltip?: {
     keys?: Array<string>;
