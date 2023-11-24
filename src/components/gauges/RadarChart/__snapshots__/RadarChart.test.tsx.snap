@@ -1,0 +1,97 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`RadarChart > renders RadarChart component for snapshot test 1`] = `
+<svg
+  class="chart dark:bg-gray-800 dark:text-gray-50 h-64 lg:w-4/12 md:w-6/12 text-gray-900 w-full"
+  data-testid="radar-chart"
+  id="radar-chart"
+>
+  <g>
+    <line
+      stroke="black"
+      x1="0"
+      x2="-1.175660927181459e-15"
+      y1="0"
+      y2="19.2"
+    />
+    <line
+      stroke="black"
+      x1="0"
+      x2="18.260285112866946"
+      y1="0"
+      y2="5.933126291998992"
+    />
+    <line
+      stroke="black"
+      x1="0"
+      x2="11.285476844015486"
+      y1="0"
+      y2="-15.533126291998988"
+    />
+    <line
+      stroke="black"
+      x1="0"
+      x2="-11.285476844015479"
+      y1="0"
+      y2="-15.533126291998993"
+    />
+    <line
+      stroke="black"
+      x1="0"
+      x2="-18.26028511286695"
+      y1="0"
+      y2="5.933126291998986"
+    />
+    <path
+      class="fill-red-600 stroke-red-600"
+      d="M0,18L15.217,4.944L10.58,-14.562L-9.405,-12.944L-15.217,4.944L0,18"
+      fill-opacity="0.7"
+    />
+    <path
+      class="fill-blue-600 stroke-blue-600"
+      d="M0,16L15.217,4.944L11.168,-15.371L-8.817,-12.135L-15.407,5.006L0,16"
+      fill-opacity="0.7"
+    />
+  </g>
+  <text
+    class="text-xs"
+    text-anchor="middle"
+    x="-1.3226185430791415e-15"
+    y="21.6"
+  >
+    attack
+  </text>
+  <text
+    class="text-xs"
+    text-anchor="middle"
+    x="20.542820751975317"
+    y="6.674767078498866"
+  >
+    defense
+  </text>
+  <text
+    class="text-xs"
+    text-anchor="middle"
+    x="12.696161449517422"
+    y="-17.474767078498864"
+  >
+    midfield
+  </text>
+  <text
+    class="text-xs"
+    text-anchor="middle"
+    x="-12.696161449517415"
+    y="-17.474767078498868"
+  >
+    goalkeeper
+  </text>
+  <text
+    class="text-xs"
+    text-anchor="middle"
+    x="-20.54282075197532"
+    y="6.674767078498859"
+  >
+    overall
+  </text>
+</svg>
+`;

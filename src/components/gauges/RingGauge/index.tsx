@@ -86,11 +86,11 @@ const RingGauge = ({
       tooltip && select('#tooltip').node()
         ? select('#tooltip')
         : select('body')
-            .append('div')
-            .attr('id', 'tooltip')
-            .style('position', 'absolute')
-            .style('opacity', '0')
-            .attr('class', mergeTailwindClasses(tooltip?.className));
+          .append('div')
+          .attr('id', 'tooltip')
+          .style('position', 'absolute')
+          .style('opacity', '0')
+          .attr('class', mergeTailwindClasses(tooltip?.className));
 
     const g = svg.append('g');
 
@@ -98,7 +98,7 @@ const RingGauge = ({
       height = +svg.style('height').split('px')[0];
 
     const getInnerRadius = (index: number) =>
-        minRadius + (numArcs - (index + 1)) * (arcWidth + (padding.arc || 0)),
+      minRadius + (numArcs - (index + 1)) * (arcWidth + (padding.arc || 0)),
       getOuterRadius = (index: number) => getInnerRadius(index) + arcWidth;
 
     g.attr('transform', `translate(${width / 2},${height / 2})`);
@@ -264,6 +264,7 @@ const RingGauge = ({
   }, [data, refreshChart]);
   return (
     <svg
+      data-testid='ring-gauge'
       id={id}
       className={mergeTailwindClasses(defaultChartClassNames, className || '')}
     />

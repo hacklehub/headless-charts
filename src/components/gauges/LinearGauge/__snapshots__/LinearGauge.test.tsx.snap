@@ -1,0 +1,38 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LinearGauge > renders LinearGauge component for snapshot test 1`] = `
+<svg
+  class=" chart dark:bg-gray-800 dark:text-gray-50 h-12 lg:w-4/12 md:w-6/12 text-gray-900 w-full"
+  data-testid="linear-gauge"
+  id="linear-gauge"
+>
+  <g>
+    <g>
+      <text
+        class="fill-current text-lg"
+        text-anchor="middle"
+        x="0"
+        y="-30"
+      >
+        Linear Gauge Graph
+      </text>
+      <rect
+        class="dark:text-gray-700 fill-current stroke-current text-gray-300"
+        height="6"
+        ry="3"
+        width="-80"
+        x="40"
+        y="-16"
+      />
+      <rect
+        class="data-rect fill-current stroke-current"
+        height="6"
+        ry="3"
+        width="0"
+        x="40"
+        y="-16"
+      />
+    </g>
+  </g>
+</svg>
+`;

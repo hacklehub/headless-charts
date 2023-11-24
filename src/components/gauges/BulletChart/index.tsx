@@ -139,7 +139,7 @@ const BulletChart = ({
       )
       .attr('x', xFn(min))
       .attr('y', margin.top)
-      .attr('width',  xFn(previousData.current) - xFn(min))
+      .attr('width', xFn(previousData.current) - xFn(min))
       .attr('height', height - axisHeight - margin.top * 2)
       .transition()
       .duration(1000)
@@ -181,6 +181,7 @@ const BulletChart = ({
 
   return (
     <svg
+      data-testid='bullet-chart'
       id={id}
       className={mergeTailwindClasses(
         defaultChartClassNames,

@@ -151,6 +151,7 @@ const RadarChart = ({
 
   return (
     <svg
+      data-testid='radar-chart'
       id={id}
       className={mergeTailwindClasses(className, defaultChartClassNames)}
     />
