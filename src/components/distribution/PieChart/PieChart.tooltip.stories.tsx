@@ -3,6 +3,12 @@ import { Meta, StoryObj } from '@storybook/react';
 import PieChart from '.';
 import data from './sample.json';
 
+const classNameMap = {
+  'Product A': 'fill-purple-700 dark:fill-purple-100',
+  'Product B': 'fill-purple-500 dark:fill-purple-300',
+  'Product C': 'fill-purple-300 dark:fill-purple-500',
+};
+
 /**
  * Donut charts are a variant of pie charts. Simply specify an `innerRadius` prop
  */
@@ -10,17 +16,17 @@ const meta: Meta<typeof PieChart> = {
   title: 'Distribution/PieChart/Tooltips',
   component: PieChart,
   tags: ['autodocs'],
+  args: {
+    data,
+    valueKey: 'USA',
+    classNameMap,
+    tooltip: {},
+  },
 };
 
 export default meta;
 
 type Story = StoryObj<typeof PieChart>;
-
-const classNameMap = {
-  'Product A': 'fill-purple-700',
-  'Product B': 'fill-purple-500',
-  'Product C': 'fill-purple-300',
-};
 
 /**
  * Tooltips can be enabled by adding a `tooltip` prop (`{}` will render default behaviour).
@@ -28,10 +34,6 @@ const classNameMap = {
 export const Tooltip: Story = {
   args: {
     id: 'tooltip',
-    data,
-    valueKey: 'USA',
-    classNameMap,
-    tooltip: {},
   },
 };
 
@@ -40,10 +42,9 @@ export const Tooltip: Story = {
  * */
 export const TooltipStyled: Story = {
   args: {
-    ...Tooltip.args,
     id: 'tooltip-styled',
     tooltip: {
-      className: 'bg-purple-800 text-white p-2 rounded',
+      className: 'bg-purple-700 text-white p-2 rounded',
     },
   },
 };
