@@ -10,7 +10,7 @@ import { convertToRanks } from '../../../utils';
  * Bump charts are used to compare the rank of a set of data points over time.
  */
 const meta: Meta<typeof LineChart> = {
-  title: 'Linear/LineChart/Bump',
+  title: 'Linear/LineChart/Ranked',
   component: LineChart,
   tags: ['autodocs'],
 };
