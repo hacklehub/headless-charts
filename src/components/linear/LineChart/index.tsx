@@ -1,5 +1,6 @@
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import {
+  curveBumpX,
   curveCatmullRom,
   curveLinear,
   curveStep,
@@ -24,21 +25,24 @@ import { easeLinear } from 'd3';
 import { mergeTailwindClasses } from '../../../utils';
 import { zoom } from 'd3-zoom';
 
+interface XAxis {
+  key: string;
+  scalingFunction?: 'linear' | 'time';
+  convert?: (d: any) => any;
+  axis?: 'bottom' | 'top';
+  format?: string;
+  axisTicks?: number;
+  axisLabel?: string;
+  axisLabelPosition?: 'right' | 'bottom';
+  start?: object | number;
+  end?: object | number;
+}
+
 interface LineChartProps {
   data: Array<object>;
   id: string;
   className?: string;
-  x: {
-    key: string;
-    scalingFunction?: 'linear' | 'time';
-    convert?: (d: any) => any;
-    axis?: 'bottom' | 'top';
-    axisTicks?: number;
-    axisLabel?: string;
-    axisLabelPosition?: 'right' | 'bottom';
-    start?: object | number;
-    end?: object | number;
-  };
+  x: XAxis;
   y: Array<{
     key: string;
     axis?: 'left' | 'right';
@@ -46,7 +50,7 @@ interface LineChartProps {
     end?: number;
     ticks?: number;
     className?: string;
-    curve?: 'rounded';
+    curve?: 'rounded' | 'step' | 'line' | 'bumpX' | undefined;
     symbol?:
       | 'none'
       | 'circle'
@@ -72,6 +76,8 @@ interface LineChartProps {
     min: number;
     max: number;
   };
+  yLeftLabel?: string;
+  yRightLabel?: string;
   paddingTop?: number;
   paddingBottom?: number;
   paddingLeft?: number;
@@ -81,6 +87,7 @@ interface LineChartProps {
   marginLeft?: number;
   marginRight?: number;
   showGuideLines?: boolean;
+  reverse?: boolean;
   referenceLines?: Array<{
     x?: number | string;
     yLeft?: number;
@@ -108,6 +115,10 @@ const LineChart = ({
   marginTop = 40,
   marginBottom = 40,
   referenceLines = [],
+  yLeftLabel,
+  yRightLabel,
+  showGuideLines = false,
+  reverse = false,
 }: LineChartProps) => {
   const refreshChart = useCallback(() => {
     const shapeMapping = {
@@ -125,6 +136,7 @@ const LineChart = ({
       rounded: curveCatmullRom,
       step: curveStep,
       line: curveLinear,
+      bumpX: curveBumpX,
       default: curveLinear,
     };
 
@@ -212,7 +224,9 @@ const LineChart = ({
 
     const yLeftFn =
       allLeftY.length > 0 &&
-      scaleLinear().domain([minLeftYs, maxLeftYs]).range(yRange);
+      scaleLinear()
+        .domain(reverse ? [maxLeftYs, minLeftYs] : [minLeftYs, maxLeftYs])
+        .range(yRange);
 
     const yLeftAxis =
       // @ts-ignore
@@ -333,7 +347,7 @@ const LineChart = ({
       yLeftAxisG
         // @ts-ignore
         .append('text')
-        .text(yLeftLabels.join(', '))
+        .text(yLeftLabel || yLeftLabels.join(', '))
         .attr('fill', 'currentColor')
         .attr('text-anchor', 'middle')
         .attr('x', 0)
@@ -348,7 +362,7 @@ const LineChart = ({
       yRightAxisG
         // @ts-ignore
         .append('text')
-        .text(yRightLabels.join(', '))
+        .text(yRightLabel || yRightLabels.join(', '))
         .attr('fill', 'currentColor')
         .attr('text-anchor', 'middle')
         .attr('x', 0)

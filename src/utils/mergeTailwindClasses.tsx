@@ -1,4 +1,4 @@
-export function mergeTailwindClasses(...classStrings: (string | undefined)[]) {
+function mergeTailwindClasses(...classStrings: (string | undefined)[]) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const classHash: any = {};
   classStrings.map((str) => {
@@ -9,3 +9,5 @@ export function mergeTailwindClasses(...classStrings: (string | undefined)[]) {
   });
   return Object.values(classHash).sort().join(' ');
 }
+
+export default mergeTailwindClasses;

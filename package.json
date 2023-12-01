@@ -8,7 +8,7 @@
   "types": "dist/index.d.ts",
   "packageManager": "yarn@4.0.2",
   "scripts": {
-    "dev": "vite",
+    "start": "tsc -w",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",

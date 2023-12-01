@@ -1,3 +1,7 @@
+import convertToRanks from './utils/convertToRanks';
+import deepValue from './utils/deepValue';
+import { mergeTailwindClasses } from './utils';
+
 export { default as LineChart } from './components/linear/LineChart';
 export { default as ColumnChart } from './components/linear/ColumnChart';
 export { default as ColumnChartStacked } from './components/linear/ColumnChartStacked';
@@ -21,3 +25,9 @@ export { default as LinearGauge } from './components/gauges/LinearGauge';
 export { default as RadarChart } from './components/gauges/RadarChart';
 export { default as SpeedometerChart } from './components/gauges/SpeedometerChart';
 export { default as PizzaChart } from './components/gauges/PizzaChart';
+
+export const utils = {
+  mergeTailwindClasses,
+  convertToRanks,
+  deepValue,
+};

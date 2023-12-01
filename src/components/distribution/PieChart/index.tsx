@@ -3,7 +3,7 @@ import { arc, pie } from 'd3';
 import { useCallback, useEffect, useRef } from 'react';
 import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
-import { deepValue } from '../../../utils/deepValue';
+import { deepValue } from '../../../utils/';
 import { defaultChartClassNames } from '../../../utils';
 import { interpolate } from 'd3-interpolate';
 import { mergeTailwindClasses } from '../../../utils';
