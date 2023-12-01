@@ -40,12 +40,17 @@ export const WithColor = {
     color: {
       key: 'continent',
       classNameMap: {
-        Asia: 'fill-red-500 stroke-red-500',
-        Europe: 'fill-blue-500 stroke-blue-500',
-        'North America': 'fill-brown-500 stroke-brown-500',
-        'South America': 'fill-green-500 stroke-green-500',
-        Africa: 'fill-yellow-500 stroke-yellow-500',
-        Oceania: 'fill-purple-500 stroke-purple-500',
+        Asia: 'fill-red-600 dark:fill-red-300 stroke-red-600 dark:stroke-red-300',
+        Europe:
+          'fill-blue-600 dark:fill-blue-300 stroke-blue-600 dark:stroke-blue-300',
+        'North America':
+          'fill-brown-600 dark:fill-brown-300 stroke-brown-600 dark:stroke-brown-300',
+        'South America':
+          'fill-green-600 dark:fill-green-300 stroke-green-600 dark:stroke-green-300',
+        Africa:
+          'fill-yellow-600 stroke-yellow-600 dark:fill-yellow-300 dark:stroke-yellow-300',
+        Oceania:
+          'fill-purple-600 stroke-purple-600 dark:fill-purple-300 dark:stroke-purple-300',
       },
     },
   },
@@ -62,7 +67,7 @@ export const WithSizeAndColor = {
     size: {
       key: 'population',
       min: 1,
-      max: 100,
+      max: 300,
       default: 10,
     },
   },
@@ -95,7 +100,7 @@ export const Animated = {
     ...WithSizeAndShape.args,
     id: 'scatterplot-animated',
     drawing: {
-      delay: 100,
+      delay: 300,
     },
   },
 };
