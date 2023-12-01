@@ -1,7 +1,7 @@
 {
   "name": "@headless-charts/react",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
