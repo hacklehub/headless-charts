@@ -13,7 +13,7 @@ interface YField {
 
 /**
  *
- * Converting to ranks for ranked line chart
+ * Converts value of data into ranks without changing the shape of the data
  *
  * @param data The data to convert to ranks
  * @param y The columns which need to be converted to ranks
