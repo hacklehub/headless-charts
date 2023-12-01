@@ -9,14 +9,14 @@ import data from './sample.json';
  * */
 
 const meta: Meta<typeof BarChartStacked> = {
-  title: 'Linear/BarChartStacked/Intro',
+  title: 'Linear/BarChartStacked/Waterfall',
   component: BarChartStacked,
   tags: ['autodocs'],
 };
 
 export default meta;
 
-export const Default = {
+export const Waterfall = {
   args: {
     data,
     id: 'bar-chart-stacked-default',
@@ -27,12 +27,13 @@ export const Default = {
       { key: 'value' },
     ],
     y: { key: 'name' },
+    waterfall: true,
   },
 };
 
 export const Styled = {
   args: {
-    ...Default.args,
+    ...Waterfall.args,
     id: 'bar-chart-stacked-styled',
     className: 'bg-gray-100 rounded',
     padding: {
@@ -62,20 +63,20 @@ export const Styled = {
 export const WithDrawing = {
   args: {
     ...Styled.args,
-    id: 'bar-chart-stacked-drawing',
+    id: 'waterfall-drawing-styled',
     drawing: {
       duration: 1000,
     },
   },
 };
 
-export const WithDrawingDelay = {
+export const DrawingWithDelay = {
   args: {
     ...Styled.args,
-    id: 'bar-chart-stacked-drawing-delay',
+    id: 'waterfall-drawing-delay',
     drawing: {
       duration: 1000,
-      delay: 100,
+      delay: 200,
     },
   },
 };

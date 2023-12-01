@@ -9,7 +9,7 @@ import data from './sample.json';
  *
  * */
 const meta: Meta<typeof BarChart> = {
-  title: 'Linear/BarChart',
+  title: 'Linear/BarChart/Intro',
   component: BarChart,
   tags: ['autodocs'],
 };
@@ -53,13 +53,17 @@ export const Styled = {
     x: [
       {
         key: 'reading',
-        className: 'fill-amber-500 rounded',
+        className: 'fill-amber-500 dark:fill-amber-100 rounded',
       },
-      { key: 'value', className: 'fill-purple-400' },
+      { key: 'value', className: 'fill-purple-400 dark:fill-purple-100' },
     ],
-    y: { key: 'name', className: 'text-red-500', padding: 10 },
+    y: { key: 'name', className: 'text-red-500 dark:text-red-50', padding: 10 },
   },
 };
+
+/**
+ * You can specially style the bars by using the `className` and `classNameNegative` props. classNameNegative is used when the value is negative.
+ */
 
 export const NegativeStyling = {
   args: {
@@ -68,17 +72,20 @@ export const NegativeStyling = {
     x: [
       {
         key: 'reading',
-        className: 'text-red-500 rounded',
-        classNameNegative: 'text-green-500 rounded',
+        className: 'text-red-500 dark:text-red-400 rounded',
+        classNameNegative: 'text-green-500 rounded dark:text-green-200',
         start: -25,
         end: 25,
       },
-      { key: 'value', className: 'text-blue-500' },
+      { key: 'value', className: 'text-blue-500 dark:text-blue-400' },
     ],
     data: [...data, { name: 'Negative', reading: -20, value: -1 }],
   },
 };
 
+/**
+ * You can animate the bars by using the `drawing` prop.
+ */
 export const Drawing = {
   args: {
     ...Default.args,
@@ -91,42 +98,15 @@ export const Drawing = {
   },
 };
 
+/**
+ * You can add a data label to the bars by using the `dataLabel` prop. You can style the data label by using the `className` prop.
+ */
 export const DataLabel = {
   args: {
     ...Default.args,
     id: 'bar-chart-data-label',
     dataLabel: {
-      className: 'text-white',
-    },
-  },
-};
-
-export const Tooltip = {
-  args: {
-    ...Default.args,
-    id: 'bar-chart-tooltip',
-    tooltip: {
-      className: 'bg-gray-800 text-white p-2 rounded',
-      keys: ['name', 'reading', 'value'],
-    },
-  },
-};
-
-export const CustomTooltip = {
-  args: {
-    ...Default.args,
-    id: 'bar-chart-custom-tooltip',
-    tooltip: {
-      className: 'bg-gray-800 text-white p-2 rounded',
-      html: (d: any) => {
-        return `
-          <div class="flex flex-col">
-            <div class="text-lg text-center">${d.name}</div>
-            <div class="text-sm text-center">${d.reading}</div>
-            <div class="text-sm text-center">${d.value}</div>
-          </div>
-        `;
-      },
+      className: 'text-white dark:text-gray-900',
     },
   },
 };
@@ -205,52 +185,5 @@ export const CustomAxisLabel = {
         axisLabel: 'Value',
       },
     ],
-  },
-};
-
-export const DivergingBarChart = {
-  args: {
-    data: [
-      {
-        name: 'Product A',
-        reading: 10000,
-      },
-      {
-        name: 'Product B',
-        reading: 9000,
-      },
-      {
-        name: 'Product C',
-        reading: 6000,
-      },
-      {
-        name: 'Product D',
-        reading: -1000,
-      },
-    ],
-    id: 'bar-chart-diverging',
-    x: [
-      {
-        key: 'reading',
-        className: 'text-green-500 rounded',
-        classNameNegative: 'text-red-500 rounded',
-        axis: 'top',
-        start: -10000,
-        end: 10000,
-      },
-    ],
-    y: { key: 'name', padding: 10 },
-  },
-};
-
-export const DrawingDivergingBarChart = {
-  args: {
-    ...DivergingBarChart.args,
-    id: 'bar-chart-diverging-drawing',
-    drawing: {
-      enabled: true,
-      duration: 1000,
-      delay: 100,
-    },
   },
 };

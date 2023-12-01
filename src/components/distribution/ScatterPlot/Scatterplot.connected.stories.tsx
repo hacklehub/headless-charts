@@ -43,7 +43,7 @@ export const ConnectedStyled = {
     id: 'scatterplot-connected-styled',
     connect: {
       enabled: true,
-      className: 'stroke-green-500',
+      className: 'stroke-green-500 dark:stroke-green-100',
     },
   },
 };
@@ -54,15 +54,10 @@ export const ConnectedStyled = {
 
 export const ConnectedAnimated = {
   args: {
-    ...Connected.args,
+    ...ConnectedStyled.args,
     id: 'scatterplot-connected-animated',
-    data: data.reverse(),
     drawing: {
       delay: 100,
-    },
-    connect: {
-      enabled: true,
-      className: 'stroke-green-500',
     },
   },
 };
