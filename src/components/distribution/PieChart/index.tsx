@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { arc, pie } from 'd3';
+import { select, selectAll } from 'd3-selection';
 import { useCallback, useEffect, useRef } from 'react';
 import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
@@ -8,7 +9,6 @@ import { defaultChartClassNames } from '../../../utils';
 import { interpolate } from 'd3-interpolate';
 import { mergeTailwindClasses } from '../../../utils';
 import { min } from 'd3-array';
-import { select } from 'd3-selection';
 
 interface DataItem {
   name: string;
@@ -86,6 +86,7 @@ const PieChart = ({
   labels,
 }: PieChartProps) => {
   const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
+    id,
     tooltip,
     defaultHtml: (d: any) => `${d.data[nameKey]} = ${d.value}`,
   });
@@ -235,6 +236,9 @@ const PieChart = ({
 
   useEffect(() => {
     refreshChart();
+    return () => {
+      selectAll(`#tooltip-${id}`).remove();
+    };
   }, [data, refreshChart]);
 
   return (

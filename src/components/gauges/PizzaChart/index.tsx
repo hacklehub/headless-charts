@@ -48,6 +48,7 @@ const PizzaChart = ({
   tooltip,
 }: PizzaChartProps) => {
   const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
+    id,
     tooltip,
     defaultHtml: (d: any) =>
       `<div class="text-gray-800">${metrics[d.index].key} = ${
@@ -172,6 +173,9 @@ const PizzaChart = ({
 
   useEffect(() => {
     refreshChart();
+    return () => {
+      selectAll(`#tooltip-${id}`).remove();
+    };
   }, [refreshChart]);
 
   return (

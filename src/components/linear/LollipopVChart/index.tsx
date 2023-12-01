@@ -245,7 +245,7 @@ const LollipopVChart = ({
   useEffect(() => {
     refreshChart();
     return () => {
-      selectAll('.tooltip').remove();
+      selectAll(`#tooltip-${id}`).remove();
     };
   }, [data, refreshChart]);
 

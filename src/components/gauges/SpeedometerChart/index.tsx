@@ -202,6 +202,10 @@ const SpeedometerChart = ({
   useEffect(() => {
     refreshChart();
     return () => {
+      selectAll(`#tooltip-${id}`).remove();
+    };
+
+    return () => {
       selectAll<SVGGElement, unknown>('.tooltip').remove();
     };
   }, [data, max, refreshChart]);

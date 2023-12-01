@@ -3,6 +3,7 @@ import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, min } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
+import { select, selectAll } from 'd3-selection';
 import {
   symbol,
   symbolCircle,
@@ -17,7 +18,6 @@ import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
 import { ChartProps } from '../../../types';
 import React from 'react';
-import { select } from 'd3-selection';
 import { transition } from 'd3-transition';
 
 export interface RangePlotProps extends ChartProps {
@@ -75,6 +75,7 @@ const RangePlot = ({
   },
 }: RangePlotProps) => {
   const { onMouseLeave, onMouseMove, onMouseOver } = useTooltip({
+    id,
     tooltip,
     defaultHtml: (d: any) => `${d[y.key]}: ${d[x.fromKey]} to ${d[x.toKey]}`,
   });
@@ -286,9 +287,8 @@ const RangePlot = ({
 
   React.useEffect(() => {
     refreshChart();
-
     return () => {
-      select(`#${id}`).selectAll('*').remove();
+      selectAll(`#tooltip-${id}`).remove();
     };
   }, [data, refreshChart, id]);
 

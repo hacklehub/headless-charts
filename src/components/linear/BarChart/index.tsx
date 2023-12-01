@@ -2,11 +2,11 @@ import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { max, min } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
+import { select, selectAll } from 'd3-selection';
 import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
 import { ChartProps } from '../../../types';
 import React from 'react';
-import { select } from 'd3-selection';
 import { transition } from 'd3-transition';
 
 interface ColumnType {
@@ -61,7 +61,10 @@ const BarChart = ({
   dataLabel,
   tooltip,
 }: BarChartProps) => {
-  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({ tooltip });
+  const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
+    id,
+    tooltip,
+  });
 
   const refreshData = React.useCallback(() => {
     const svg = select(`#${id}`);
@@ -247,6 +250,9 @@ const BarChart = ({
 
   React.useEffect(() => {
     refreshData();
+    return () => {
+      selectAll(`#tooltip-${id}`).remove();
+    };
   }, [data, refreshData]);
 
   return (

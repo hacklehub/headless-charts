@@ -223,7 +223,7 @@ const ColumnChartGrouped = ({
 
     const tooltipDiv = select('body')
       .append('div')
-      .attr('id', 'tooltip')
+      .attr('id', `tooltip-${id}`)
       .style('position', 'absolute')
       .style('opacity', '0')
       .attr('class', `tooltip ${(tooltip && tooltip.className) || ''}`);
@@ -256,7 +256,7 @@ const ColumnChartGrouped = ({
   useEffect(() => {
     refreshChart();
     return () => {
-      selectAll('.tooltip').remove();
+      selectAll(`#tooltip-${id}`).remove();
     };
   }, [data]);
   /* eslint-enable */

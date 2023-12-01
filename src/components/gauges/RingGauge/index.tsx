@@ -8,6 +8,7 @@ import { interpolateNumber } from 'd3-interpolate';
 import { min } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
 import { transition } from 'd3-transition';
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 export interface RingGaugeProps {
@@ -87,7 +88,7 @@ const RingGauge = ({
         ? select('#tooltip')
         : select('body')
             .append('div')
-            .attr('id', 'tooltip')
+            .attr('id', `tooltip-${id}`)
             .style('position', 'absolute')
             .style('opacity', '0')
             .attr('class', mergeTailwindClasses(tooltip?.className));
@@ -258,6 +259,10 @@ const RingGauge = ({
 
   useEffect(() => {
     refreshChart();
+    return () => {
+      selectAll(`#tooltip-${id}`).remove();
+    };
+
     return () => {
       selectAll('#tooltip').remove();
     };

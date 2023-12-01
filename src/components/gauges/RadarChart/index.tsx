@@ -147,6 +147,9 @@ const RadarChart = ({
 
   React.useEffect(() => {
     refreshChart();
+    return () => {
+      selectAll(`#tooltip-${id}`).remove();
+    };
   }, [data, refreshChart]);
 
   return (

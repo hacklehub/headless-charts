@@ -156,7 +156,7 @@ const LinearGauge = ({
 
     const tooltipDiv = select('body')
       .append('div')
-      .attr('id', 'tooltip')
+      .attr('id', `tooltip-${id}`)
       .style('position', 'absolute')
       .style('opacity', '0')
       .attr(
@@ -202,7 +202,11 @@ const LinearGauge = ({
   useEffect(() => {
     refreshChart();
     return () => {
-      selectAll('.tooltip').remove();
+      selectAll(`#tooltip-${id}`).remove();
+    };
+
+    return () => {
+      selectAll(`#tooltip-${id}`).remove();
     };
   }, [data, max, refreshChart]);
 

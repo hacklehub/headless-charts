@@ -59,6 +59,7 @@ const BoxPlotV = ({
   },
 }: BoxPlotVProps) => {
   const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
+    id,
     tooltip,
     defaultHtml: (d: any) =>
       `min: ${d[y.minKey].toFixed(0)} <br/> range: ${+d[y.boxStart].toFixed(
@@ -255,7 +256,7 @@ const BoxPlotV = ({
   React.useEffect(() => {
     refreshChart();
     return () => {
-      selectAll('.tooltip').remove();
+      selectAll(`#tooltip-${id}`).remove();
     };
   }, [data, refreshChart]);
   return (

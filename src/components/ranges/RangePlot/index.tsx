@@ -62,6 +62,7 @@ const RangePlot = ({
   zooming,
 }: RangePlotProps) => {
   const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
+    id,
     tooltip,
     defaultHtml: (d: any) => `${d[y.key]}: ${d[x.minKey]} to ${d[x.maxKey]}`,
   });
@@ -299,7 +300,7 @@ const RangePlot = ({
   useEffect(() => {
     refreshChart();
     return () => {
-      selectAll('.tooltip').remove();
+      selectAll(`#tooltip-${id}`).remove();
     };
   }, [data, refreshChart]);
   return (

@@ -105,6 +105,7 @@ const BarChartStacked = ({
   dataLabel,
 }: BarChartStackedProps) => {
   const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
+    id,
     tooltip,
     defaultHtml: (d: any) =>
       `${d.data[y.key]} <br/> ${x
@@ -257,7 +258,7 @@ const BarChartStacked = ({
   useEffect(() => {
     refreshChart();
     return () => {
-      selectAll('.tooltip').remove();
+      selectAll(`#tooltip-${id}`).remove();
     };
   }, [data, refreshChart]);
   return (

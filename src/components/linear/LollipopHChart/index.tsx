@@ -234,7 +234,7 @@ const LollipopHChart = ({
 
     const tooltipDiv = select('body')
       .append('div')
-      .attr('id', 'tooltip')
+      .attr('id', `tooltip-${id}`)
       .style('position', 'absolute')
       .style('opacity', '0')
       .attr('class', mergeTailwindClasses(`tooltip`, tooltip?.className || ''));
@@ -255,7 +255,7 @@ const LollipopHChart = ({
   useEffect(() => {
     refreshChart();
     return () => {
-      selectAll('.tooltip').remove();
+      selectAll(`#tooltip-${id}`).remove();
     };
   }, [data, refreshChart]);
   return (

@@ -12,18 +12,22 @@ export interface TooltipObjectType {
 export interface TooltipProps {
   tooltip?: TooltipObjectType;
   defaultHtml?: (d: any) => string;
+  id?: string;
 }
 
-const useTooltip = ({ tooltip, defaultHtml }: TooltipProps) => {
+const useTooltip = ({ tooltip, defaultHtml, id }: TooltipProps) => {
   const tooltipDiv =
     tooltip && select('#tooltip').node()
       ? select('#tooltip')
       : select('body')
           .append('div')
-          .attr('id', 'tooltip')
+          .attr('id', `tooltip-${id}`)
           .attr(
             'class',
-            mergeTailwindClasses('absolute opacity-0', tooltip?.className)
+            mergeTailwindClasses(
+              'absolute opacity-0 tooltip',
+              tooltip?.className
+            )
           );
 
   const onMouseOver = (event: any, d: any) => {

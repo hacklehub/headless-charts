@@ -107,6 +107,7 @@ const ScatterPlot = ({
     ${shape?.key ? `${shape.key} ${d[shape.key]}<br/>` : ''}`;
 
   const { onMouseOver, onMouseLeave, onMouseMove } = useTooltip({
+    id,
     tooltip,
     defaultHtml,
   });
@@ -244,7 +245,7 @@ const ScatterPlot = ({
     //     ? select('#tooltip')
     //     : select('body')
     //         .append('div')
-    //         .attr('id', 'tooltip')
+    //         .attr('id', `tooltip-${id}`)
     //         .style('position', 'absolute')
     //         .style('opacity', '0')
     //         .attr('class', mergeTailwindClasses(tooltip?.className));
@@ -400,7 +401,7 @@ const ScatterPlot = ({
   useEffect(() => {
     refreshChart();
     return () => {
-      selectAll('.tooltip').remove();
+      selectAll(`#tooltip-${id}`).remove();
     };
   }, [data, refreshChart]);
   return (
