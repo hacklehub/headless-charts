@@ -17,5 +17,12 @@ export const Default: Story = {
   args: {
     id: 'timeline-chart',
     data,
+    y: {
+      key: 'exophoneNumber',
+      className: 'fill-gray-500',
+    },
+    events: {
+      startKey: 'callStartTime',
+    },
   },
 };
