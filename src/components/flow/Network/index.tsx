@@ -9,6 +9,16 @@ import {
   forceX,
   forceY,
 } from 'd3-force';
+import {
+  symbol,
+  symbolCircle,
+  symbolCross,
+  symbolDiamond,
+  symbolSquare,
+  symbolStar,
+  symbolTriangle,
+  symbolWye,
+} from 'd3-shape';
 import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
 import { ChartProps } from '../../../types';
@@ -32,6 +42,21 @@ interface SizeType {
   min?: number;
   max?: number;
   default?: number;
+}
+
+interface ShapeType {
+  key?: string;
+  map?: {
+    [key: string]:
+      | 'circle'
+      | 'diamond'
+      | 'triangle'
+      | 'square'
+      | 'cross'
+      | 'star'
+      | 'wye';
+  };
+  default?: string;
 }
 
 export interface NetworkProps extends ChartProps {
@@ -65,9 +90,9 @@ export interface NetworkProps extends ChartProps {
       ticks?: number;
       axis?: 'left' | 'right';
     };
-
     size?: SizeType;
     tooltip?: TooltipObjectType;
+    shape?: ShapeType;
   };
   edgeDef: {
     sourceKey: string;
@@ -239,11 +264,24 @@ const Network: React.FC<NetworkProps> = ({
       });
 
       node
-        .attr('cx', (d) =>
-          nodeDef?.x?.key && xScale ? xScale(d[nodeDef?.x?.key]) : d.x
-        )
-        .attr('cy', (d) =>
-          nodeDef?.y?.key && yScale ? yScale(d[nodeDef?.y?.key]) : d.y
+        .attr('d', (d: any) => {
+          return symbol(
+            nodeDef?.shape?.map
+              ? // @ts-ignore
+                shapeMapping[nodeDef?.shape?.map[d[nodeDef?.shape.key]]]
+              : symbolCircle,
+            sizeScale
+              ? // @ts-ignore
+                sizeScale(d[nodeDef?.size?.key])
+              : nodeDef?.size?.default || 75
+          )();
+        })
+        .attr(
+          'transform',
+          (d: any) =>
+            `translate(${
+              nodeDef?.x?.key && xScale ? xScale(d[nodeDef?.x?.key]) : d.x
+            },${nodeDef?.y?.key && yScale ? yScale(d[nodeDef?.y?.key]) : d.y})`
         );
     };
 
@@ -287,9 +325,12 @@ const Network: React.FC<NetworkProps> = ({
       .join('path')
       .attr('class', (d: any) =>
         mergeTailwindClasses(
-          d.className,
+          'stroke-black fill-none',
           edgeDef?.className,
-          'stroke-black fill-none'
+          edgeDef?.classNameKey &&
+            edgeDef?.classNameMap && // @ts-ignore
+            edgeDef?.classNameMap[d[edgeDef?.classNameKey]],
+          d.className
         )
       )
       .attr('stroke-width', (d: any) =>
@@ -314,21 +355,24 @@ const Network: React.FC<NetworkProps> = ({
         ])
         .range([nodeDef?.size.min, nodeDef?.size.max]);
 
+    const shapeMapping: any = {
+      circle: symbolCircle,
+      diamond: symbolDiamond,
+      triangle: symbolTriangle,
+      square: symbolSquare,
+      cross: symbolCross,
+      star: symbolStar,
+      wye: symbolWye,
+    };
+
     const node = g
       .append('g')
-      .attr('stroke', '#fff')
-      .attr('stroke-width', 1.5)
       .selectAll('circle')
       .data(nodes)
-      .join('circle')
-      .attr('r', (d) =>
-        sizeScale
-          ? // @ts-ignore
-            sizeScale(d[nodeDef?.size?.key])
-          : nodeDef?.size?.default || 5
-      )
+      .join('path')
       .attr('class', (d) =>
         mergeTailwindClasses(
+          'fill-black stroke-none',
           d.className,
           nodeDef?.className,
           nodeDef?.classNameKey &&

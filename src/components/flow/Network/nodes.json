@@ -5,7 +5,8 @@
     "age": 20,
     "xValue": 200,
     "yValue": 100,
-    "gender": "male"
+    "gender": "male",
+    "isMarried": "yes"
   },
   {
     "id": "2",
@@ -13,7 +14,8 @@
     "age": 18,
     "xValue": 200,
     "yValue": 150,
-    "gender": "male"
+    "gender": "male",
+    "isMarried": "no"
   },
   {
     "id": "3",
@@ -21,7 +23,8 @@
     "age": 25,
     "xValue": 250,
     "yValue": 100,
-    "gender": "female"
+    "gender": "female",
+    "isMarried": "no"
   },
 
   {
@@ -30,7 +33,8 @@
     "age": 22,
     "xValue": 250,
     "yValue": 150,
-    "gender": "female"
+    "gender": "female",
+    "isMarried": "yes"
   },
   {
     "id": "5",
@@ -38,6 +42,7 @@
     "age": 30,
     "xValue": 300,
     "yValue": 100,
-    "gender": "male"
+    "gender": "male",
+    "isMarried": "yes"
   }
 ]

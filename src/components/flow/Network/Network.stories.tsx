@@ -49,8 +49,8 @@ export const Styling: Story = {
       targetKey: 'to',
       classNameKey: 'type',
       classNameMap: {
-        friend: 'stroke-green-400',
-        acquaintance: 'stroke-red-400',
+        friend: 'stroke-gray-700',
+        acquaintance: 'stroke-gray-300',
       },
     },
   },
@@ -65,9 +65,8 @@ export const NodeSize: Story = {
       idKey: 'name',
       size: {
         key: 'age',
-        min: 4,
-        max: 7,
-        default: 20,
+        min: 40,
+        max: 100,
       },
     },
   },
@@ -98,6 +97,24 @@ export const WithZooming: Story = {
       enabled: true,
       min: 0.5,
       max: 2,
+    },
+  },
+};
+
+export const WithShapeMap: Story = {
+  args: {
+    ...EdgeSize.args,
+    id: 'shape-map-network',
+    nodeDef: {
+      ...EdgeSize.args?.nodeDef,
+      idKey: 'name',
+      shape: {
+        key: 'isMarried',
+        map: {
+          yes: 'square',
+          no: 'star',
+        },
+      },
     },
   },
 };
