@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "name": "John",
+    "age": 20,
+    "xValue": 200,
+    "yValue": 100,
+    "gender": "male"
+  },
+  {
+    "id": "2",
+    "name": "Pete",
+    "age": 18,
+    "xValue": 200,
+    "yValue": 150,
+    "gender": "male"
+  },
+  {
+    "id": "3",
+    "name": "Mary",
+    "age": 25,
+    "xValue": 250,
+    "yValue": 100,
+    "gender": "female"
+  }
+]

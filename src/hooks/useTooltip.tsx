@@ -1,7 +1,6 @@
-import { pointer, select } from 'd3-selection';
-
 // import React from 'react';
-import { mergeTailwindClasses } from '../utils';
+import { deepValue, mergeTailwindClasses } from '../utils';
+import { pointer, select } from 'd3-selection';
 
 export interface TooltipObjectType {
   className?: string;
@@ -45,7 +44,10 @@ const useTooltip = ({ tooltip, defaultHtml, id }: TooltipProps) => {
         ? tooltip.html(d) // Call it
         : tooltip?.keys // Else if keys exists
         ? tooltip.keys // iterate over the keys and show the data
-            .map((key: string) => `${key}: ${d[key] || d.data[key] || ''}`)
+            .map(
+              (key: string) =>
+                `${key}: ${deepValue(d, key) || deepValue(d.data, key) || ''}`
+            )
             .join('<br/>')
         : defaultHtml // else if defaultHtml is given for a chart type
         ? defaultHtml(d) // call it

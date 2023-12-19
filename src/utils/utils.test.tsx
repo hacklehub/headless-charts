@@ -23,6 +23,20 @@ describe('mergeTailwindClasses', () => {
     expect(testDiv).toHaveClass('text-blue-500');
     expect(testDiv).not.toHaveClass('text-red-500');
   });
+  it(`undefined should not come in final string`, () => {
+    const classes = mergeTailwindClasses('text-red-500', undefined);
+    expect(classes).toBe('text-red-500');
+  });
+
+  it(`null should not come in final string`, () => {
+    const classes = mergeTailwindClasses('text-red-500', null);
+    expect(classes).toBe('text-red-500');
+  });
+
+  it(`Empty string should not come in final string`, () => {
+    const classes = mergeTailwindClasses('text-red-500', '');
+    expect(classes).toBe('text-red-500');
+  });
 });
 
 describe('convertToRanks', () => {

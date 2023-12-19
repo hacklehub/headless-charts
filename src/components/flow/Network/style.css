@@ -1,0 +1,14 @@
+@keyframes through {
+    from {
+        stroke-dashoffset: 100%;
+    }
+
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.running {
+    animation: through 60s linear infinite;
+    stroke-dasharray: 5 2;
+}
