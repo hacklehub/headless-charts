@@ -2,9 +2,8 @@ import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import {
   forceCenter,
   forceLink,
+  forceManyBody,
   forceSimulation,
-  forceX,
-  forceY,
 } from 'd3-force';
 import { max, min } from 'd3-array';
 import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
@@ -50,7 +49,9 @@ export interface NetworkProps {
     size?: SizeType;
     tooltip?: TooltipObjectType;
   };
-  edgeDef?: {
+  edgeDef: {
+    sourceKey: string;
+    targetKey: string;
     size?: SizeType;
     curve?: number;
     className?: string; // tailwindClass, Applies to all edges
@@ -129,25 +130,14 @@ const Network: React.FC<NetworkProps> = ({
       .force(
         'link',
         // @ts-ignore
-        forceLink(edges).id((d) => d.id)
+        forceLink(edges).id((d) => d[nodeDef?.idKey])
       )
       // @ts-ignore
       .tick(ticked);
 
-    if (nodeDef?.xKey && nodeDef?.yKey) {
-      simulation.force(
-        'x',
-        // @ts-ignore
-        (d) => forceX(d).strength(1)
-      );
-      simulation.force(
-        'y',
-        // @ts-ignore
-        (d) => forceY(d).strength(1)
-      );
-    } else {
-      simulation.force(`center`, forceCenter(width / 2, height / 2));
-    }
+    simulation
+      .force(`center`, forceCenter(width / 2, height / 2))
+      .force('charge', forceManyBody().strength(-400));
 
     const strokeWidthScale =
       edgeDef?.size?.min &&
@@ -165,12 +155,15 @@ const Network: React.FC<NetworkProps> = ({
 
     const link = svg
       .append('g')
-      .attr('stroke-opacity', 0.6)
       .selectAll('line')
       .data(edges)
       .join('path')
       .attr('class', (d: any) =>
-        mergeTailwindClasses(edgeDef?.className, 'stroke-black fill-none')
+        mergeTailwindClasses(
+          d.className,
+          edgeDef?.className,
+          'stroke-black fill-none'
+        )
       )
       .attr('stroke-width', (d: any) =>
         strokeWidthScale
@@ -209,6 +202,7 @@ const Network: React.FC<NetworkProps> = ({
       )
       .attr('class', (d) =>
         mergeTailwindClasses(
+          d.className,
           nodeDef?.className,
           nodeDef?.classNameKey &&
             nodeDef?.classNameMap && // @ts-ignore

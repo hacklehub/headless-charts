@@ -22,7 +22,7 @@ export const NodeTooltip: Story = {
   args: {
     id: 'tooltip-only-for-nodes',
     nodeDef: {
-      idKey: 'id',
+      idKey: 'name',
       classNameKey: 'gender',
       classNameMap: {
         male: 'fill-blue-800',
@@ -85,6 +85,8 @@ export const EdgeTooltip: Story = {
       tooltip: {},
     },
     edgeDef: {
+      sourceKey: 'from',
+      targetKey: 'to',
       tooltip: {},
     },
   },
@@ -98,6 +100,8 @@ export const EdgeTooltipStyleWithClassName: Story = {
       tooltip: {},
     },
     edgeDef: {
+      sourceKey: 'from',
+      targetKey: 'to',
       tooltip: {
         className: 'bg-gray-100 text-gray-900 p-2 rounded',
       },
@@ -113,6 +117,8 @@ export const EdgeTooltipCustomKeys: Story = {
       tooltip: {},
     },
     edgeDef: {
+      sourceKey: 'from',
+      targetKey: 'to',
       tooltip: {
         keys: ['source.name', 'target.name', 'value'],
       },
@@ -128,6 +134,8 @@ export const EdgeTooltipCustomHTML: Story = {
       tooltip: {},
     },
     edgeDef: {
+      sourceKey: 'from',
+      targetKey: 'to',
       size: {
         key: 'value',
         min: 1,
@@ -137,7 +145,7 @@ export const EdgeTooltipCustomHTML: Story = {
       tooltip: {
         html: (edge) => `
           <div class="bg-gray-100 text-gray-900 p-2 rounded">
-            <div class="font-bold">${edge.source.name} to ${edge.target.name}</div>
+            <div class="font-bold">${edge.from.name} to ${edge.target.name}</div>
             <div>${edge.value}</div>
             `,
       },

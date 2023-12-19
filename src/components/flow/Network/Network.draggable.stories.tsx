@@ -11,6 +11,13 @@ const meta: Meta<typeof Network> = {
   args: {
     nodes,
     edges,
+    nodeDef: {
+      idKey: 'name',
+    },
+    edgeDef: {
+      sourceKey: 'from',
+      targetKey: 'to',
+    },
   },
 };
 

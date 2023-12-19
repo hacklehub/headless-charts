@@ -22,11 +22,13 @@ type Story = StoryObj<typeof Network>;
 
 export const Default: Story = {
   args: {
-    id: 'simple-network',
+    id: 'custom-styles-network',
     nodeDef: {
-      idKey: 'id',
+      idKey: 'name',
     },
     edgeDef: {
+      sourceKey: 'from',
+      targetKey: 'to',
       className: 'running',
     },
   },
@@ -36,9 +38,11 @@ export const CurvedEdges: Story = {
   args: {
     id: 'curved-network',
     nodeDef: {
-      idKey: 'id',
+      idKey: 'name',
     },
     edgeDef: {
+      sourceKey: 'from',
+      targetKey: 'to',
       className: 'running fill-none stroke-green-500',
       curve: 1,
     },

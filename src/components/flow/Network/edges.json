@@ -1,25 +1,25 @@
 [
   {
-    "source": "1",
-    "target": "2",
+    "source": "John",
+    "target": "Pete",
     "type": "friend",
     "value": 1
   },
   {
-    "source": "1",
-    "target": "3",
+    "source": "John",
+    "target": "Mary",
     "type": "friend",
     "value": 3
   },
   {
-    "source": "2",
-    "target": "3",
+    "source": "Pete",
+    "target": "Mary",
     "type": "acquaintance",
     "value": 4
   },
   {
-    "source": "2",
-    "target": "4",
+    "source": "Mary",
+    "target": "Jane",
     "type": "friend",
     "value": 2
   }

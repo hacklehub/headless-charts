@@ -23,7 +23,11 @@ export const Default: Story = {
   args: {
     id: 'simple-network',
     nodeDef: {
-      idKey: 'id',
+      idKey: 'name',
+    },
+    edgeDef: {
+      sourceKey: 'from',
+      targetKey: 'to',
     },
   },
 };
@@ -32,9 +36,13 @@ export const FixingPosition: Story = {
   args: {
     id: 'fixed-network',
     nodeDef: {
-      idKey: 'id',
+      idKey: 'name',
       xKey: 'xValue',
       yKey: 'yValue',
+    },
+    edgeDef: {
+      sourceKey: 'from',
+      targetKey: 'to',
     },
   },
 };
@@ -43,7 +51,7 @@ export const Styling: Story = {
   args: {
     id: 'styled-network',
     nodeDef: {
-      idKey: 'id',
+      idKey: 'name',
       classNameKey: 'gender',
       classNameMap: {
         male: 'fill-blue-800',
@@ -51,6 +59,8 @@ export const Styling: Story = {
       },
     },
     edgeDef: {
+      sourceKey: 'from',
+      targetKey: 'to',
       classNameKey: 'type',
       classNameMap: {
         friend: 'stroke-green-400',
@@ -66,7 +76,7 @@ export const NodeSize: Story = {
     id: 'node-size-network',
     nodeDef: {
       ...Styling?.args?.nodeDef,
-      idKey: 'id',
+      idKey: 'name',
       size: {
         key: 'age',
         min: 4,
@@ -82,6 +92,8 @@ export const EdgeSize: Story = {
     ...NodeSize.args,
     id: 'edge-size-network',
     edgeDef: {
+      sourceKey: 'from',
+      targetKey: 'to',
       size: {
         key: 'value',
         min: 1,
