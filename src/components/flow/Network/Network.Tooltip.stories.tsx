@@ -128,11 +128,10 @@ export const EdgeTooltipCustomKeys: Story = {
 
 export const EdgeTooltipCustomHTML: Story = {
   args: {
+    ...NodeTooltipCustomHTML,
+    nodes,
+    edges,
     id: 'edge-tooltip-custom-html',
-    nodeDef: {
-      idKey: 'id',
-      tooltip: {},
-    },
     edgeDef: {
       sourceKey: 'from',
       targetKey: 'to',
@@ -145,7 +144,7 @@ export const EdgeTooltipCustomHTML: Story = {
       tooltip: {
         html: (edge) => `
           <div class="bg-gray-100 text-gray-900 p-2 rounded">
-            <div class="font-bold">${edge.from.name} to ${edge.target.name}</div>
+            <div class="font-bold">${edge.source.name} to ${edge.target.name}</div>
             <div>${edge.value}</div>
             `,
       },

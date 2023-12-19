@@ -6,6 +6,8 @@ import {
   forceLink,
   forceManyBody,
   forceSimulation,
+  forceX,
+  forceY,
 } from 'd3-force';
 import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
@@ -55,12 +57,13 @@ export interface NetworkProps extends ChartProps {
     x?: {
       key: string;
       ticks?: number;
-      showAxis?: boolean;
+      axis?: 'top' | 'bottom';
+      className?: string;
     };
     y?: {
       key: string;
       ticks?: number;
-      showAxis?: boolean;
+      axis?: 'left' | 'right';
     };
 
     size?: SizeType;
@@ -88,10 +91,10 @@ const Network: React.FC<NetworkProps> = ({
     snapToNewPosition: false,
   },
   padding = {
-    top: 50,
-    right: 50,
-    bottom: 50,
-    left: 50,
+    top: 30,
+    right: 30,
+    bottom: 30,
+    left: 30,
   },
   margin = {
     top: 30,
@@ -153,6 +156,26 @@ const Network: React.FC<NetworkProps> = ({
           extent(nodes, (d: any) => d[nodeDef?.x?.key])
         );
 
+    if (xScale && nodeDef?.x?.axis) {
+      const xAxisFn =
+        nodeDef?.x?.axis === 'top'
+          ? axisTop(xScale).ticks(nodeDef?.x?.ticks || 5)
+          : // @ts-ignore
+            axisBottom(xScale).ticks(nodeDef?.x?.ticks || 5);
+
+      g.append('g')
+        .attr(
+          'transform',
+          `translate(0,${
+            nodeDef?.x?.axis === 'top'
+              ? margin.top
+              : height - (margin?.bottom || 0)
+          })`
+        )
+        .attr('class', mergeTailwindClasses(nodeDef?.x?.className))
+        .call(xAxisFn);
+    }
+
     const yScale =
       nodeDef?.y?.key &&
       scaleLinear()
@@ -165,21 +188,27 @@ const Network: React.FC<NetworkProps> = ({
           extent(nodes, (d: any) => d[nodeDef?.y?.key])
         );
 
-    const xAxisFn = xScale && axisBottom(xScale).ticks(5);
+    if (yScale && nodeDef?.y?.axis) {
+      const yAxisFn =
+        nodeDef?.y?.axis === 'right'
+          ? axisRight(yScale).ticks(nodeDef?.y?.ticks || 5)
+          : // @ts-ignore
+            axisLeft(yScale).ticks(nodeDef?.y?.ticks || 5);
 
-    xAxisFn &&
-      g
-        .append('g')
-        .attr('transform', `translate(0,${height - (margin?.bottom || 0)})`)
-        .call(xAxisFn);
+      // @ts-ignore
 
-    const yAxisFn = yScale && axisLeft(yScale).ticks(5);
-
-    yAxisFn &&
-      g
-        .append('g')
-        .attr('transform', `translate(${margin?.left || 0},0)`)
+      g.append('g')
+        .attr(
+          'transform',
+          `translate(${
+            nodeDef?.y?.axis === 'right'
+              ? width - (margin.right || 0)
+              : margin?.left || 0
+          },0)`
+        )
         .call(yAxisFn);
+    }
+    // Do similar for x
 
     const ticked = () => {
       link.attr('d', (d: any) => {
@@ -220,11 +249,16 @@ const Network: React.FC<NetworkProps> = ({
 
     // @ts-ignore
     const simulation = forceSimulation(nodes)
+      // Need to force links as edges
       .force(
         'link',
         // @ts-ignore
         forceLink(edges).id((d) => d[nodeDef?.idKey])
       )
+      // Need to force x so that disjointed nodes don't go out of screen
+      .force('x', forceX())
+      // Need to force y so that disjointed nodes don't go out of screen
+      .force('y', forceY())
       // @ts-ignore
       .tick(ticked);
 

@@ -31,5 +31,13 @@
     "xValue": 250,
     "yValue": 150,
     "gender": "female"
+  },
+  {
+    "id": "5",
+    "name": "Tom",
+    "age": 30,
+    "xValue": 300,
+    "yValue": 100,
+    "gender": "male"
   }
 ]

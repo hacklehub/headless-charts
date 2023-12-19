@@ -35,6 +35,7 @@ export const Default: Story = {
 export const Styling: Story = {
   args: {
     id: 'styled-network',
+    className: 'bg-gray-100 rounded-lg',
     nodeDef: {
       idKey: 'name',
       classNameKey: 'gender',

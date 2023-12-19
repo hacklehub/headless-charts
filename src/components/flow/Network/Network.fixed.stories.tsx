@@ -75,3 +75,67 @@ export const FixingOnlyYPosition: Story = {
     },
   },
 };
+
+export const ShowAxis: Story = {
+  args: {
+    id: 'fixed-network-show-axis',
+    nodeDef: {
+      idKey: 'name',
+      x: {
+        key: 'xValue',
+        axis: 'bottom',
+      },
+      y: {
+        key: 'yValue',
+        axis: 'left',
+      },
+    },
+    edgeDef: {
+      sourceKey: 'from',
+      targetKey: 'to',
+    },
+  },
+};
+
+export const ShowXAxisTop: Story = {
+  args: {
+    id: 'fixed-network-show-axis-top',
+    nodeDef: {
+      idKey: 'name',
+      x: {
+        key: 'xValue',
+
+        axis: 'top',
+      },
+      y: {
+        key: 'yValue',
+        axis: 'left',
+      },
+    },
+    edgeDef: {
+      sourceKey: 'from',
+      targetKey: 'to',
+    },
+  },
+};
+
+export const ShowYAxisRight: Story = {
+  args: {
+    id: 'fixed-network-show-axis-right',
+    nodeDef: {
+      idKey: 'name',
+      x: {
+        key: 'xValue',
+        axis: 'bottom',
+      },
+      y: {
+        key: 'yValue',
+        axis: 'right',
+      },
+    },
+    edgeDef: {
+      sourceKey: 'from',
+      targetKey: 'to',
+    },
+  },
+};
