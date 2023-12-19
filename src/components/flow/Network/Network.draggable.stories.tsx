@@ -6,6 +6,7 @@ import nodes from './nodes.json';
 
 const meta: Meta<typeof Network> = {
   title: 'Flow/Network/Draggable',
+  tags: ['autodocs'],
   component: Network,
   args: {
     nodes,

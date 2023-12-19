@@ -52,6 +52,7 @@ export interface NetworkProps {
   };
   edgeDef?: {
     size?: SizeType;
+    curve?: number;
     className?: string; // tailwindClass, Applies to all edges
     classNameKey?: string; // style by this key
     classNameMap?: object; // Provide mapping to style by this key
@@ -103,19 +104,18 @@ const Network: React.FC<NetworkProps> = ({
       height = +svg.style('height').split('px')[0];
 
     const ticked = () => {
-      link
-        .attr('x1', (d: any) =>
-          nodeDef?.xKey ? d.source[nodeDef?.xKey] : d.source.x
-        )
-        .attr('y1', (d: any) =>
-          nodeDef?.yKey ? d.source[nodeDef?.yKey] : d.source.y
-        )
-        .attr('x2', (d: any) =>
-          nodeDef?.xKey ? d.target[nodeDef?.xKey] : d.target.x
-        )
-        .attr('y2', (d: any) =>
-          nodeDef?.yKey ? d.target[nodeDef?.yKey] : d.target.y
-        );
+      link.attr('d', (d: any) => {
+        const x1 = nodeDef?.xKey ? d.source[nodeDef?.xKey] : d.source.x;
+        const y1 = nodeDef?.yKey ? d.source[nodeDef?.yKey] : d.source.y;
+        const x2 = nodeDef?.xKey ? d.target[nodeDef?.xKey] : d.target.x;
+        const y2 = nodeDef?.yKey ? d.target[nodeDef?.yKey] : d.target.y;
+
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        const dr = Math.sqrt(dx * dx + dy * dy);
+
+        return `M${x1},${y1}A${dr},${dr} 0 0,1 ${x2},${y2}`;
+      });
 
       node
         .attr('cx', (d) => (nodeDef?.xKey ? d[nodeDef?.xKey] : d.x))
@@ -166,9 +166,9 @@ const Network: React.FC<NetworkProps> = ({
       .attr('stroke-opacity', 0.6)
       .selectAll('line')
       .data(edges)
-      .join('line')
+      .join('path')
       .attr('class', (d: any) =>
-        mergeTailwindClasses(edgeDef?.className, 'stroke-black')
+        mergeTailwindClasses(edgeDef?.className, 'stroke-black fill-none')
       )
       .attr('stroke-width', (d: any) =>
         strokeWidthScale
@@ -232,25 +232,7 @@ const Network: React.FC<NetworkProps> = ({
         drag().on('start', dragstarted).on('drag', dragged).on('end', dragended)
       );
 
-    simulation.on('tick', () => {
-      link
-        .attr('x1', (d: any) =>
-          nodeDef?.xKey ? d.source[nodeDef?.xKey] : d.source.x
-        )
-        .attr('y1', (d: any) =>
-          nodeDef?.yKey ? d.source[nodeDef?.yKey] : d.source.y
-        )
-        .attr('x2', (d: any) =>
-          nodeDef?.xKey ? d.target[nodeDef?.xKey] : d.target.x
-        )
-        .attr('y2', (d: any) =>
-          nodeDef?.yKey ? d.target[nodeDef?.yKey] : d.target.y
-        );
-
-      node
-        .attr('cx', (d) => (nodeDef?.xKey ? d[nodeDef?.xKey] : d.x))
-        .attr('cy', (d) => (nodeDef?.yKey ? d[nodeDef?.yKey] : d.y));
-    });
+    simulation.on('tick', ticked);
 
     // Reheat the simulation when drag starts, and fix the subject position.
     function dragstarted(event: any) {

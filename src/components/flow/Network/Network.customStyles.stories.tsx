@@ -9,6 +9,7 @@ import nodes from './nodes.json';
 const meta: Meta<typeof Network> = {
   title: 'Flow/Network/CustomStyles',
   component: Network,
+  tags: ['autodocs'],
   args: {
     nodes,
     edges,
@@ -27,6 +28,19 @@ export const Default: Story = {
     },
     edgeDef: {
       className: 'running',
+    },
+  },
+};
+
+export const CurvedEdges: Story = {
+  args: {
+    id: 'curved-network',
+    nodeDef: {
+      idKey: 'id',
+    },
+    edgeDef: {
+      className: 'running fill-none stroke-green-500',
+      curve: 1,
     },
   },
 };

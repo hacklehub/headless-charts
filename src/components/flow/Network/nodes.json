@@ -22,5 +22,14 @@
     "xValue": 250,
     "yValue": 100,
     "gender": "female"
+  },
+
+  {
+    "id": "4",
+    "name": "Jane",
+    "age": 22,
+    "xValue": 250,
+    "yValue": 150,
+    "gender": "female"
   }
 ]

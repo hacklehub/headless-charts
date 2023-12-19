@@ -6,7 +6,9 @@ import nodes from './nodes.json';
 
 const meta: Meta<typeof Network> = {
   title: 'Flow/Network/Intro',
+  tags: ['autodocs'],
   component: Network,
+  argTypes: {},
   args: {
     nodes,
     edges,
@@ -46,6 +48,13 @@ export const Styling: Story = {
       classNameMap: {
         male: 'fill-blue-800',
         female: 'fill-pink-400',
+      },
+    },
+    edgeDef: {
+      classNameKey: 'type',
+      classNameMap: {
+        friend: 'stroke-green-400',
+        acquaintance: 'stroke-red-400',
       },
     },
   },
