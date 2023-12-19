@@ -112,7 +112,9 @@ const Network: React.FC<NetworkProps> = ({
 
         const dx = x2 - x1;
         const dy = y2 - y1;
-        const dr = Math.sqrt(dx * dx + dy * dy);
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        const dr = distance * (edgeDef?.curve || 0);
 
         return `M${x1},${y1}A${dr},${dr} 0 0,1 ${x2},${y2}`;
       });
