@@ -1,0 +1,48 @@
+[
+  {
+    "id": "1",
+    "name": "John",
+    "age": 20,
+    "xValue": 200,
+    "yValue": 100,
+    "gender": "male",
+    "isMarried": "yes"
+  },
+  {
+    "id": "2",
+    "name": "Pete",
+    "age": 18,
+    "xValue": 200,
+    "yValue": 150,
+    "gender": "male",
+    "isMarried": "no"
+  },
+  {
+    "id": "3",
+    "name": "Mary",
+    "age": 25,
+    "xValue": 250,
+    "yValue": 100,
+    "gender": "female",
+    "isMarried": "no"
+  },
+
+  {
+    "id": "4",
+    "name": "Jane",
+    "age": 22,
+    "xValue": 250,
+    "yValue": 150,
+    "gender": "female",
+    "isMarried": "yes"
+  },
+  {
+    "id": "5",
+    "name": "Tom",
+    "age": 30,
+    "xValue": 300,
+    "yValue": 100,
+    "gender": "male",
+    "isMarried": "yes"
+  }
+]
