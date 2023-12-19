@@ -43,7 +43,7 @@ export const CurvedEdges: Story = {
     edgeDef: {
       sourceKey: 'from',
       targetKey: 'to',
-      className: 'running fill-none stroke-green-500',
+      className: 'fill-none stroke-green-500',
       curve: 1,
     },
   },

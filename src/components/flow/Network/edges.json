@@ -22,5 +22,11 @@
     "target": "Jane",
     "type": "friend",
     "value": 2
+  },
+  {
+    "source": "Jane",
+    "target": "Mary",
+    "type": "friend",
+    "value": 5
   }
 ]
