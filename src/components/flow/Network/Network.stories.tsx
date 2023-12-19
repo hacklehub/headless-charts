@@ -32,21 +32,6 @@ export const Default: Story = {
   },
 };
 
-export const FixingPosition: Story = {
-  args: {
-    id: 'fixed-network',
-    nodeDef: {
-      idKey: 'name',
-      xKey: 'xValue',
-      yKey: 'yValue',
-    },
-    edgeDef: {
-      sourceKey: 'from',
-      targetKey: 'to',
-    },
-  },
-};
-
 export const Styling: Story = {
   args: {
     id: 'styled-network',
@@ -100,6 +85,18 @@ export const EdgeSize: Story = {
         max: 3,
         default: 1,
       },
+    },
+  },
+};
+
+export const WithZooming: Story = {
+  args: {
+    ...EdgeSize.args,
+    id: 'zoom-network',
+    zooming: {
+      enabled: true,
+      min: 0.5,
+      max: 2,
     },
   },
 };

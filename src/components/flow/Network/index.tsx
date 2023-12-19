@@ -1,17 +1,20 @@
+import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { extent, max, min } from 'd3-array';
 import {
   forceCenter,
   forceLink,
   forceManyBody,
   forceSimulation,
 } from 'd3-force';
-import { max, min } from 'd3-array';
 import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
+import { ChartProps } from '../../../types';
 import React from 'react';
 import { drag } from 'd3';
 import { scaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
+import { zoom } from 'd3-zoom';
 
 interface EdgeType {
   source: string;
@@ -29,7 +32,7 @@ interface SizeType {
   default?: number;
 }
 
-export interface NetworkProps {
+export interface NetworkProps extends ChartProps {
   id: string;
   className?: string;
   nodes: Array<NodeType>; // Data of actual nodes
@@ -38,14 +41,28 @@ export interface NetworkProps {
     enabled?: boolean;
     snapToNewPosition?: boolean;
   };
+  zooming?: {
+    enabled?: boolean;
+    min?: number;
+    max?: number;
+  };
   nodeDef: {
     idKey: string;
     weightKey?: string;
     className?: string; // tailwindClass, Applies to all nodes
     classNameKey?: string; // Style by this key
     classNameMap?: object; // Provide mapping for styling by this key
-    xKey?: string;
-    yKey?: string;
+    x?: {
+      key: string;
+      ticks?: number;
+      showAxis?: boolean;
+    };
+    y?: {
+      key: string;
+      ticks?: number;
+      showAxis?: boolean;
+    };
+
     size?: SizeType;
     tooltip?: TooltipObjectType;
   };
@@ -70,8 +87,26 @@ const Network: React.FC<NetworkProps> = ({
     enabled: false,
     snapToNewPosition: false,
   },
-  nodeDef,
-  edgeDef,
+  padding = {
+    top: 50,
+    right: 50,
+    bottom: 50,
+    left: 50,
+  },
+  margin = {
+    top: 30,
+    right: 30,
+    bottom: 30,
+    left: 30,
+  },
+  nodeDef = {
+    idKey: 'id',
+  },
+  edgeDef = {
+    sourceKey: 'source',
+    targetKey: 'target',
+  },
+  zooming = {},
   ...props
 }) => {
   const refreshData = React.useCallback(() => {
@@ -101,15 +136,69 @@ const Network: React.FC<NetworkProps> = ({
 
     svg.selectAll('*').remove();
 
+    const g = svg.append('g');
+
     const width = +svg.style('width').split('px')[0],
       height = +svg.style('height').split('px')[0];
 
+    const xScale =
+      nodeDef?.x?.key &&
+      scaleLinear()
+        .range([
+          (padding?.left || 0) + (margin?.left || 0),
+          width - (margin?.right || 0) - (padding.right || 0),
+        ])
+        .domain(
+          // @ts-ignore
+          extent(nodes, (d: any) => d[nodeDef?.x?.key])
+        );
+
+    const yScale =
+      nodeDef?.y?.key &&
+      scaleLinear()
+        .range([
+          height - (padding?.bottom || 0) - (margin?.bottom || 0),
+          (padding?.top || 0) + (margin?.top || 0),
+        ])
+        .domain(
+          // @ts-ignore
+          extent(nodes, (d: any) => d[nodeDef?.y?.key])
+        );
+
+    const xAxisFn = xScale && axisBottom(xScale).ticks(5);
+
+    xAxisFn &&
+      g
+        .append('g')
+        .attr('transform', `translate(0,${height - (margin?.bottom || 0)})`)
+        .call(xAxisFn);
+
+    const yAxisFn = yScale && axisLeft(yScale).ticks(5);
+
+    yAxisFn &&
+      g
+        .append('g')
+        .attr('transform', `translate(${margin?.left || 0},0)`)
+        .call(yAxisFn);
+
     const ticked = () => {
       link.attr('d', (d: any) => {
-        const x1 = nodeDef?.xKey ? d.source[nodeDef?.xKey] : d.source.x;
-        const y1 = nodeDef?.yKey ? d.source[nodeDef?.yKey] : d.source.y;
-        const x2 = nodeDef?.xKey ? d.target[nodeDef?.xKey] : d.target.x;
-        const y2 = nodeDef?.yKey ? d.target[nodeDef?.yKey] : d.target.y;
+        const x1 =
+          nodeDef?.x?.key && xScale
+            ? xScale(d.source[nodeDef?.x?.key])
+            : d.source.x;
+        const y1 =
+          nodeDef?.y?.key && yScale
+            ? yScale(d.source[nodeDef?.y?.key])
+            : d.source.y;
+        const x2 =
+          nodeDef?.x?.key && xScale
+            ? xScale(d.target[nodeDef?.x?.key])
+            : d.target.x;
+        const y2 =
+          nodeDef?.y?.key && yScale
+            ? yScale(d.target[nodeDef?.y?.key])
+            : d.target.y;
 
         const dx = x2 - x1;
         const dy = y2 - y1;
@@ -121,8 +210,12 @@ const Network: React.FC<NetworkProps> = ({
       });
 
       node
-        .attr('cx', (d) => (nodeDef?.xKey ? d[nodeDef?.xKey] : d.x))
-        .attr('cy', (d) => (nodeDef?.yKey ? d[nodeDef?.yKey] : d.y));
+        .attr('cx', (d) =>
+          nodeDef?.x?.key && xScale ? xScale(d[nodeDef?.x?.key]) : d.x
+        )
+        .attr('cy', (d) =>
+          nodeDef?.y?.key && yScale ? yScale(d[nodeDef?.y?.key]) : d.y
+        );
     };
 
     // @ts-ignore
@@ -153,7 +246,7 @@ const Network: React.FC<NetworkProps> = ({
         ])
         .range([edgeDef?.size.min, edgeDef?.size.max]);
 
-    const link = svg
+    const link = g
       .append('g')
       .selectAll('line')
       .data(edges)
@@ -187,7 +280,7 @@ const Network: React.FC<NetworkProps> = ({
         ])
         .range([nodeDef?.size.min, nodeDef?.size.max]);
 
-    const node = svg
+    const node = g
       .append('g')
       .attr('stroke', '#fff')
       .attr('stroke-width', 1.5)
@@ -249,6 +342,25 @@ const Network: React.FC<NetworkProps> = ({
       if (!event.active) simulation.alphaTarget(0);
       event.subject.fx = dragging.snapToNewPosition ? event.x : null;
       event.subject.fy = dragging.snapToNewPosition ? event.y : null;
+    }
+
+    if (zooming?.enabled) {
+      const zoomed = ({ transform }: any) => {
+        g.attr('transform', transform);
+      };
+
+      const zoomFn =
+        zooming?.min &&
+        zooming?.max &&
+        zoom()
+          .scaleExtent([zooming.min, zooming.max])
+          .translateExtent([
+            [0, 0],
+            [width, height],
+          ])
+          .on('zoom', zoomed);
+      // @ts-ignore
+      svg.call(zoomFn);
     }
   }, []);
 
