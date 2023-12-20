@@ -2,6 +2,11 @@ import { Meta } from '@storybook/react';
 import SpineChart from '.';
 import data from '../AreaChart/data.json';
 
+/**
+ * Spine charts split a series of data into two parts, left and right, and stack them on top of each other.
+ *
+ * For example the chart below contains data for Apple's revenue from 2011 to 2022. We want to show that just iphones sell more than all other products combined.
+ */
 const meta: Meta<typeof SpineChart> = {
   title: 'Linear/SpineChart',
   component: SpineChart,
@@ -10,6 +15,11 @@ const meta: Meta<typeof SpineChart> = {
 
 export default meta;
 
+/**
+ * To initialize a spine chart, the following props are mandatory: data, id, y, x.
+ *
+ * y is an object where `key` is mandatory, whereas x is an array of objects where `key` is mandatory.
+ */
 export const Default = {
   args: {
     data,
