@@ -326,7 +326,7 @@ const SpineChart = ({
       .text(y.label || y.key)
       .attr('class', 'fill-current')
       .attr('x', y.axis === 'left' ? -20 : y.axis === 'right' ? 20 : -20)
-      .attr('y', xAxis === 'top' ? margin.top : height - margin.bottom);
+      .attr('y', xAxis === 'top' ? margin.top : height - margin.bottom + 10);
   }, [data, x, padding, margin, paddingBar, y]);
 
   useEffect(() => {
