@@ -18,15 +18,26 @@ export default meta;
 
 export const Waterfall = {
   args: {
-    data,
+    data: data.filter((d) => d.year >= 2020),
     id: 'bar-chart-stacked-default',
     x: [
       {
-        key: 'reading',
+        key: 'macbook',
       },
-      { key: 'value' },
+      {
+        key: 'iphone',
+      },
+      {
+        key: 'ipad',
+      },
+      {
+        key: 'wearables',
+      },
+      {
+        key: 'services',
+      },
     ],
-    y: { key: 'name' },
+    y: { key: 'year' },
     waterfall: true,
   },
 };
@@ -51,12 +62,27 @@ export const Styled = {
     },
     x: [
       {
-        key: 'reading',
-        className: 'fill-purple-700',
+        key: 'macbook',
+        className: 'fill-purple-800',
       },
-      { key: 'value', className: 'fill-purple-400' },
+      {
+        key: 'iphone',
+        className: 'fill-purple-600',
+      },
+      {
+        key: 'ipad',
+        className: 'fill-purple-400',
+      },
+      {
+        key: 'wearables',
+        className: 'fill-purple-300',
+      },
+      {
+        key: 'services',
+        className: 'fill-purple-200',
+      },
     ],
-    y: { key: 'name', className: 'text-red-500', padding: 10 },
+    y: { key: 'year', className: 'text-red-500', padding: 10 },
   },
 };
 

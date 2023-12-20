@@ -24,11 +24,27 @@ export const Tooltip = {
     id: 'bar-chart-tooltip-default',
     x: [
       {
-        key: 'reading',
+        key: 'macbook',
+        className: 'fill-purple-800',
       },
-      { key: 'value' },
+      {
+        key: 'iphone',
+        className: 'fill-purple-600',
+      },
+      {
+        key: 'ipad',
+        className: 'fill-purple-400',
+      },
+      {
+        key: 'wearables',
+        className: 'fill-purple-300',
+      },
+      {
+        key: 'services',
+        className: 'fill-purple-200',
+      },
     ],
-    y: { key: 'name' },
+    y: { key: 'year' },
     tooltip: {},
   },
 };
@@ -49,7 +65,7 @@ export const TooltipCustomKeys = {
     id: 'bar-chart-tooltip-custom-keys',
     tooltip: {
       className: 'bg-gray-100 rounded p-2',
-      keys: ['reading', 'value'],
+      keys: ['year', 'macbook'],
     },
   },
 };
@@ -61,7 +77,7 @@ export const TooltipCustomHtml = {
     tooltip: {
       className: 'bg-gray-100 rounded p-2',
       html: (d: any) =>
-        `<p className="text-xl">${d.data.name}</p><p classname="text-xs"> ${d.data.value}</p>`,
+        `<p className="text-xl">${d.data.year}</p><p classname="text-xs"> macbooks sold $${d.data.macbook}B</p>`,
     },
   },
 };

@@ -16,8 +16,24 @@ export const Default = {
   args: {
     data,
     id: 'column-chart-stack-default',
-    x: { key: 'name' },
-    y: [{ key: 'value1' }, { key: 'value2' }, { key: 'value3' }],
+    y: [
+      {
+        key: 'macbook',
+      },
+      {
+        key: 'iphone',
+      },
+      {
+        key: 'ipad',
+      },
+      {
+        key: 'wearables',
+      },
+      {
+        key: 'services',
+      },
+    ],
+    x: { key: 'year' },
   },
 };
 
@@ -40,9 +56,26 @@ export const Styled = {
       left: 60,
     },
     y: [
-      { key: 'value1', className: 'text-purple-500' },
-      { key: 'value2', className: 'text-purple-700' },
-      { key: 'value3', className: 'text-purple-900' },
+      {
+        key: 'macbook',
+        className: 'fill-purple-800',
+      },
+      {
+        key: 'iphone',
+        className: 'fill-purple-600',
+      },
+      {
+        key: 'ipad',
+        className: 'fill-purple-400',
+      },
+      {
+        key: 'wearables',
+        className: 'fill-purple-300',
+      },
+      {
+        key: 'services',
+        className: 'fill-purple-200',
+      },
     ],
   },
 };

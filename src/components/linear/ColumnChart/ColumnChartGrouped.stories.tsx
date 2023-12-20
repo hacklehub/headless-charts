@@ -16,15 +16,23 @@ export const Default = {
   args: {
     data,
     id: 'column-chart-group-default',
-    x: { key: 'name' },
+    x: { key: 'year' },
     y: [
       {
-        key: 'USA',
-        start: 0,
+        key: 'macbook',
       },
-      { key: 'Europe' },
-      { key: 'APAC' },
-      { key: 'Africa' },
+      {
+        key: 'iphone',
+      },
+      {
+        key: 'ipad',
+      },
+      {
+        key: 'wearables',
+      },
+      {
+        key: 'services',
+      },
     ],
   },
 };
@@ -47,30 +55,42 @@ export const Styled = {
       bottom: 40,
       left: 60,
     },
-    x: { key: 'name', className: 'fill-blue-500' },
+    x: { key: 'year', className: 'fill-blue-500' },
     y: [
       {
-        key: 'USA',
-        start: 0,
-        className: 'text-purple-300',
+        key: 'macbook',
+        className: 'fill-purple-800',
       },
-      { key: 'Europe', className: 'text-purple-500 ' },
-      { key: 'APAC', className: 'text-purple-700' },
-      { key: 'Africa', className: 'text-purple-900' },
+      {
+        key: 'iphone',
+        className: 'fill-purple-600',
+      },
+      {
+        key: 'ipad',
+        className: 'fill-purple-400',
+      },
+      {
+        key: 'wearables',
+        className: 'fill-purple-300',
+      },
+      {
+        key: 'services',
+        className: 'fill-purple-200',
+      },
     ],
   },
 };
 
 export const Animated = {
   args: {
-    ...Default.args,
+    ...Styled.args,
     drawing: { duration: 1000 },
   },
 };
 
 export const WithTooltip = {
   args: {
-    ...Default.args,
+    ...Styled.args,
     tooltip: {
       className: 'bg-gray-100 rounded p-2',
     },
@@ -79,13 +99,13 @@ export const WithTooltip = {
 
 export const WithCustomTooltip = {
   args: {
-    ...Default.args,
+    ...Styled.args,
     tooltip: {
       html: (data: any) => {
         return `
           <div class="bg-gray-100 rounded p-2">
-            <div class="text-sm font-semibold">${data.name}</div>
-            <div class="text-xs">${data['USA']}</div>
+            <div class="text-sm font-semibold">${data.year}</div>
+            <div class="text-xs">${data.macbook}</div>
           </div>
         `;
       },
