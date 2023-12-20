@@ -17,7 +17,7 @@ interface DataItem {
 
 interface AxisItems {
   key: string;
-  className: string;
+  className?: string;
   axis?: string;
   axisTicks?: number;
 }
@@ -159,17 +159,8 @@ const BarChartStacked = ({
       .data(dataStacked)
       .enter()
       .append('g')
-      .attr(
-        'class',
-        (
-          d: Series<
-            {
-              [key: string]: number;
-            },
-            string
-          >
-        ) => x[d.index].className
-      )
+      // @ts-ignore
+      .attr('class', (d: any) => x[d.index].className)
       .selectAll('rect')
       .data((d: StackedArrayItem[], index: number) => {
         return d.map((v: StackedArrayItem) => {

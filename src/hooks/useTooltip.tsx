@@ -10,7 +10,7 @@ export interface TooltipObjectType {
 
 export interface TooltipProps {
   tooltip?: TooltipObjectType;
-  defaultHtml?: (d: any) => string;
+  defaultHtml?: (d: any, i?: number) => string;
   id?: string;
 }
 
