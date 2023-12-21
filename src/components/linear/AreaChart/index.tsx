@@ -4,8 +4,6 @@ import {
   curveCatmullRom,
   curveLinear,
   curveStep,
-  line,
-  symbol,
   symbolCircle,
   symbolCross,
   symbolDiamond,
@@ -15,18 +13,23 @@ import {
   symbolWye,
 } from 'd3-shape';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { max, min, minIndex } from 'd3-array';
-import { pointer, select, selectAll } from 'd3-selection';
+import { max, min } from 'd3-array';
 import { scaleLinear, scaleTime } from 'd3';
+import { select, selectAll } from 'd3-selection';
+import {
+  stack,
+  stackOffsetDiverging,
+  stackOffsetExpand,
+  stackOffsetWiggle,
+  stackOrderInsideOut,
+  stackOrderReverse,
+} from 'd3';
 import { useCallback, useEffect } from 'react';
 import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
-import { ChartProps } from '../../../types';
 import { DateTime } from 'luxon';
 import { defaultChartClassNames } from '../../../utils';
-import { easeLinear } from 'd3';
 import { mergeTailwindClasses } from '../../../utils';
-import { stack } from 'd3';
 import { zoom } from 'd3-zoom';
 
 interface XAxis {
@@ -67,6 +70,9 @@ interface AreaChartProps {
     size?: number;
     unknown?: any;
   }>;
+  stacking: {
+    type: 'normal' | '100%' | 'streamgraph' | 'diverging';
+  };
 
   padding?: {
     top?: number;
@@ -81,6 +87,11 @@ interface AreaChartProps {
     left?: number;
   };
   tooltip?: TooltipObjectType;
+  zooming?: {
+    enabled: boolean;
+    min?: number;
+    max?: number;
+  };
 }
 
 const AreaChart = ({
@@ -89,7 +100,9 @@ const AreaChart = ({
   className,
   x,
   y,
+  stacking,
   tooltip,
+
   padding = {
     top: 0,
     right: 0,
@@ -102,16 +115,9 @@ const AreaChart = ({
     bottom: 20,
     left: 40,
   },
+  zooming,
 }: AreaChartProps) => {
   const refreshChart = useCallback(() => {
-    // const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
-    //   tooltip,
-    //   id,
-    //   defaultHtml: (d) => {
-    //     return ``;
-    //   },
-    // });
-
     const svg = select(`#${id}`);
     // Clear svg
 
@@ -121,6 +127,21 @@ const AreaChart = ({
       height = +svg.style('height').split('px')[0];
 
     const g = svg.append('g');
+
+    svg
+      .append('clipPath')
+      .attr('id', 'clip')
+      .append('rect')
+      .attr('x', margin?.left || 0)
+      .attr('y', (margin?.top || 0) - (padding.top || 0))
+      .attr(
+        'width',
+        width -
+          (padding?.right || 0) -
+          (margin?.right || 0) -
+          (margin?.left || 0)
+      )
+      .attr('height', height);
 
     const shapeMapping = {
       circle: symbolCircle,
@@ -185,7 +206,6 @@ const AreaChart = ({
         : axisBottom(xFn).ticks(x.axisTicks || 5);
 
     const xAxisG = g.append('g').attr('class', 'axis--x axis ');
-
     xAxisG
       .attr(
         'transform',
@@ -195,11 +215,24 @@ const AreaChart = ({
       )
       .call(xAxis);
 
-    const dataStacked = stack().keys(y.map((column) => column.key))(data);
+    const stackerFn = stack().keys(y.map((column) => column.key));
+
+    stacking?.type === '100%' && stackerFn.offset(stackOffsetExpand);
+
+    stacking?.type === 'streamgraph' &&
+      stackerFn.offset(stackOffsetWiggle).order(stackOrderInsideOut);
+
+    stacking.type === 'diverging' &&
+      stackerFn.offset(stackOffsetDiverging).order(stackOrderReverse);
+
+    const dataStacked = stackerFn(data);
 
     const yFn = scaleLinear()
       // @ts-ignore
-      .domain([0, max(dataStacked, (d) => max(d, (d) => d[1]))])
+      .domain([
+        min(dataStacked, (d) => min(d, (d) => d[0])),
+        max(dataStacked, (d) => max(d, (d) => d[1])),
+      ])
       .range([
         height - (margin?.bottom || 0) - (padding?.bottom || 0),
         (margin?.top || 0) + (padding?.top || 0),
@@ -220,19 +253,53 @@ const AreaChart = ({
 
     const areaG = g.append('g').attr('class', 'area');
 
-    areaG
-      .selectAll('path')
-      .data(dataStacked)
-      .join('path')
+    const redraw = () => {
+      areaG
+        .selectAll('path')
+        .data(dataStacked)
+        .join('path')
 
-      // @ts-ignore
-      .attr('d', areaFn)
-      .attr('class', (d, i) =>
-        mergeTailwindClasses(
-          'fill-current stroke-none [fill-opacity:50%]',
-          y[i].className
+        // @ts-ignore
+        .attr('d', areaFn)
+        .attr('class', (d, i) =>
+          mergeTailwindClasses(
+            'fill-current stroke-1 [fill-opacity:50%]',
+            y[i].className
+          )
         )
-      );
+        .attr('clip-path', 'url(#clip)');
+    };
+    redraw();
+
+    const extent = [
+      [margin?.left || 0, margin?.top || 0],
+      [width, height],
+    ];
+
+    if (zooming?.enabled) {
+      const zoomFunc = zoom()
+        .scaleExtent([zooming?.min || 1, zooming?.max || 1.2])
+        // @ts-ignore
+        .extent(extent)
+        // @ts-ignore
+        .translateExtent(extent)
+        .on('zoom', zoomed);
+
+      function zoomed(event: MouseEvent) {
+        xFn.range(
+          [
+            (margin?.left || 0) + (padding?.left || 0),
+            width - (margin?.right || 0) - (padding?.right || 0),
+          ].map(
+            // @ts-ignore
+            (d: any) => event.transform.applyX(d)
+          )
+        );
+        xAxisG.call(xAxis);
+        redraw();
+      }
+      svg.call(zoomFunc);
+    }
   }, []);
 
   useEffect(() => {

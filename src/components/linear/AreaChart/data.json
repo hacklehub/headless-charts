@@ -5,7 +5,10 @@
     "services": 12.89,
     "wearables": 10.76,
     "ipad": 30.94,
-    "iphone": 78.69
+    "iphone": 78.69,
+    "deltaMacbook": 0,
+    "deltaServices": 0,
+    "deltaWearables": 0
   },
   {
     "year": 2013,
@@ -13,7 +16,10 @@
     "services": 16.05,
     "wearables": 10.12,
     "ipad": 31.98,
-    "iphone": 91.28
+    "iphone": 91.28,
+    "deltaMacbook": -1.74,
+    "deltaServices": 3.16,
+    "deltaWearables": -0.64
   },
   {
     "year": 2014,
@@ -21,7 +27,10 @@
     "services": 18.06,
     "wearables": 8.379,
     "ipad": 30.28,
-    "iphone": 101.99
+    "iphone": 101.99,
+    "deltaMacbook": 2.6,
+    "deltaServices": 2.01,
+    "deltaWearables": -1.74
   },
   {
     "year": 2015,
@@ -29,7 +38,10 @@
     "services": 19.91,
     "wearables": 10.07,
     "ipad": 23.23,
-    "iphone": 155.04
+    "iphone": 155.04,
+    "deltaMacbook": 1.39,
+    "deltaServices": 1.85,
+    "deltaWearables": 1.69
   },
   {
     "year": 2016,
@@ -37,7 +49,10 @@
     "services": 24.35,
     "wearables": 11.13,
     "ipad": 20.63,
-    "iphone": 136.7
+    "iphone": 136.7,
+    "deltaMacbook": -2.64,
+    "deltaServices": 4.44,
+    "deltaWearables": 1.06
   },
   {
     "year": 2017,
@@ -45,7 +60,10 @@
     "services": 32.7,
     "wearables": 12.83,
     "ipad": 18.8,
-    "iphone": 139.34
+    "iphone": 139.34,
+    "deltaMacbook": 2.74,
+    "deltaServices": 8.35,
+    "deltaWearables": 1.7
   },
 
   {
@@ -54,7 +72,10 @@
     "services": 39.75,
     "wearables": 17.38,
     "ipad": 18.38,
-    "iphone": 164.89
+    "iphone": 164.89,
+    "deltaMacbook": -0.37,
+    "deltaServices": 7.05,
+    "deltaWearables": 4.55
   },
   {
     "year": 2019,
@@ -62,7 +83,10 @@
     "services": 46.29,
     "wearables": 24.48,
     "ipad": 21.28,
-    "iphone": 142.38
+    "iphone": 142.38,
+    "deltaMacbook": 0.54,
+    "deltaServices": 6.54,
+    "deltaWearables": 7.1
   },
   {
     "year": 2020,
@@ -70,7 +94,10 @@
     "services": 53.77,
     "wearables": 30.62,
     "ipad": 23.72,
-    "iphone": 137.78
+    "iphone": 137.78,
+    "deltaMacbook": 2.88,
+    "deltaServices": 7.48,
+    "deltaWearables": 6.14
   },
 
   {
@@ -79,7 +106,10 @@
     "services": 68.42,
     "wearables": 38.37,
     "ipad": 31.86,
-    "iphone": 191.97
+    "iphone": 191.97,
+    "deltaMacbook": 6.57,
+    "deltaServices": 14.65,
+    "deltaWearables": 7.75
   },
   {
     "year": 2022,
@@ -87,6 +117,9 @@
     "services": 78.13,
     "wearables": 41.24,
     "ipad": 29.29,
-    "iphone": 205.49
+    "iphone": 205.49,
+    "deltaMacbook": 4.99,
+    "deltaServices": 9.71,
+    "deltaWearables": 2.87
   }
 ]

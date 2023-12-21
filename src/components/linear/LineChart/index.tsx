@@ -61,6 +61,11 @@ interface LineChartProps {
       | 'cross'
       | 'diamond';
     size?: number;
+    label?: {
+      show?: boolean;
+      position?: 'left' | 'right';
+      className?: string;
+    };
     unknown?: any;
   }>;
   tooltip?: {
@@ -401,21 +406,9 @@ const LineChart = ({
       .attr('id', 'clip')
       .append('rect')
       .attr('x', margin?.left || 0)
-      .attr('y', (margin?.top || 0) - (padding.top || 0))
-      .attr(
-        'width',
-        width -
-          (padding?.right || 0) -
-          (margin?.right || 0) -
-          (margin?.left || 0)
-      )
-      .attr(
-        'height',
-        height -
-          (padding?.bottom || 0) -
-          (margin?.bottom || 0) -
-          (margin?.top || 0)
-      );
+      .attr('y', margin?.top || 0)
+      .attr('width', width - (margin?.right || 0) - (margin?.left || 0))
+      .attr('height', height - (margin?.bottom || 0) - (margin?.top || 0));
 
     const leftG = g
       .append('g')
@@ -437,6 +430,8 @@ const LineChart = ({
             Number.isFinite(d[column.key]) || column.unknown === 'zero'
         );
 
+        const columnG = leftG.append('g').attr('class', 'group');
+
         const columnCurve =
           //@ts-ignore
           curveMapping[column.curve] || curveMapping['default'];
@@ -452,7 +447,7 @@ const LineChart = ({
           .y((d) => yLeftFn(d[column.key] || (column.unknown === 'zero' && 0)))
           .curve(columnCurve || curveLinear);
 
-        const seriesPath = leftG
+        const seriesPath = columnG
           .append('path')
           .attr('class', `left-series stroke-current ${column.className || ''}`)
           .datum(seriesData)
@@ -460,6 +455,19 @@ const LineChart = ({
           .attr('clip-path', 'url(#clip)')
           //@ts-ignore
           .attr('d', newLine);
+
+        const yLineLabels =
+          column.label?.show &&
+          columnG
+            .append('text')
+            .attr('class', `y-line-labels ${column.label.className || ''}`)
+            .text(column.key)
+            .attr('x', width - (padding?.right || 0 - 10))
+            .attr(
+              'y',
+              // @ts-ignore
+              yLeftFn(seriesData[seriesData.length - 1][column.key])
+            );
 
         if (drawing && drawing.duration) {
           // @ts-ignore

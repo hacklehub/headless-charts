@@ -89,3 +89,33 @@ export const Padding: Story = {
     },
   },
 };
+
+export const Zooming: Story = {
+  args: {
+    ...Styled.args,
+    id: 'area-chart-zooming',
+    zooming: {
+      enabled: true,
+    },
+  },
+};
+
+export const StackedArea100Percent: Story = {
+  args: {
+    ...Styled.args,
+    id: 'stacked-area-100',
+    stacking: {
+      type: '100%',
+    },
+  },
+};
+
+export const Streamgraph: Story = {
+  args: {
+    ...Styled.args,
+    id: 'stacked-area-streamgraph',
+    stacking: {
+      type: 'streamgraph',
+    },
+  },
+};

@@ -37,6 +37,11 @@ describe('mergeTailwindClasses', () => {
     const classes = mergeTailwindClasses('text-red-500', '');
     expect(classes).toBe('text-red-500');
   });
+
+  it(`Stroke-width and stroke should be treated separately`, () => {
+    const classes = mergeTailwindClasses('stroke-2', 'stroke-red-500');
+    expect(classes).toBe('stroke-2 stroke-red-500');
+  });
 });
 
 describe('convertToRanks', () => {
