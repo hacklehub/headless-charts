@@ -131,7 +131,7 @@ const LineChart = ({
   referenceLines = [],
   yLeftLabel,
   yRightLabel,
-  showGuideLines = false,
+
   reverse = false,
 }: LineChartProps) => {
   const refreshChart = useCallback(() => {
@@ -456,8 +456,7 @@ const LineChart = ({
           //@ts-ignore
           .attr('d', newLine);
 
-        const yLineLabels =
-          column.label?.show &&
+        column.label?.show &&
           columnG
             .append('text')
             .attr('class', `y-line-labels ${column.label.className || ''}`)
@@ -533,11 +532,13 @@ const LineChart = ({
           // @ts-ignore
           .curve(column.curve || curveLinear);
 
+        const columnG = rightG.append('g').attr('class', 'group');
+
         const seriesData = data.filter(
           (d: any) =>
             Number.isFinite(d[column.key]) || column.unknown === 'zero'
         );
-        const seriesPath = rightG
+        const seriesPath = columnG
           .append('path')
           .attr(
             'class',
@@ -548,6 +549,21 @@ const LineChart = ({
           .attr('clip-path', 'url(#clip)')
           // @ts-ignore
           .attr('d', newLine);
+
+        column.label?.show &&
+          columnG
+            .append('text')
+            .attr('class', `y-line-labels ${column.label.className || ''}`)
+            .text(column.key)
+            .attr(
+              'x',
+              width - (margin?.right || 0) - (padding?.right || 0 - 10)
+            )
+            .attr(
+              'y',
+              // @ts-ignore
+              yRightFn(seriesData[seriesData.length - 1][column.key])
+            );
 
         if (drawing && drawing.duration) {
           // @ts-ignore

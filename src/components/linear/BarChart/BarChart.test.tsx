@@ -59,7 +59,6 @@ describe('BarChart', () => {
 
     expect(svg).toHaveClass('bg-red-500');
     expect(xAxisTransform).toEqual(-margin.bottom);
-    screen.debug();
   });
   it('direction left', () => {
     render(

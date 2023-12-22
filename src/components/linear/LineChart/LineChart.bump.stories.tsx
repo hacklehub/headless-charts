@@ -3,7 +3,6 @@ import './index.css';
 import { Meta, StoryObj } from '@storybook/react';
 
 import LineChart from '.';
-import React from 'react';
 import { convertToRanks } from '../../../utils';
 import data from '../AreaChart/data.json';
 
@@ -42,10 +41,10 @@ const y = [
   {
     key: 'ipad',
     className:
-      'text-slate-200 group-hover:text-blue-100 group-hover:stroke-2 group-hover:font-bold group-hover:z-10',
+      'text-slate-200 group-hover:text-yellow-600 group-hover:stroke-2 group-hover:font-bold group-hover:z-10',
     label: {
       show: true,
-      className: 'fill-blue-100 text-xs group-hover:font-bold',
+      className: 'fill-yellow-600 text-xs group-hover:font-bold',
     },
   },
   {
@@ -60,10 +59,10 @@ const y = [
   {
     key: 'services',
     className:
-      'text-slate-200 group-hover:text-green-300 group-hover:stroke-2 group-hover:font-bold group-hover:z-10',
+      'text-slate-200 group-hover:text-green-600 group-hover:stroke-2 group-hover:font-bold group-hover:z-10',
     label: {
       show: true,
-      className: 'fill-green-300 text-xs group-hover:font-bold',
+      className: 'fill-green-600 text-xs group-hover:font-bold',
     },
   },
 ];
@@ -85,8 +84,8 @@ export const RankedLine: Story = {
     },
     padding: {
       top: 10,
-      right: 120,
-      bottom: 10,
+      right: 80,
+      bottom: 30,
       left: 10,
     },
     yLeftLabel: 'rank',

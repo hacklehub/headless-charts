@@ -1,18 +1,4 @@
-import {
-  area,
-  curveBumpX,
-  curveCatmullRom,
-  curveLinear,
-  curveStep,
-  symbolCircle,
-  symbolCross,
-  symbolDiamond,
-  symbolSquare,
-  symbolStar,
-  symbolTriangle,
-  symbolWye,
-} from 'd3-shape';
-import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
+import { axisBottom, axisLeft, axisTop } from 'd3-axis';
 import { max, min } from 'd3-array';
 import { scaleLinear, scaleTime } from 'd3';
 import { select, selectAll } from 'd3-selection';
@@ -25,9 +11,10 @@ import {
   stackOrderReverse,
 } from 'd3';
 import { useCallback, useEffect } from 'react';
-import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
 import { DateTime } from 'luxon';
+import { TooltipObjectType } from '../../../hooks/useTooltip';
+import { area } from 'd3-shape';
 import { defaultChartClassNames } from '../../../utils';
 import { mergeTailwindClasses } from '../../../utils';
 import { zoom } from 'd3-zoom';
@@ -101,7 +88,7 @@ const AreaChart = ({
   x,
   y,
   stacking,
-  tooltip,
+  // tooltip,
 
   padding = {
     top: 0,
@@ -143,24 +130,24 @@ const AreaChart = ({
       )
       .attr('height', height);
 
-    const shapeMapping = {
-      circle: symbolCircle,
-      diamond: symbolDiamond,
-      triangle: symbolTriangle,
-      square: symbolSquare,
-      cross: symbolCross,
-      star: symbolStar,
-      wye: symbolWye,
-      default: symbolCircle,
-    };
+    // const shapeMapping = {
+    //   circle: symbolCircle,
+    //   diamond: symbolDiamond,
+    //   triangle: symbolTriangle,
+    //   square: symbolSquare,
+    //   cross: symbolCross,
+    //   star: symbolStar,
+    //   wye: symbolWye,
+    //   default: symbolCircle,
+    // };
 
-    const curveMapping = {
-      rounded: curveCatmullRom,
-      step: curveStep,
-      line: curveLinear,
-      bumpX: curveBumpX,
-      default: curveLinear,
-    };
+    // const curveMapping = {
+    //   rounded: curveCatmullRom,
+    //   step: curveStep,
+    //   line: curveLinear,
+    //   bumpX: curveBumpX,
+    //   default: curveLinear,
+    // };
 
     // @ts-ignore
     const toDateTime = (d) => DateTime.fromFormat(d[x.key], x.format);
@@ -261,10 +248,11 @@ const AreaChart = ({
 
         // @ts-ignore
         .attr('d', areaFn)
-        .attr('class', (d, i) =>
+        .attr('class', (d: any, i) =>
           mergeTailwindClasses(
             'fill-current stroke-1 [fill-opacity:50%]',
-            y[i].className
+            y[i].className,
+            d?.className || ''
           )
         )
         .attr('clip-path', 'url(#clip)');

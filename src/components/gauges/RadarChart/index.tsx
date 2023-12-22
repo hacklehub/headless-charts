@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
 import { line, scaleLinear } from 'd3';
+import { select, selectAll } from 'd3-selection';
 
 import { ChartProps } from '../../../types';
-import { select } from 'd3-selection';
 import { transition } from 'd3-transition';
 
 export interface RadarChartProps extends ChartProps {

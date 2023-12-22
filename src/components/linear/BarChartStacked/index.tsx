@@ -6,7 +6,6 @@ import { select, selectAll } from 'd3-selection';
 import { useCallback, useEffect } from 'react';
 import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
-import { Series } from 'd3';
 import { format } from 'd3-format';
 import { stack } from 'd3';
 import { transition } from 'd3-transition';

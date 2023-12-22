@@ -335,3 +335,31 @@ export const LineChartHorizontal = {
     ],
   },
 };
+
+export const SeriesLabel = {
+  args: {
+    data,
+    id: 'line-chart-with-series-label',
+    padding: { top: 10, right: 50, bottom: 10, left: 10 },
+    x: { key: 'id' },
+    y: [
+      {
+        key: 'value',
+        className: 'text-green-500',
+        label: {
+          show: true,
+          className: 'fill-green-500 text-xs group-hover:font-bold',
+        },
+      },
+      {
+        key: 'reading',
+        className: 'text-blue-500',
+        label: {
+          show: true,
+          className: 'fill-blue-500 text-xs group-hover:font-bold',
+        },
+      },
+    ],
+    className: '',
+  },
+};

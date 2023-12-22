@@ -3,10 +3,9 @@
 
 import { arc, interpolateNumber, pie, scaleLinear, transition } from 'd3';
 import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { select, selectAll } from 'd3-selection';
 import { useCallback, useEffect } from 'react';
 import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
-
-import { select } from 'd3-selection';
 
 export interface PizzaChartProps {
   data: { [key: string]: any };
