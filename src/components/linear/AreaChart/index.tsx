@@ -57,8 +57,8 @@ interface AreaChartProps {
     size?: number;
     unknown?: any;
   }>;
-  stacking: {
-    type: 'normal' | '100%' | 'streamgraph' | 'diverging';
+  stacking?: {
+    type?: 'normal' | '100%' | 'streamgraph' | 'diverging';
   };
 
   padding?: {
@@ -87,7 +87,9 @@ const AreaChart = ({
   className,
   x,
   y,
-  stacking,
+  stacking = {
+    type: 'normal',
+  },
   // tooltip,
 
   padding = {
@@ -209,7 +211,7 @@ const AreaChart = ({
     stacking?.type === 'streamgraph' &&
       stackerFn.offset(stackOffsetWiggle).order(stackOrderInsideOut);
 
-    stacking.type === 'diverging' &&
+    stacking?.type === 'diverging' &&
       stackerFn.offset(stackOffsetDiverging).order(stackOrderReverse);
 
     const dataStacked = stackerFn(data);
