@@ -42,6 +42,7 @@ interface SpineChartProps {
   axisTicks?: number;
   xAxis?: 'top' | 'bottom';
   tooltip?: TooltipObjectType;
+  style?: React.CSSProperties;
 }
 
 const SpineChart = ({
@@ -71,6 +72,7 @@ const SpineChart = ({
   axisTicks = 5,
   xAxis = 'bottom',
   tooltip = undefined,
+  style = {},
 }: SpineChartProps) => {
   const refreshChart = useCallback(() => {
     const svg = select(`#${id}`);
@@ -341,6 +343,7 @@ const SpineChart = ({
   return (
     <svg
       id={id}
+      style={style}
       className={mergeTailwindClasses(defaultChartClassNames, className)}
     />
   );

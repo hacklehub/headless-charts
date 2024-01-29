@@ -143,3 +143,13 @@ export const WithCustomTooltip = {
     },
   },
 };
+
+export const WithCustomStyleAttribute = {
+  args: {
+    ...WithStyle.args,
+    id: 'spine-chart-with-custom-style-attribute',
+    style: {
+      width: 2048,
+    },
+  },
+};
