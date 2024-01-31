@@ -15,7 +15,7 @@ import {
 import { useCallback, useEffect } from 'react';
 
 import { defaultChartClassNames } from '../../../utils';
-import { mergeTailwindClasses } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 
 interface DataItem {
   [key: string]: any;
@@ -249,12 +249,7 @@ const LollipopVChart = ({
     };
   }, [data, refreshChart]);
 
-  return (
-    <svg
-      id={id}
-      className={mergeTailwindClasses(defaultChartClassNames, className)}
-    />
-  );
+  return <svg id={id} className={twMerge(defaultChartClassNames, className)} />;
 };
 
 export default LollipopVChart;

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import {
   line,
   symbol,
@@ -248,7 +249,7 @@ const ScatterPlot = ({
     //         .attr('id', `tooltip-${id}`)
     //         .style('position', 'absolute')
     //         .style('opacity', '0')
-    //         .attr('class', mergeTailwindClasses(tooltip?.className));
+    //         .attr('class', twMerge(tooltip?.className));
 
     svg
       .append('clipPath')
@@ -268,7 +269,7 @@ const ScatterPlot = ({
       .enter()
       .append('path')
       .attr('class', (d: any) =>
-        mergeTailwindClasses(
+        twMerge(
           `fill-current stroke-current`,
           d.className || '',
           (color && color.classNameMap && color.classNameMap[d[color.key]]) ||
@@ -405,10 +406,7 @@ const ScatterPlot = ({
     };
   }, [data, refreshChart]);
   return (
-    <svg
-      id={id}
-      className={mergeTailwindClasses(defaultChartClassNames, className || '')}
-    />
+    <svg id={id} className={twMerge(defaultChartClassNames, className || '')} />
   );
 };
 

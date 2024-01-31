@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { line, scaleLinear } from 'd3';
 import { select, selectAll } from 'd3-selection';
 
@@ -114,11 +115,7 @@ const RadarChart = ({
       .append('path')
       .attr('fill-opacity', 0.7)
       .attr('class', (d: any) =>
-        mergeTailwindClasses(
-          `stroke-2`,
-          d.className,
-          classNameMap[d[label.key]]
-        )
+        twMerge(`stroke-2`, d.className, classNameMap[d[label.key]])
       )
       .attr('d', (d: any) => {
         if (drawing) {
@@ -152,12 +149,7 @@ const RadarChart = ({
     };
   }, [data, refreshChart]);
 
-  return (
-    <svg
-      id={id}
-      className={mergeTailwindClasses(className, defaultChartClassNames)}
-    />
-  );
+  return <svg id={id} className={twMerge(className, defaultChartClassNames)} />;
 };
 
 export default RadarChart;

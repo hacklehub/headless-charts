@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { arc, interpolateNumber, pie, scaleLinear, transition } from 'd3';
-import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { select, selectAll } from 'd3-selection';
 import { useCallback, useEffect } from 'react';
 import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
@@ -103,10 +104,7 @@ const PizzaChart = ({
           .cornerRadius(cornerRadius)(d)
       )
       .attr('class', (d: any) =>
-        mergeTailwindClasses(
-          'fill-gray-200',
-          metrics[d.index].classNameBackground
-        )
+        twMerge('fill-gray-200', metrics[d.index].classNameBackground)
       )
       .on('mouseenter', onMouseOver)
       .on('mousemove', onMouseMove)
@@ -127,7 +125,7 @@ const PizzaChart = ({
           .cornerRadius(cornerRadius)(d)
       )
       .attr('class', (metric: any) =>
-        mergeTailwindClasses('fill-gray-800', metrics[metric.index].className)
+        twMerge('fill-gray-800', metrics[metric.index].className)
       )
       .on('mouseenter', onMouseOver)
       .on('mousemove', onMouseMove)
@@ -177,12 +175,7 @@ const PizzaChart = ({
     };
   }, [refreshChart]);
 
-  return (
-    <svg
-      id={id}
-      className={mergeTailwindClasses(className, defaultChartClassNames)}
-    />
-  );
+  return <svg id={id} className={twMerge(className, defaultChartClassNames)} />;
 };
 
 export default PizzaChart;

@@ -1,5 +1,6 @@
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { max, sum } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { select, selectAll } from 'd3-selection';
@@ -253,10 +254,7 @@ const BarChartStacked = ({
   }, [data, refreshChart]);
   return (
     <>
-      <svg
-        id={id}
-        className={mergeTailwindClasses(defaultChartClassNames, className)}
-      />
+      <svg id={id} className={twMerge(defaultChartClassNames, className)} />
     </>
   );
 };

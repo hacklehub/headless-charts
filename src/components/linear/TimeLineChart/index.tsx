@@ -1,5 +1,6 @@
 import { axisBottom, scaleBand, scaleLinear, scaleTime } from 'd3';
-import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { max, min } from 'd3-array';
 import { select, selectAll } from 'd3-selection';
 import { useCallback, useEffect } from 'react';
@@ -160,9 +161,7 @@ const TimeLineChart = ({
   }, [data, id, className]);
 
   return (
-    <svg
-      id={id}
-      className={mergeTailwindClasses(defaultChartClassNames, className)}></svg>
+    <svg id={id} className={twMerge(defaultChartClassNames, className)}></svg>
   );
 };
 

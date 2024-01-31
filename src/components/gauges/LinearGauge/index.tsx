@@ -2,7 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { ValueFn, pointer, select, selectAll } from 'd3';
 
 import { TooltipObjectType } from '../../../hooks/useTooltip';
-import { mergeTailwindClasses } from '../../../utils';
+
+import { twMerge } from 'tailwind-merge';
 import { scaleLinear } from 'd3';
 
 interface LinearGaugeProps {
@@ -83,7 +84,7 @@ const LinearGauge = ({
       .append('rect')
       .attr(
         'class',
-        mergeTailwindClasses(
+        twMerge(
           'fill-current stroke-current text-gray-300 dark:text-gray-700',
           classNameGaugeBg
         )
@@ -117,10 +118,7 @@ const LinearGauge = ({
       .append('rect')
       .attr(
         'class',
-        mergeTailwindClasses(
-          'data-rect fill-current stroke-current',
-          classNameGauge
-        )
+        twMerge('data-rect fill-current stroke-current', classNameGauge)
       )
       .attr('x', margin.left || 0)
       .attr('y', height - (margin.bottom || 0) - gaugeHeight)
@@ -137,7 +135,7 @@ const LinearGauge = ({
         .append('rect')
         .attr(
           'class',
-          mergeTailwindClasses(
+          twMerge(
             'data-rect fill-current stroke-current text-red-700',
             (error && error.className) || ''
           )
@@ -159,10 +157,7 @@ const LinearGauge = ({
       .attr('id', `tooltip-${id}`)
       .style('position', 'absolute')
       .style('opacity', '0')
-      .attr(
-        'class',
-        mergeTailwindClasses('tooltip ', tooltip && tooltip.className)
-      );
+      .attr('class', twMerge('tooltip ', tooltip && tooltip.className));
 
     previousData.current = data;
   }, [
@@ -213,7 +208,7 @@ const LinearGauge = ({
   return (
     <svg
       id={id}
-      className={mergeTailwindClasses(
+      className={twMerge(
         className,
         `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart `
       )}

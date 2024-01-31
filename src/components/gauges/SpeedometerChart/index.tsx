@@ -5,8 +5,8 @@ import { useCallback, useEffect, useRef } from 'react';
 
 import { Axis } from 'd3-axis';
 import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { max } from 'd3-array';
-import { mergeTailwindClasses } from '../../../utils';
 
 interface Region {
   limit: number;
@@ -92,10 +92,7 @@ const SpeedometerChart = ({
       .enter()
       .append('path')
       .attr('class', (d) =>
-        mergeTailwindClasses(
-          'gauge-level fill-current stroke-current',
-          d.className
-        )
+        twMerge('gauge-level fill-current stroke-current', d.className)
       )
       .attr('d', (d) => arcFn(d));
 
@@ -214,7 +211,7 @@ const SpeedometerChart = ({
     <svg
       data-testid='speedometer'
       id={id}
-      className={mergeTailwindClasses(defaultChartClassNames, className)}
+      className={twMerge(defaultChartClassNames, className)}
     />
   );
 };

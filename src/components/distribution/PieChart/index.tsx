@@ -6,8 +6,9 @@ import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
 import { deepValue } from '../../../utils/';
 import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { interpolate } from 'd3-interpolate';
-import { mergeTailwindClasses } from '../../../utils';
+
 import { min } from 'd3-array';
 
 interface DataItem {
@@ -154,7 +155,7 @@ const PieChart = ({
       // @ts-ignore
       .attr('data-testid', (d) => deepValue(d.data, nameKey))
       .attr('class', (d: any) =>
-        mergeTailwindClasses('fill-black', classNameMap[d.data[nameKey]])
+        twMerge('fill-black', classNameMap[d.data[nameKey]])
       )
       // @ts-ignore
       .attr('d', arcFn)
@@ -200,7 +201,7 @@ const PieChart = ({
         )
         .attr('text-anchor', 'middle')
         .attr('class', (d: any) =>
-          mergeTailwindClasses(
+          twMerge(
             labels?.className,
             labels?.classNameMap && labels.classNameMap[d.data[nameKey]],
             `fill-current`
@@ -245,7 +246,7 @@ const PieChart = ({
     <svg
       data-testid={id}
       id={id}
-      className={mergeTailwindClasses(defaultChartClassNames, className)}
+      className={twMerge(defaultChartClassNames, className)}
     />
   );
 };

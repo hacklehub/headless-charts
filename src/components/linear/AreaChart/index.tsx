@@ -16,7 +16,7 @@ import { DateTime } from 'luxon';
 import { TooltipObjectType } from '../../../hooks/useTooltip';
 import { area } from 'd3-shape';
 import { defaultChartClassNames } from '../../../utils';
-import { mergeTailwindClasses } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { zoom } from 'd3-zoom';
 
 interface XAxis {
@@ -251,7 +251,7 @@ const AreaChart = ({
         // @ts-ignore
         .attr('d', areaFn)
         .attr('class', (d: any, i) =>
-          mergeTailwindClasses(
+          twMerge(
             'fill-current stroke-1 [fill-opacity:50%]',
             y[i].className,
             d?.className || ''
@@ -299,12 +299,7 @@ const AreaChart = ({
     };
   }, [data, refreshChart]);
 
-  return (
-    <svg
-      id={id}
-      className={mergeTailwindClasses(defaultChartClassNames, className)}
-    />
-  );
+  return <svg id={id} className={twMerge(defaultChartClassNames, className)} />;
 };
 
 export default AreaChart;

@@ -1,6 +1,7 @@
 import { ZoomTransform, zoom } from 'd3-zoom';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { max, min } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { select, selectAll } from 'd3-selection';
@@ -180,7 +181,7 @@ const RangePlot = ({
       .append('polyline')
       .attr('clip-path', 'url(#clip)')
       .attr('class', (d: any) =>
-        mergeTailwindClasses(
+        twMerge(
           `comet-tail fill-current stroke-0`,
           (d[x.fromKey] > d[x.toKey] ? x.classNameNegative : x.className) || '',
           d.className || '',
@@ -225,7 +226,7 @@ const RangePlot = ({
     dotRowsG
       .append('path')
       .attr('class', (d: any) =>
-        mergeTailwindClasses(
+        twMerge(
           `fill-current end-dots stroke-current stroke-0`,
           (d[x.fromKey] > d[x.toKey] ? x.classNameNegative : x.className) || '',
           d.className || '',
@@ -293,10 +294,7 @@ const RangePlot = ({
   }, [data, refreshChart, id]);
 
   return (
-    <svg
-      id={id}
-      className={mergeTailwindClasses(defaultChartClassNames, className || '')}
-    />
+    <svg id={id} className={twMerge(defaultChartClassNames, className || '')} />
   );
 };
 

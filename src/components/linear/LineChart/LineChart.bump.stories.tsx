@@ -4,6 +4,7 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import LineChart from '.';
 import { convertToRanks } from '../../../utils';
+
 import data from '../AreaChart/data.json';
 
 /**

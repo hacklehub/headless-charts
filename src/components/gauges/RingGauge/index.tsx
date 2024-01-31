@@ -1,6 +1,7 @@
 import { PieArcDatum, arc } from 'd3-shape';
 import React, { useEffect, useRef } from 'react';
-import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { pointer, select, selectAll } from 'd3-selection';
 
 // import { axisBottom } from 'd3-axis';
@@ -91,7 +92,7 @@ const RingGauge = ({
             .attr('id', `tooltip-${id}`)
             .style('position', 'absolute')
             .style('opacity', '0')
-            .attr('class', mergeTailwindClasses(tooltip?.className));
+            .attr('class', twMerge(tooltip?.className));
 
     const g = svg.append('g');
 
@@ -130,7 +131,7 @@ const RingGauge = ({
       .append('path')
       .attr(
         'class',
-        mergeTailwindClasses(
+        twMerge(
           ` fill-current text-gray-200 dark:text-gray-700`,
           classNameGaugeBg
         )
@@ -147,9 +148,7 @@ const RingGauge = ({
       .data(data)
       .enter()
       .append('path')
-      .attr('class', (d: any) =>
-        mergeTailwindClasses('data-arc fill-current ', d.className)
-      )
+      .attr('class', (d: any) => twMerge('data-arc fill-current ', d.className))
       .attr('d', (d: any, i: number) => {
         // Draw previous arc first
         const previousArc = previousData.current.find(
@@ -163,10 +162,7 @@ const RingGauge = ({
         );
       })
       .on('mouseenter', function (_event, d) {
-        tooltipDiv.attr(
-          'class',
-          mergeTailwindClasses(tooltip?.className, 'tooltip')
-        );
+        tooltipDiv.attr('class', twMerge(tooltip?.className, 'tooltip'));
         tooltipDiv
           .style('opacity', 1)
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -268,10 +264,7 @@ const RingGauge = ({
     };
   }, [data, refreshChart]);
   return (
-    <svg
-      id={id}
-      className={mergeTailwindClasses(defaultChartClassNames, className || '')}
-    />
+    <svg id={id} className={twMerge(defaultChartClassNames, className || '')} />
   );
 };
 

@@ -21,8 +21,8 @@ import { useCallback, useEffect } from 'react';
 
 import { DateTime } from 'luxon';
 import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { easeLinear } from 'd3';
-import { mergeTailwindClasses } from '../../../utils';
 import { zoom } from 'd3-zoom';
 
 interface XAxis {
@@ -859,12 +859,7 @@ const LineChart = ({
     };
   }, [data, refreshChart]);
 
-  return (
-    <svg
-      id={id}
-      className={mergeTailwindClasses(defaultChartClassNames, className)}
-    />
-  );
+  return <svg id={id} className={twMerge(defaultChartClassNames, className)} />;
 };
 
 export default LineChart;

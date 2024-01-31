@@ -1,6 +1,7 @@
 import { ZoomTransform, zoom } from 'd3-zoom';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { max, min } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
 // pointer,
@@ -130,7 +131,7 @@ const BoxPlotH = ({
       .attr('y1', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth() / 2)
       .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth() / 2)
       .attr('class', (d: any) =>
-        mergeTailwindClasses(
+        twMerge(
           'box-plot-line stroke-current',
           x.classNameMap
             ? x.classNameMap[d[y.key]] || ''
@@ -150,7 +151,7 @@ const BoxPlotH = ({
       .attr('y1', (d: any) => yFn(d[y.key]) || 0)
       .attr('y2', (d: any) => yFn(d[y.key]) || 0)
       .attr('class', (d: any) =>
-        mergeTailwindClasses(
+        twMerge(
           `box-plot-line stroke-current`,
           x.classNameMap
             ? x.classNameMap[d[y.key]] || ''
@@ -173,10 +174,7 @@ const BoxPlotH = ({
       .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth())
       .attr(
         'class',
-        mergeTailwindClasses(
-          `box-plot-line stroke-current`,
-          x.classNameLines || ''
-        )
+        twMerge(`box-plot-line stroke-current`, x.classNameLines || '')
       )
       .transition()
       .duration(1000)
@@ -186,7 +184,7 @@ const BoxPlotH = ({
     dotRowsG
       .append('rect')
       .attr('class', (d: any) =>
-        mergeTailwindClasses(
+        twMerge(
           'box-plot-box stroke-current fill-current',
           d.className,
           x.classNameBoxes || ''
@@ -207,10 +205,7 @@ const BoxPlotH = ({
       .attr('x2', (d: any) => xFn(d[x.midKey]))
       .attr('y1', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth() / 2)
       .attr('y2', (d: any) => (yFn(d[y.key]) || 0) + yFn.bandwidth() / 2)
-      .attr(
-        'class',
-        mergeTailwindClasses(`box-plot-line stroke-current`, classNameData)
-      )
+      .attr('class', twMerge(`box-plot-line stroke-current`, classNameData))
       .transition()
       .duration(1000)
       .attr('y1', (d: any) => yFn(d[y.key]) || 0)
@@ -294,10 +289,7 @@ const BoxPlotH = ({
   }, [data, refreshChart]);
 
   return (
-    <svg
-      id={id}
-      className={mergeTailwindClasses(defaultChartClassNames, className || '')}
-    />
+    <svg id={id} className={twMerge(defaultChartClassNames, className || '')} />
   );
 };
 

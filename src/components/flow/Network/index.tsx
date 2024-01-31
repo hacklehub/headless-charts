@@ -1,5 +1,6 @@
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { extent, max, min } from 'd3-array';
 import {
   forceCenter,
@@ -197,7 +198,7 @@ const Network: React.FC<NetworkProps> = ({
               : height - (margin?.bottom || 0)
           })`
         )
-        .attr('class', mergeTailwindClasses(nodeDef?.x?.className))
+        .attr('class', twMerge(nodeDef?.x?.className))
         .call(xAxisFn);
     }
 
@@ -324,7 +325,7 @@ const Network: React.FC<NetworkProps> = ({
       .data(edges)
       .join('path')
       .attr('class', (d: any) =>
-        mergeTailwindClasses(
+        twMerge(
           'stroke-black fill-none',
           edgeDef?.className,
           edgeDef?.classNameKey &&
@@ -371,7 +372,7 @@ const Network: React.FC<NetworkProps> = ({
       .data(nodes)
       .join('path')
       .attr('class', (d) =>
-        mergeTailwindClasses(
+        twMerge(
           'fill-black stroke-none',
           d.className,
           nodeDef?.className,
@@ -448,7 +449,7 @@ const Network: React.FC<NetworkProps> = ({
 
   return (
     <svg
-      className={mergeTailwindClasses(defaultChartClassNames, className)}
+      className={twMerge(defaultChartClassNames, className)}
       id={id}
       {...props}
     />

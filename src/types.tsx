@@ -24,4 +24,5 @@ export interface ChartProps {
     min?: number;
     max?: number;
   };
+  style?: React.CSSProperties;
 }

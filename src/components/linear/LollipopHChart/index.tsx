@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { max, min } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 import { scaleLinear, scalePoint } from 'd3-scale';
@@ -194,7 +195,7 @@ const LollipopHChart = ({
         .append('line')
         .attr(
           'class',
-          mergeTailwindClasses(
+          twMerge(
             `stroke-2 stroke-current`,
             classNamePoints || '',
             classNameLines || ''
@@ -210,10 +211,7 @@ const LollipopHChart = ({
 
       pointGroup
         .append('path')
-        .attr(
-          'class',
-          mergeTailwindClasses(classNamePoints || '', classNameSymbols || ``)
-        )
+        .attr('class', twMerge(classNamePoints || '', classNameSymbols || ``))
         .attr('d', () => symbol(shapeMapping[shape], 100)())
         .attr(
           'transform',
@@ -237,7 +235,7 @@ const LollipopHChart = ({
       .attr('id', `tooltip-${id}`)
       .style('position', 'absolute')
       .style('opacity', '0')
-      .attr('class', mergeTailwindClasses(`tooltip`, tooltip?.className || ''));
+      .attr('class', twMerge(`tooltip`, tooltip?.className || ''));
   }, [
     classNameLines,
     classNamePoints,
@@ -261,7 +259,7 @@ const LollipopHChart = ({
   return (
     <svg
       id={id}
-      className={mergeTailwindClasses(defaultChartClassNames, className)}
+      className={twMerge(defaultChartClassNames, className)}
       data-testid='bar-chart'
     />
   );

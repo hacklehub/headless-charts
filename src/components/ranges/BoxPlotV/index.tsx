@@ -1,6 +1,7 @@
 import { ZoomTransform, zoom } from 'd3-zoom';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { max, min } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { select, selectAll } from 'd3-selection';
@@ -141,7 +142,7 @@ const BoxPlotV = ({
       .attr('y1', (d: any) => yFn(d[y.minKey]))
       .attr('y2', (d: any) => yFn(d[y.minKey]))
       .attr('class', (d: any) =>
-        mergeTailwindClasses('box-plot-line stroke-current', d.className || ``)
+        twMerge('box-plot-line stroke-current', d.className || ``)
       )
       .transition()
       .duration(1000)
@@ -181,7 +182,7 @@ const BoxPlotV = ({
       .append('rect')
       .attr(
         'class',
-        mergeTailwindClasses(
+        twMerge(
           'box-plot-box stroke-current fill-current opacity-50 ',
           y.classNameBoxes
         )
@@ -260,10 +261,7 @@ const BoxPlotV = ({
     };
   }, [data, refreshChart]);
   return (
-    <svg
-      id={id}
-      className={mergeTailwindClasses(defaultChartClassNames, className || '')}
-    />
+    <svg id={id} className={twMerge(defaultChartClassNames, className || '')} />
   );
 };
 

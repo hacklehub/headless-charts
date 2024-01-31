@@ -1,5 +1,6 @@
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { max, min } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
@@ -202,7 +203,7 @@ const ColumnChartGrouped = ({
     }: drawHLineProps) {
       const horizontalLine = g
         .append('line')
-        .attr('class', mergeTailwindClasses(className, 'line stroke-current'))
+        .attr('class', twMerge(className, 'line stroke-current'))
         .attr('x1', direction === 'left' ? margin.left : x)
         .attr('x2', direction === 'left' ? x : width + margin.left)
         .attr('y1', y)
@@ -260,12 +261,7 @@ const ColumnChartGrouped = ({
     };
   }, [data]);
   /* eslint-enable */
-  return (
-    <svg
-      id={id}
-      className={mergeTailwindClasses(defaultChartClassNames, className)}
-    />
-  );
+  return <svg id={id} className={twMerge(defaultChartClassNames, className)} />;
 };
 
 export default ColumnChartGrouped;

@@ -1,5 +1,6 @@
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { defaultChartClassNames, mergeTailwindClasses } from '../../../utils';
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 import { max, min } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { select, selectAll } from 'd3-selection';
@@ -149,7 +150,7 @@ const BarChart = ({
 
     xAxisG
       .append('text')
-      .attr('class', mergeTailwindClasses('fill-current'))
+      .attr('class', twMerge('fill-current'))
       .attr('x', width - (margin.right || 0))
       .attr('text-anchor', 'end')
       .attr('y', x && x.some((column) => column.axis === 'top') ? -20 : 30)
@@ -227,10 +228,7 @@ const BarChart = ({
           .enter()
           .append('text')
           .text((d: any) => d[column.key])
-          .attr(
-            'class',
-            mergeTailwindClasses('fill-current', dataLabel.className || '')
-          )
+          .attr('class', twMerge('fill-current', dataLabel.className || ''))
           .attr('data-testid', 'label')
           .attr('text-anchor', direction === 'left' ? 'start' : 'end')
           .attr(
@@ -258,7 +256,7 @@ const BarChart = ({
   return (
     <svg
       id={id}
-      className={mergeTailwindClasses(defaultChartClassNames, className)}
+      className={twMerge(defaultChartClassNames, className)}
       data-testid='bar-chart'
     />
   );
