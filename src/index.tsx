@@ -2,6 +2,7 @@ import convertToRanks from './utils/convertToRanks';
 import deepValue from './utils/deepValue';
 import { mergeTailwindClasses } from './utils';
 
+export { default as AreaChart } from './components/linear/AreaChart';
 export { default as LineChart } from './components/linear/LineChart';
 export { default as ColumnChart } from './components/linear/ColumnChart';
 export { default as ColumnChartStacked } from './components/linear/ColumnChartStacked';
