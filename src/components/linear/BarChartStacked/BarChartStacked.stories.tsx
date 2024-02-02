@@ -107,3 +107,14 @@ export const WithDrawingDelay = {
     },
   },
 };
+
+export const CustomStyle = {
+  args: {
+    ...Styled.args,
+    id: 'bar-chart-stacked-custom-style',
+    style: {
+      width: '1024px',
+      height: '768px',
+    },
+  },
+};
