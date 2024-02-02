@@ -2,11 +2,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { arc, interpolateNumber, pie, scaleLinear, transition } from 'd3';
-import { defaultChartClassNames } from '../../../utils';
-import { twMerge } from 'tailwind-merge';
 import { select, selectAll } from 'd3-selection';
 import { useCallback, useEffect } from 'react';
 import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
+
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 
 export interface PizzaChartProps {
   data: { [key: string]: any };
@@ -32,6 +33,7 @@ export interface PizzaChartProps {
     className?: string;
     classNameBackground?: string;
   }[];
+  style?: React.CSSProperties;
 }
 
 const PizzaChart = ({
@@ -46,6 +48,7 @@ const PizzaChart = ({
   cornerRadius = 0,
   metrics = [],
   tooltip,
+  style = {},
 }: PizzaChartProps) => {
   const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
     id,
@@ -175,7 +178,13 @@ const PizzaChart = ({
     };
   }, [refreshChart]);
 
-  return <svg id={id} className={twMerge(className, defaultChartClassNames)} />;
+  return (
+    <svg
+      id={id}
+      style={style}
+      className={twMerge(className, defaultChartClassNames)}
+    />
+  );
 };
 
 export default PizzaChart;

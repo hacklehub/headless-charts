@@ -12,6 +12,7 @@ import {
 } from 'd3';
 import { useCallback, useEffect } from 'react';
 
+import { ChartProps } from '../../../types';
 import { DateTime } from 'luxon';
 import { TooltipObjectType } from '../../../hooks/useTooltip';
 import { area } from 'd3-shape';
@@ -32,7 +33,7 @@ interface XAxis {
   end?: object | number;
 }
 
-interface AreaChartProps {
+interface AreaChartProps extends ChartProps {
   data: any[];
   id: string;
   className?: string;
@@ -62,12 +63,6 @@ interface AreaChartProps {
   };
 
   padding?: {
-    top?: number;
-    right?: number;
-    bottom?: number;
-    left?: number;
-  };
-  margin?: {
     top?: number;
     right?: number;
     bottom?: number;
@@ -105,6 +100,7 @@ const AreaChart = ({
     left: 40,
   },
   zooming,
+  style = {},
 }: AreaChartProps) => {
   const refreshChart = useCallback(() => {
     const svg = select(`#${id}`);
@@ -299,7 +295,13 @@ const AreaChart = ({
     };
   }, [data, refreshChart]);
 
-  return <svg id={id} className={twMerge(defaultChartClassNames, className)} />;
+  return (
+    <svg
+      id={id}
+      style={style}
+      className={twMerge(defaultChartClassNames, className)}
+    />
+  );
 };
 
 export default AreaChart;

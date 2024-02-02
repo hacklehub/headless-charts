@@ -1,10 +1,11 @@
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { defaultChartClassNames } from '../../../utils';
-import { twMerge } from 'tailwind-merge';
 import { max, min } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { useCallback, useEffect } from 'react';
+
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 
 interface DataItem {
   [key: string]: number | string;
@@ -47,6 +48,7 @@ interface ColumnChartGroupedProps {
     y?: number;
     className?: string;
   }[];
+  style?: React.CSSProperties;
 }
 
 interface drawHLineProps {
@@ -79,6 +81,7 @@ const ColumnChartGrouped = ({
   drawing,
   tooltip,
   referenceLines = [],
+  style = {},
 }: ColumnChartGroupedProps) => {
   const refreshChart = useCallback(() => {
     /* eslint-disable */
@@ -261,7 +264,13 @@ const ColumnChartGrouped = ({
     };
   }, [data]);
   /* eslint-enable */
-  return <svg id={id} className={twMerge(defaultChartClassNames, className)} />;
+  return (
+    <svg
+      id={id}
+      style={style}
+      className={twMerge(defaultChartClassNames, className)}
+    />
+  );
 };
 
 export default ColumnChartGrouped;

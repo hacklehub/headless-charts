@@ -21,8 +21,8 @@ import { useCallback, useEffect } from 'react';
 
 import { DateTime } from 'luxon';
 import { defaultChartClassNames } from '../../../utils';
-import { twMerge } from 'tailwind-merge';
 import { easeLinear } from 'd3';
+import { twMerge } from 'tailwind-merge';
 import { zoom } from 'd3-zoom';
 
 interface XAxis {
@@ -105,6 +105,7 @@ interface LineChartProps {
     className?: string;
     showText?: boolean;
   }>;
+  style?: React.CSSProperties;
 }
 
 const LineChart = ({
@@ -131,7 +132,7 @@ const LineChart = ({
   referenceLines = [],
   yLeftLabel,
   yRightLabel,
-
+  style = {},
   reverse = false,
 }: LineChartProps) => {
   const refreshChart = useCallback(() => {
@@ -859,7 +860,13 @@ const LineChart = ({
     };
   }, [data, refreshChart]);
 
-  return <svg id={id} className={twMerge(defaultChartClassNames, className)} />;
+  return (
+    <svg
+      id={id}
+      style={style}
+      className={twMerge(defaultChartClassNames, className)}
+    />
+  );
 };
 
 export default LineChart;

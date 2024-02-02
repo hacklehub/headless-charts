@@ -1,14 +1,14 @@
 import { PieArcDatum, arc } from 'd3-shape';
 import React, { useEffect, useRef } from 'react';
-import { defaultChartClassNames } from '../../../utils';
-import { twMerge } from 'tailwind-merge';
 import { pointer, select, selectAll } from 'd3-selection';
 
+import { defaultChartClassNames } from '../../../utils';
 // import { axisBottom } from 'd3-axis';
 import { interpolateNumber } from 'd3-interpolate';
 import { min } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
 import { transition } from 'd3-transition';
+import { twMerge } from 'tailwind-merge';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -47,6 +47,7 @@ export interface RingGaugeProps {
   };
   classNameGauge?: string;
   classNameGaugeBg?: string;
+  style?: React.CSSProperties;
 }
 
 const RingGauge = ({
@@ -73,6 +74,7 @@ const RingGauge = ({
   tooltip,
   classNameGaugeBg = '',
   labels = { position: 'top' },
+  style = {},
 }: RingGaugeProps) => {
   const PI = Math.PI,
     numArcs = data.length;
@@ -264,7 +266,11 @@ const RingGauge = ({
     };
   }, [data, refreshChart]);
   return (
-    <svg id={id} className={twMerge(defaultChartClassNames, className || '')} />
+    <svg
+      id={id}
+      style={style}
+      className={twMerge(defaultChartClassNames, className || '')}
+    />
   );
 };
 

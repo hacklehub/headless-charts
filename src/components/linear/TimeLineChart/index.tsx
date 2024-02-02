@@ -1,11 +1,11 @@
 import { axisBottom, scaleBand, scaleLinear, scaleTime } from 'd3';
-import { defaultChartClassNames } from '../../../utils';
-import { twMerge } from 'tailwind-merge';
 import { max, min } from 'd3-array';
 import { select, selectAll } from 'd3-selection';
 import { useCallback, useEffect } from 'react';
 
 import { ChartProps } from '../../../types';
+import { defaultChartClassNames } from '../../../utils';
+import { twMerge } from 'tailwind-merge';
 
 interface TimeLineChartProps extends ChartProps {
   y?: {
@@ -51,6 +51,7 @@ const TimeLineChart = ({
     left: 20,
   },
   y,
+  style = {},
 }: TimeLineChartProps) => {
   const refreshChart = useCallback(() => {
     const svg = select(`#${id}`);
@@ -161,7 +162,10 @@ const TimeLineChart = ({
   }, [data, id, className]);
 
   return (
-    <svg id={id} className={twMerge(defaultChartClassNames, className)}></svg>
+    <svg
+      id={id}
+      style={style}
+      className={twMerge(defaultChartClassNames, className)}></svg>
   );
 };
 

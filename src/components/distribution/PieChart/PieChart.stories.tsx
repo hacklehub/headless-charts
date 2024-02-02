@@ -117,6 +117,19 @@ export const CornerRadius: Story = {
   },
 };
 
+export const CustomStyle: Story = {
+  args: {
+    ...Styled.args,
+    id: 'pie-chart-custom-style',
+    style: {
+      width: '100%',
+      maxWidth: '500px',
+      height: '100%',
+      backgroundColor: 'var(--color-bg)',
+    },
+  },
+};
+
 export const PieChartRace = () => {
   const [pieData, setPieData] = useState(data);
 

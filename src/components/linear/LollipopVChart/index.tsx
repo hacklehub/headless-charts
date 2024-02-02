@@ -14,6 +14,7 @@ import {
 } from 'd3';
 import { useCallback, useEffect } from 'react';
 
+import { ChartProps } from '../../../types';
 import { defaultChartClassNames } from '../../../utils';
 import { twMerge } from 'tailwind-merge';
 
@@ -21,7 +22,7 @@ interface DataItem {
   [key: string]: any;
 }
 
-interface LollipopVChartProps {
+interface LollipopVChartProps extends ChartProps {
   data: DataItem[];
   valueMin?: number;
   valueMax?: number;
@@ -83,6 +84,7 @@ const LollipopVChart = ({
   shape = 'circle',
   x = { axis: 'bottom', axisTicks: 0, key: 'x' },
   y = { axis: 'left', key: 'y' },
+  style = {},
 }: LollipopVChartProps) => {
   const refreshChart = useCallback(() => {
     const svg = select(`#${id}`);
@@ -249,7 +251,13 @@ const LollipopVChart = ({
     };
   }, [data, refreshChart]);
 
-  return <svg id={id} className={twMerge(defaultChartClassNames, className)} />;
+  return (
+    <svg
+      id={id}
+      style={style}
+      className={twMerge(defaultChartClassNames, className)}
+    />
+  );
 };
 
 export default LollipopVChart;

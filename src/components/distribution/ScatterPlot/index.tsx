@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { defaultChartClassNames } from '../../../utils';
-import { twMerge } from 'tailwind-merge';
 import {
   line,
   symbol,
@@ -18,7 +16,9 @@ import { select, selectAll } from 'd3-selection';
 import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
 import { ChartProps } from '../../../types';
+import { defaultChartClassNames } from '../../../utils';
 import { scaleLinear } from 'd3-scale';
+import { twMerge } from 'tailwind-merge';
 import { zoom } from 'd3-zoom';
 
 // import { brush } from 'd3-brush';
@@ -100,6 +100,7 @@ const ScatterPlot = ({
   zooming = {},
   drawing,
   connect = {},
+  style = {},
 }: ScatterPlotProps) => {
   const defaultHtml = (d: any) =>
     `${x.key} ${d[x.key]}<br/>${y.key} ${d[y.key]}<br/>
@@ -406,7 +407,11 @@ const ScatterPlot = ({
     };
   }, [data, refreshChart]);
   return (
-    <svg id={id} className={twMerge(defaultChartClassNames, className || '')} />
+    <svg
+      id={id}
+      style={style}
+      className={twMerge(defaultChartClassNames, className || '')}
+    />
   );
 };
 

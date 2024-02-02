@@ -2,9 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { ValueFn, pointer, select, selectAll } from 'd3';
 
 import { TooltipObjectType } from '../../../hooks/useTooltip';
-
-import { twMerge } from 'tailwind-merge';
 import { scaleLinear } from 'd3';
+import { twMerge } from 'tailwind-merge';
 
 interface LinearGaugeProps {
   id: string;
@@ -29,6 +28,7 @@ interface LinearGaugeProps {
   tooltip?: TooltipObjectType;
   classNameGauge?: string;
   classNameGaugeBg?: string;
+  style?: React.CSSProperties;
 }
 
 const LinearGauge = ({
@@ -49,6 +49,7 @@ const LinearGauge = ({
   tooltip = undefined,
   classNameGauge = '',
   classNameGaugeBg = '',
+  style = {},
 }: LinearGaugeProps) => {
   const previousData = useRef(0);
 
@@ -208,6 +209,7 @@ const LinearGauge = ({
   return (
     <svg
       id={id}
+      style={style}
       className={twMerge(
         className,
         `w-full md:w-6/12 lg:w-4/12 dark:bg-gray-800 text-gray-900 dark:text-gray-50 chart `

@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
-import { defaultChartClassNames } from '../../../utils';
-import { twMerge } from 'tailwind-merge';
 import { line, scaleLinear } from 'd3';
 import { select, selectAll } from 'd3-selection';
 
 import { ChartProps } from '../../../types';
+import { defaultChartClassNames } from '../../../utils';
 import { transition } from 'd3-transition';
+import { twMerge } from 'tailwind-merge';
 
 export interface RadarChartProps extends ChartProps {
   metrics: { key: string }[];
@@ -28,6 +28,7 @@ const RadarChart = ({
   max = 1,
   margin = { top: 20, bottom: 20, left: 20, right: 20 },
   drawing = undefined,
+  style = {},
 }: RadarChartProps) => {
   const refreshChart = useCallback(() => {
     const svg = select(`#${id}`);
@@ -149,7 +150,13 @@ const RadarChart = ({
     };
   }, [data, refreshChart]);
 
-  return <svg id={id} className={twMerge(className, defaultChartClassNames)} />;
+  return (
+    <svg
+      id={id}
+      style={style}
+      className={twMerge(className, defaultChartClassNames)}
+    />
+  );
 };
 
 export default RadarChart;

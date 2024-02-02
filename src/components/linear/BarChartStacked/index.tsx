@@ -1,15 +1,15 @@
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { defaultChartClassNames } from '../../../utils';
-import { twMerge } from 'tailwind-merge';
 import { max, sum } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { select, selectAll } from 'd3-selection';
 import { useCallback, useEffect } from 'react';
 import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
+import { defaultChartClassNames } from '../../../utils';
 import { format } from 'd3-format';
 import { stack } from 'd3';
 import { transition } from 'd3-transition';
+import { twMerge } from 'tailwind-merge';
 
 interface DataItem {
   [key: string]: any;
@@ -75,6 +75,7 @@ interface BarChartStackedProps {
   tooltip?: TooltipObjectType;
   drawing?: Drawing;
   dataLabel?: DataLabel;
+  style?: React.CSSProperties;
 }
 
 const BarChartStacked = ({
@@ -103,6 +104,7 @@ const BarChartStacked = ({
   tooltip,
   drawing = undefined,
   dataLabel,
+  style = {},
 }: BarChartStackedProps) => {
   const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
     id,
@@ -254,7 +256,11 @@ const BarChartStacked = ({
   }, [data, refreshChart]);
   return (
     <>
-      <svg id={id} className={twMerge(defaultChartClassNames, className)} />
+      <svg
+        id={id}
+        style={style}
+        className={twMerge(defaultChartClassNames, className)}
+      />
     </>
   );
 };

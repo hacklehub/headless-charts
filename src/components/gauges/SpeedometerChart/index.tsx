@@ -5,8 +5,8 @@ import { useCallback, useEffect, useRef } from 'react';
 
 import { Axis } from 'd3-axis';
 import { defaultChartClassNames } from '../../../utils';
-import { twMerge } from 'tailwind-merge';
 import { max } from 'd3-array';
+import { twMerge } from 'tailwind-merge';
 
 interface Region {
   limit: number;
@@ -32,6 +32,7 @@ interface SpeedometerChartProps {
   regions?: Region[];
   axisTicks?: number;
   needleRadius?: number;
+  style?: React.CSSProperties;
 }
 
 const SpeedometerChart = ({
@@ -48,6 +49,7 @@ const SpeedometerChart = ({
   regions = [],
   axisTicks = 5,
   needleRadius = 0.8,
+  style = {},
 }: SpeedometerChartProps) => {
   const PI = Math.PI;
   const MIN_ANGLE = -PI / 2;
@@ -211,6 +213,7 @@ const SpeedometerChart = ({
     <svg
       data-testid='speedometer'
       id={id}
+      style={style}
       className={twMerge(defaultChartClassNames, className)}
     />
   );

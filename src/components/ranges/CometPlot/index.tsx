@@ -1,7 +1,5 @@
 import { ZoomTransform, zoom } from 'd3-zoom';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { defaultChartClassNames } from '../../../utils';
-import { twMerge } from 'tailwind-merge';
 import { max, min } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { select, selectAll } from 'd3-selection';
@@ -19,7 +17,9 @@ import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
 import { ChartProps } from '../../../types';
 import React from 'react';
+import { defaultChartClassNames } from '../../../utils';
 import { transition } from 'd3-transition';
+import { twMerge } from 'tailwind-merge';
 
 export interface RangePlotProps extends ChartProps {
   y: {
@@ -74,6 +74,7 @@ const RangePlot = ({
   zooming = {
     enabled: false,
   },
+  style = {},
 }: RangePlotProps) => {
   const { onMouseLeave, onMouseMove, onMouseOver } = useTooltip({
     id,
@@ -294,7 +295,11 @@ const RangePlot = ({
   }, [data, refreshChart, id]);
 
   return (
-    <svg id={id} className={twMerge(defaultChartClassNames, className || '')} />
+    <svg
+      id={id}
+      style={style}
+      className={twMerge(defaultChartClassNames, className || '')}
+    />
   );
 };
 

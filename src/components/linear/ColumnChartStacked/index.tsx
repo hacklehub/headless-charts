@@ -1,13 +1,13 @@
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { defaultChartClassNames } from '../../../utils';
-import { twMerge } from 'tailwind-merge';
 import { max, sum } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { useCallback, useEffect } from 'react';
 
+import { defaultChartClassNames } from '../../../utils';
 import { format } from 'd3-format';
 import { transition } from 'd3';
+import { twMerge } from 'tailwind-merge';
 
 interface DataItem {
   [key: string]: number | string;
@@ -53,6 +53,7 @@ interface ColumnChartStackedProps {
   drawing?: {
     duration?: number;
   };
+  style?: React.CSSProperties;
 }
 
 interface drawHLineProps {
@@ -87,6 +88,7 @@ const ColumnChartStacked = ({
   referenceLines = [],
   tickFormat,
   drawing = undefined,
+  style = {},
 }: ColumnChartStackedProps) => {
   const formatMapping = {
     '%': '.0%',
@@ -275,7 +277,13 @@ const ColumnChartStacked = ({
     };
   }, [data]);
   /* eslint-enable */
-  return <svg id={id} className={twMerge(defaultChartClassNames, className)} />;
+  return (
+    <svg
+      id={id}
+      style={style}
+      className={twMerge(defaultChartClassNames, className)}
+    />
+  );
 };
 
 export default ColumnChartStacked;

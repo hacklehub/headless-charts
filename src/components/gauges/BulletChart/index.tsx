@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
-import { defaultChartClassNames } from '../../../utils';
-import { twMerge } from 'tailwind-merge';
 
 import { axisBottom } from 'd3-axis';
+import { defaultChartClassNames } from '../../../utils';
 import { scaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
 import { transition } from 'd3-transition';
+import { twMerge } from 'tailwind-merge';
 
 export interface BulletChartProps {
   id: string;
@@ -30,6 +30,7 @@ export interface BulletChartProps {
   };
   axisHeight?: number;
   height?: number;
+  style?: React.CSSProperties;
 }
 
 const BulletChart = ({
@@ -53,7 +54,7 @@ const BulletChart = ({
     right: 20,
     bottom: 0,
   },
-
+  style = {},
   axisHeight = 20,
   height = 50,
 }: BulletChartProps) => {
@@ -168,6 +169,7 @@ const BulletChart = ({
   return (
     <svg
       id={id}
+      style={style}
       className={twMerge(defaultChartClassNames, `h-12`, className)}
     />
   );

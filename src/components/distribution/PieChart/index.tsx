@@ -4,12 +4,12 @@ import { select, selectAll } from 'd3-selection';
 import { useCallback, useEffect, useRef } from 'react';
 import useTooltip, { TooltipObjectType } from '../../../hooks/useTooltip';
 
+import { ChartProps } from '../../../types';
 import { deepValue } from '../../../utils/';
 import { defaultChartClassNames } from '../../../utils';
-import { twMerge } from 'tailwind-merge';
 import { interpolate } from 'd3-interpolate';
-
 import { min } from 'd3-array';
+import { twMerge } from 'tailwind-merge';
 
 interface DataItem {
   name: string;
@@ -31,25 +31,13 @@ interface LabelOptions {
   classNameMap?: { [key: string]: string };
 }
 
-interface PieChartProps {
+interface PieChartProps extends ChartProps {
   data: DataItem[];
   id: string;
   className?: string;
   classNameMap?: ClassNameMap;
-  padding?: {
-    left: number;
-    right?: number;
-    top: number;
-    bottom?: number;
-  };
   paddingAngle?: number;
   cornerRadius?: number;
-  margin?: {
-    left: number;
-    right: number;
-    top: number;
-    bottom: number;
-  };
   startAngle?: number;
   endAngle?: number;
   innerRadius?: number;
@@ -68,6 +56,8 @@ const PieChart = ({
   padding = {
     left: 0,
     top: 0,
+    right: 0,
+    bottom: 0,
   },
   paddingAngle = 2,
   startAngle = 0,
@@ -85,6 +75,7 @@ const PieChart = ({
   drawing,
   tooltip,
   labels,
+  style = {},
 }: PieChartProps) => {
   const { onMouseOver, onMouseMove, onMouseLeave } = useTooltip({
     id,
@@ -139,9 +130,9 @@ const PieChart = ({
       .append('g')
       .attr(
         'transform',
-        `translate(${padding.left + margin.left + chartArea[0] / 2},${
+        `translate(${(padding.left ?? 0) + margin.left + chartArea[0] / 2},${
           endAngle - startAngle <= 180
-            ? height - margin.bottom - (padding.bottom || 0)
+            ? height - margin.bottom - (padding.bottom ?? 0)
             : margin.top + (padding.top || 0) + chartArea[1] / 2
         })`
       );
@@ -245,6 +236,7 @@ const PieChart = ({
   return (
     <svg
       data-testid={id}
+      style={style}
       id={id}
       className={twMerge(defaultChartClassNames, className)}
     />

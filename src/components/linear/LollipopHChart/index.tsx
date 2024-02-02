@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
-import { defaultChartClassNames } from '../../../utils';
-import { twMerge } from 'tailwind-merge';
 import { max, min } from 'd3-array';
 import { pointer, select, selectAll } from 'd3-selection';
 import { scaleLinear, scalePoint } from 'd3-scale';
@@ -17,7 +15,9 @@ import {
 } from 'd3-shape';
 
 import { ChartProps } from '../../../types';
+import { defaultChartClassNames } from '../../../utils';
 import { transition } from 'd3-transition';
+import { twMerge } from 'tailwind-merge';
 
 export interface LollipopHChartProps extends ChartProps {
   classNamePoints?: string;
@@ -72,6 +72,7 @@ const LollipopHChart = ({
   shape = 'circle',
   x = { key: 'x', axis: 'bottom', axisTicks: 2 },
   y = { key: 'y', axis: 'left' },
+  style = {},
 }: LollipopHChartProps) => {
   const refreshChart = React.useCallback(() => {
     const svg = select(`#${id}`);
@@ -259,6 +260,7 @@ const LollipopHChart = ({
   return (
     <svg
       id={id}
+      style={style}
       className={twMerge(defaultChartClassNames, className)}
       data-testid='bar-chart'
     />
