@@ -1,6 +1,6 @@
 {
   "name": "@headless-charts/react",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "React wrapper for headless-charts",
   "author": "Hackle dev team",
   "keywords": [
@@ -16,7 +16,7 @@
     "url": "https://github.com/hacklehub/headless-charts.git"
   },
   "type": "module",
-  "main": "dist/index.umd.js",
+  "main": "dist/index.es.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "packageManager": "yarn@4.0.2",
