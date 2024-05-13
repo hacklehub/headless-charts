@@ -1,11 +1,11 @@
 import { ascending, descending, rank } from 'd3';
 
-interface XField {
+export interface XField {
   key: string;
   [key: string]: any;
 }
 
-interface YField {
+export interface YField {
   key: string;
   className?: string;
   [key: string]: any;
